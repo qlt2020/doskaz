@@ -1,0 +1,101 @@
+imports:
+    - { resource: './DomainEvents/services.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+
+    App\Infrastructure\Api\KernelExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: -127 }
+        arguments:
+            $isDebug: '%kernel.debug%'
+
+    App\Infrastructure\Api\CheckCsrfTokenListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 10 }
+
+    App\Infrastructure\Api\ExceptionNormalizer:
+        arguments:
+            - '%kernel.debug%'
+        tags:
+            - { name: serializer.normalizer, priority: 7 }
+
+    App\Infrastructure\Api\HttpExceptionNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 8 }
+
+    App\Infrastructure\Api\SerializerExceptionNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 8 }
+
+    App\Infrastructure\ObjectResolver\ValidationExceptionNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 8 }
+
+    App\Infrastructure\Doctrine\Flusher:
+
+    App\Infrastructure\Doctrine\MigrationEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber}
+
+    App\Infrastructure\Api\ResponseViewListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.view, priority: -1}
+
+    App\Infrastructure\ObjectResolver\ObjectArgumentResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: -49 }
+
+    Jsor\Doctrine\PostGIS\Event\ORMSchemaEventSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+
+    App\Infrastructure\Storage\StorageController:
+        tags: ['controller.service_arguments']
+
+    App\Infrastructure\Api\DocumentationController:
+        tags: ['controller.service_arguments']
+        arguments:
+            - '%kernel.project_dir%/src'
+
+    App\Infrastructure\AttributeNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 1 }
+
+    App\Infrastructure\FileNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 1 }
+
+    App\Infrastructure\UuidNormalizer:
+        tags:
+            - { name: serializer.normalizer, priority: 1 }
+
+    Imgproxy\UrlBuilder:
+        arguments:
+            - '/img'
+
+    App\Infrastructure\Doctrine\Transactional:
+
+    TheCodingMachine\Gotenberg\Client:
+        arguments:
+            - 'http://gotenberg:3000'
+
+    App\Infrastructure\Firebase\ProfileFetcher:
+        arguments:
+            - '%env(FIREBASE_API_KEY)%'
+        lazy: true
+
+    App\Infrastructure\Storage\Storage:
+
+    App\Infrastructure\ImageConversion\ImageConversionHandler:
+        tags: [ 'messenger.message_handler' ]
+
+    App\Infrastructure\ImageConversion\ConvertAllImages:
+        tags:
+            - { name: 'console.command', command: 'app:convert-images'}
+
+    App\Infrastructure\Api\LocaleListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 110 }

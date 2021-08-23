@@ -1,0 +1,29 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\ProfileNotifications\ProfileNotificationRepository:
+
+  App\ProfileNotifications\RememberWhenLevelReached:
+    tags:
+      - {name: 'domain_events.listener'}
+
+  App\ProfileNotifications\RememberWhenProfileCompletionTaskDone:
+    tags:
+      - {name: 'domain_events.listener'}
+
+  App\ProfileNotifications\RememberWhenAdministrationTaskDone:
+    tags:
+      - {name: 'domain_events.listener'}
+
+  App\ProfileNotifications\RememberWhenDailyTaskDone:
+    tags:
+      - {name: 'domain_events.listener'}
+
+  App\ProfileNotifications\RememberWhenDailyVerificationTaskDone:
+    tags:
+      - {name: 'domain_events.listener'}
+
+  App\ProfileNotifications\ProfileNotificationController:
+    tags: [ 'controller.service_arguments' ]

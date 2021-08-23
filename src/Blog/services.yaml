@@ -1,0 +1,32 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Blog\SlugFactory:
+
+  App\Blog\Categories\CategoryRepository:
+
+  App\Blog\Categories\CategoriesController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\Blog\Posts\PostRepository:
+
+  App\Blog\Posts\PostsController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\Blog\Posts\PostsFinder:
+
+  App\Blog\Comments\CommentRepository:
+
+  App\Blog\Comments\CommentController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\Blog\Posts\PostsAdminController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\Blog\Categories\CategoriesAdminController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\Blog\Categories\TranslateCategoriesCommand:
+    tags: [ 'console.command' ]

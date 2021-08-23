@@ -1,0 +1,18 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Tasks\ProfileCompletion\AttemptProfileCompletionOnUserProfileUpdate:
+    tags: ['domain_events.listener']
+
+
+  App\Tasks\ProfileCompletion\CreateProfileCompletionTaskOnUserRegistered:
+    tags: ['domain_events.listener']
+
+  App\Tasks\ProfileCompletion\ProfileCompletionTaskRepository:
+
+  App\Tasks\ProfileCompletion\ProfileCompletionDataProvider:
+
+  App\Tasks\ProfileCompletion\SeedTasks:
+    tags: ['console.command']

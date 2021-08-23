@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\UserAbilities\UnlockedAbilityRepository:
+
+  App\UserAbilities\GiveAbilityOnLevelReached:
+    tags:
+        - {name: 'domain_events.listener', priority: 100}

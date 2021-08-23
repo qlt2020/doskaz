@@ -1,0 +1,113 @@
+doctrine:
+    dbal:
+        default_connection: 'default'
+        connections:
+            default:
+                driver: 'pdo_pgsql'
+                server_version: '11'
+                url: '%env(resolve:DATABASE_URL)%'
+                mapping_types:
+                    _text: string
+
+        types:
+            geography:
+                class: 'Jsor\Doctrine\PostGIS\Types\GeographyType'
+                commented: false
+            geometry:
+                class: 'Jsor\Doctrine\PostGIS\Types\GeometryType'
+                commented: false
+            raster:
+                class: 'Jsor\Doctrine\PostGIS\Types\RasterType'
+                commented: false
+
+    orm:
+        dql:
+            string_functions:
+                ST_AsGeoJSON: Jsor\Doctrine\PostGIS\Functions\ST_AsGeoJSON
+            numeric_functions:
+                ST_YMin: Jsor\Doctrine\PostGIS\Functions\ST_YMin
+                ST_XMin: Jsor\Doctrine\PostGIS\Functions\ST_XMin
+                ST_XMax: Jsor\Doctrine\PostGIS\Functions\ST_XMax
+                ST_Ymax: Jsor\Doctrine\PostGIS\Functions\ST_YMax
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            translatable:
+                type: annotation
+                alias: Gedmo
+                is_bundle: false
+                prefix: Gedmo\Translatable\Entity
+                # make sure vendor library location is correct
+                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/src/Translatable/Entity/MappedSuperclass"
+            Users:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Users'
+                prefix: 'App\Users'
+                alias: Users
+            Objects:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Objects'
+                prefix: 'App\Objects'
+            Blog:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Blog'
+                prefix: 'App\Blog'
+            Complaints:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Complaints'
+                prefix: 'App\Complaints'
+            Cities:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Cities'
+                prefix: 'App\Cities'
+            Feedback:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Feedback'
+                prefix: 'App\Feedback'
+            RegionalRepresentatives:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/RegionalRepresentatives'
+                prefix: 'App\RegionalRepresentatives'
+            Tasks:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Tasks'
+                prefix: 'App\Tasks'
+            Levels:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Levels'
+                prefix: 'App\Levels'
+            UserEvents:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/UserEvents'
+                prefix: 'App\UserEvents'
+            UserAbilities:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/UserAbilities'
+                prefix: 'App\UserAbilities'
+            Awards:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Awards'
+                prefix: 'App\Awards'
+            RegionalCoordinators:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/RegionalCoordinators'
+                prefix: 'App\RegionalCoordinators'
+            ProfileNotifications:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/ProfileNotifications'
+                prefix: 'App\ProfileNotifications'

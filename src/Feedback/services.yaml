@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Feedback\FeedbackRepository:
+
+  App\Feedback\FeedbackController:
+    tags: ['controller.service_arguments']
+
+  App\Feedback\FeedbackAdminController:
+    tags: ['controller.service_arguments']

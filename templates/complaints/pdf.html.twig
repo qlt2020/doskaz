@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&amp;subset=cyrillic-ext" rel="stylesheet">
+    <style>
+        ul, li {
+            list-style: none
+        }
+        a {
+            text-decoration: none
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+        html {
+            height: 100%;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            padding: 0;
+            margin: 0
+        }
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            line-height: 1.5;
+            font-size: 14px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            font-weight: 400;
+            font-family: 'Roboto', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            text-align: left;
+        }
+        .template {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3em 0;
+        }
+        .template-half {
+            width: 100%;
+            padding-left: 50%;
+            margin-bottom: 1.3em;
+        }
+        .template-half-text {
+            padding-left: 1.5em
+        }
+        .template-half-text p {
+            margin-bottom: 1em;
+        }
+        .template-title {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        .table-span {
+            display: table;
+        }
+        .table-span span {
+            display: table-cell;
+        }
+        .template-text p {
+            text-indent: 3em;
+        }
+        .template-text ul {
+            padding: 0 0 0 3em;
+            margin-bottom: 0.5em;
+        }
+        .template-text ul li {
+            margin-bottom: 0.3em;
+        }
+        .template-text div {
+            padding: 0 0 0 3em;
+            margin-bottom: 0.5em;
+        }
+        .template-text p {
+            margin-bottom: 0.5em;
+        }
+        .img {
+            text-align: center;
+            padding: 2em 0 0;
+        }
+        .img img {
+            display: inline-block;
+            max-width: 100%;
+        }
+        /*добавленные стили*/
+        .template-ios {
+            font-size: 17px;
+        }
+        .template-mobile {
+            padding: 0;
+            line-height: 1.5;
+        }
+        .template-mobile .template-half {
+            padding: 16px;
+            background: #F0F4F5;
+        }
+        .template-mobile .template-half-text {
+            padding: 0;
+        }
+        .template-mobile .template-half-text p {
+            margin: 0;
+        }
+        .template-mobile .template-text {
+            padding: 0 16px 16px;
+            background: #ffffff;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+            -moz-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24);
+            position: relative;
+        }
+        .template-mobile .template-text p {
+            text-indent: 0;
+        }
+        .template-mobile .template-text ul,.template-mobile .template-text div {
+            padding: 0;
+        }
+        .template-mobile .img {
+            background: #F0F4F5;
+            padding: 16px;
+        }
+        .template-mobile .img-item {
+            margin: 16px 0 0;
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .template-mobile .img-item:first-child {
+            margin: 0;
+        }
+        .template-mobile .item-video {
+            position: relative;
+            width: 100%;
+        }
+        .template-mobile .item-video-in {
+            width: 100%;
+            padding: 0 0 56.3%;
+            left: 0;
+            top: 0;
+        }
+        .template-mobile .video {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
+        }
+        .link {
+            background: #8BC34A;
+            color: #ffffff;
+            font-size: 16px;
+            display: block;
+            padding: 16px 0;
+            text-align: center;
+        }
+        /*добавленные стили*/
+    </style>
+</head>
+<body>
+<!--класс для моб версии template-mobile и плюс добавить класс template-ios в случае ios-->
+<div class="template template-mobile template-ios">
+    <div class="template-half">
+        <div class="template-half-text">
+            <p>Проекту «Доступный Казахстан»</p>
+            <p>КОПИЯ: {{ authorityName }}</p>
+            <p>
+                <span class="table-span"><span>От:&nbsp;</span><span>{{ complainantLastName }} {{ complainantFirstName }} {{ complainantMiddleName }}</span></span><br>
+                ИИН&nbsp;<span>{{ complainantIin }}</span><br>
+                проживающий (-ая) по адресу: г.{{ complainantCity.name }},<br>
+                улица&nbsp;<span>{{ complainantStreet }}</span><br>
+                дом&nbsp;<span>{{ complainantBuilding }}</span><br>
+                квартира&nbsp;<span>{{ complainantApartment }}</span><br>
+                тел.:&nbsp;<span>{{ complainantPhone }}</span><br>
+            </p>
+        </div>
+    </div>
+    <div class="template-title">ЖАЛОБА</div>
+    <div class="template-text">
+        <p>В соответствии с пунктом 2 статьи 14 и пунктом 3 статьи 25 Закона Республики Казахстан от 13 апреля 2005 года № 39-III «О социальной защите инвалидов в Республике Казахстан», люди с инвалидностью в Республике Казахстан обладают всей полнотой социально-экономических и личных прав и свобод, закрепленных Конституцией Республики Казахстан, другими законодательными актами Республики Казахстан, включая право на обеспечение доступа к объектам социальной инфраструктуры, а юридические лица в соответствии с государственными стандартами обязаны создавать условия людям с инвалидностью для беспрепятственного доступа к общественным и производственным зданиям, сооружениям, помещениям и т.д. В тех случаях, когда указанные объекты невозможно приспособить для доступа людей с инвалидностью, соответствующими юридическими лицами должны быть разработаны и осуществлены необходимые меры, в наибольшей степени учитывающие потребности людей с инвалидностью.</p>
+        <p><span>{{ visitedAt | date('j') }} {{ visitedAt | date('n') | trans({}, 'months') }} {{ visitedAt | date('Y')}}</span>&nbsp;я попытался и не смог посетить&nbsp;<span>{{ objectName }}</span>&nbsp;по адресу: г. {{ city.name }}, улица&nbsp;<span>{{ street }}</span>, дом&nbsp;<span>{{ building }}</span>, с целью&nbsp;<span>{{ visitPurpose }}</span>.</p>
+        <p>В нарушении норм СП РК 3.06-101-2012 «Проектирование зданий и сооружений с учетом доступности для маломобильных групп населения. Общие положения» собственником объекта было нарушено мое право на доступ к объекту социальной инфраструктуры, а именно: </p>
+
+        {% if type == 'complaint2' %}
+            <ul>
+                {% for attribute in selectedAttributes %}
+                    {% if attribute.options is not empty %}
+                        <li>{{ attribute.title }}: {{ attribute.options | column('label') | join(', ') }};</li>
+                    {% endif %}
+                {% endfor %}
+                {% if comment is not empty %}
+                    <li>{{ comment }}</li>
+                {% endif %}
+                {% if threatToLife %}
+                    <li>Данными условиями создана угроза причинения вреда моей жизни и здоровью;</li>
+                {% endif %}
+            </ul>
+        {% elseif type == 'complaint1' %}
+            отсутствие пандуса/подъемника не позволило мне посетить данный объект.
+        {% endif %}
+
+        <p>Прошу донести данную информацию до {{ authorityName }} для того, чтобы данный Департамент провел внеплановую проверку объекта с целью устранения необеспечения условий людям с инвалидностью для беспрепятственного доступа к объектам социальной инфраструктуры на основании Закона Республики Казахстан от 13 апреля 2005 года № 39-III «О социальной защите инвалидов в Республике Казахстан».</p>
+        <p>Примечание. Разрешаю проекту «Доступный Казахстан» данную автоматически сформированную жалобу через функционал сайта «Доступный Казахстан» направить {{ authorityName }}.</p>
+        <p>Приложение:&nbsp;фото нарушений.</p>
+        <div>{{ complainantLastName }} {{ complainantFirstName }} {{ complainantMiddleName }}</div>
+        <p><span>{{ createdAt | date('j') }} {{ createdAt | date('n') | trans({}, 'months') }} {{ createdAt | date('Y')}} года</span></p>
+    </div>
+    <!--измененные блоки-->
+    <div class="img">
+        {% for index, photo  in photos %}
+            <img src="image{{ index }}" class="img-item">
+        {% endfor %}
+    </div>
+
+    {% for video in videos %}
+        {% if video is not empty %} <a href="{{ video }}">{{ video }}</a> {% endif %}
+    {% endfor %}
+    <!--измененные блоки-->
+</div>
+</body>
+</html>

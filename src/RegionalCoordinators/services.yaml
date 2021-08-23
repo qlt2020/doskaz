@@ -1,0 +1,14 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\RegionalCoordinators\RegionalCoordinatorController:
+    tags: ['controller.service_arguments']
+
+  App\RegionalCoordinators\RegionalCoordinatorRepository:
+
+  App\RegionalCoordinators\RegionalCoordinatorAdminPermissionsVoter:
+    tags: ['security.voter']
+
+  App\RegionalCoordinators\RegionalCoordinatorCitiesFinder:

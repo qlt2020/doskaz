@@ -1,0 +1,48 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true       # Automatically injects dependencies in your services.
+        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+
+    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
+        arguments:
+            - ~
+            - ~
+            - ~
+            - '@property_info.php_doc_extractor'
+        tags:
+            - { name: serializer.normalizer, priority: -999 }
+
+
+    App\Infrastructure\TranslatableListener:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
+            - [ setDefaultLocale, [ 'ru' ] ]
+            - [ setTranslationFallback, [ false ] ]
+
+imports:
+    - { resource: '../src/Infrastructure/services.yaml' }
+    - { resource: '../src/Users/services.yaml' }
+    - { resource: '../src/Objects/services.yaml' }
+    - { resource: '../src/Blog/services.yaml' }
+    - { resource: '../src/Complaints/services.yaml' }
+    - { resource: '../src/Cities/services.yaml' }
+    - { resource: '../src/Feedback/services.yaml' }
+    - { resource: '../src/RegionalRepresentatives/services.yaml' }
+    - { resource: '../src/Tasks/services.yaml' }
+    - { resource: '../src/Levels/services.yaml' }
+    - { resource: '../src/UserEvents/services.yaml' }
+    - { resource: '../src/UserAbilities/services.yaml' }
+    - { resource: '../src/Awards/services.yaml' }
+    - { resource: '../src/RegionalCoordinators/services.yaml' }
+    - { resource: '../src/ProfileNotifications/services.yaml' }
+    - { resource: '../src/Sitemap/services.yaml' }

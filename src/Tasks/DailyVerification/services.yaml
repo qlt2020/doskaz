@@ -1,0 +1,18 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Tasks\DailyVerification\DailyVerificationTaskRepository:
+
+  App\Tasks\DailyVerification\IssueVerificationTaskWheUserRegistered:
+    tags: ['domain_events.listener']
+
+  App\Tasks\DailyVerification\SeedDailyVerificationTasks:
+    tags: ['console.command']
+
+  App\Tasks\DailyVerification\CompleteDailyVerificationTaskWhenObjectVerified:
+    tags: ['domain_events.listener']
+
+  App\Tasks\DailyVerification\IssueDailyVerificationTaskWhenDailyTaskCompleted:
+    tags: ['domain_events.listener']

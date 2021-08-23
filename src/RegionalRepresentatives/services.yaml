@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\RegionalRepresentatives\RegionalRepresentativeRepository:
+
+  App\RegionalRepresentatives\RegionalRepresentativeController:
+    tags: ['controller.service_arguments']

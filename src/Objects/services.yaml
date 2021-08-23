@@ -1,0 +1,57 @@
+imports:
+    - { resource: './Reviews/services.yaml' }
+    - { resource: './EventsHistory/services.yaml' }
+    - { resource: './Verification/services.yaml' }
+    - { resource: './PhotosAdding/services.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+
+    App\Objects\MapObjectRepository:
+
+    App\Objects\ObjectsApiController:
+        tags: ['controller.service_arguments']
+        arguments:
+            - '@translation.loader.csv'
+
+    App\Objects\MigrateZones:
+        tags: ['console.command']
+
+    App\Objects\CategoriesController:
+        tags: ['controller.service_arguments']
+
+    App\Objects\Adding\AddingRequestRepository:
+
+    App\Objects\Adding\AddingController:
+        tags: ['controller.service_arguments']
+
+    App\Objects\Adding\AdminController:
+        tags: ['controller.service_arguments']
+
+    App\Objects\AdminController:
+        tags: ['controller.service_arguments']
+
+    App\Objects\PhotosHistory\UpdateHistoryWhenPhotosUpdated:
+        tags:
+            - { name: domain_events.listener }
+
+    App\Objects\PhotosHistory\PhotosHistoryRepository:
+
+    App\Objects\Command\RecalculateAccessibilityScore:
+        tags: ['console.command']
+
+    App\Objects\Command\DumpAttributes:
+        tags: ['console.command']
+
+    App\Objects\Command\UpdateCategoryTranslations:
+        tags: [ 'console.command' ]
+
+    App\Objects\Command\DebugTranslations:
+        tags: [ 'console.command' ]
+        arguments:
+            $csvFileLoader: '@translation.loader.csv'
+
+    App\Objects\EventListener\AddPhotosToObjectWhenRequestApproved:
+        tags: ['domain_events.listener']

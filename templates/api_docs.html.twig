@@ -1,0 +1,25 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.18.1/swagger-ui.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.18.1/swagger-ui-bundle.js"></script>
+</head>
+
+<body>
+
+<div id="swagger-ui"></div>
+
+<script>
+    (function () {
+        SwaggerUIBundle({
+            spec: {{ spec | raw }},
+            dom_id: '#swagger-ui',
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIBundle.SwaggerUIStandalonePreset
+            ]
+        })
+    })()
+</script>
+
+</body>
+</html>

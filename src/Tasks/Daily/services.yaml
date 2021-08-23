@@ -1,0 +1,12 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Tasks\Daily\DailyTaskRepository:
+
+  App\Tasks\Daily\IssueDailyTaskWhenUserDailyVerificationTaskDone:
+    tags: ['domain_events.listener']
+
+  App\Tasks\Daily\CompleteDailyTaskOnObjectCreated:
+    tags: ['domain_events.listener']

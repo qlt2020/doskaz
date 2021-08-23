@@ -1,0 +1,15 @@
+imports:
+  - { resource: './ProfileCompletion/services.yaml' }
+  - { resource: './Daily/services.yaml' }
+  - { resource: './DailyVerification/services.yaml' }
+  - { resource: './Administration/services.yaml' }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Tasks\CurrentTaskProvider:
+  App\Tasks\CurrentTaskDataProvider:
+
+  App\Tasks\UserTasksFinder:

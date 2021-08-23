@@ -1,0 +1,26 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Complaints\ComplaintController:
+    tags: ['controller.service_arguments']
+    arguments:
+      - '%kernel.project_dir%'
+
+  App\Complaints\ComplaintRepository:
+
+  App\Complaints\SeedComplaintAuthorities:
+    tags: ['console.command']
+
+  App\Complaints\AuthorityRepository:
+
+  App\Complaints\ComplaintVoter:
+    tags: ['security.voter']
+
+  App\Complaints\ComplaintDocExporter:
+    arguments:
+      $templatePath: '%kernel.project_dir%/complaint-template.docx'
+      $storagePath: '%kernel.project_dir%'
+
+  App\Complaints\ComplaintPdfExporter:

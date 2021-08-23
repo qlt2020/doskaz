@@ -1,0 +1,22 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Objects\EventsHistory\EventRepository:
+
+  App\Objects\EventsHistory\Listener\ReviewCreatedListener:
+    tags:
+      - { name: domain_events.listener }
+
+  App\Objects\EventsHistory\Listener\VerificationConfirmedListener:
+    tags:
+      - { name: domain_events.listener }
+
+  App\Objects\EventsHistory\Listener\VerificationRejectedListener:
+    tags:
+      - { name: domain_events.listener }
+
+  App\Objects\EventsHistory\Listener\SupplementedListener:
+    tags:
+      - { name: domain_events.listener }

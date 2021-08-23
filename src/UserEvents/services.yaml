@@ -1,0 +1,49 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\UserEvents\UserEventRepository:
+
+  App\UserEvents\ObjectReviewed\RememberWhenObjectReviewed:
+    tags: [ 'domain_events.listener' ]
+
+  App\UserEvents\ObjectReviewed\ObjectReviewedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\LevelReached\RememberWhenLevelReached:
+    tags: [ 'domain_events.listener' ]
+
+  App\UserEvents\LevelReached\LevelReachedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\BlogCommentReplied\RememberWhenBlogCommentReplied:
+    tags: [ 'domain_events.listener' ]
+
+  App\UserEvents\BlogCommentReplied\BlogCommentRepliedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\AwardIssued\RememberWhenAwardIssued:
+    tags: [ 'domain_events.listener' ]
+
+  App\UserEvents\AwardIssued\AwardIssuedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\ObjectAdded\RememberWhenObjectAdded:
+    tags: [ 'domain_events.listener' ]
+
+  App\UserEvents\ObjectAdded\ObjectAddedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\ObjectSupplemented\ObjectSupplementedDataFormatter:
+    tags: [ 'user_events.data_formatter' ]
+
+  App\UserEvents\UserEventsFinder:
+    arguments:
+      $formatters: !tagged user_events.data_formatter
+
+  App\UserEvents\UserEventsController:
+    tags: [ 'controller.service_arguments' ]
+
+  App\UserEvents\ObjectSupplemented\RememberWhenObjectSupplemented:
+    tags: [ 'domain_events.listener' ]

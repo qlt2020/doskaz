@@ -1,0 +1,9 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Sitemap\UpdateSitemap:
+    tags: ['console.command']
+    arguments:
+      - '%kernel.project_dir%/storage/sitemap.xml'

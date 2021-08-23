@@ -1,0 +1,55 @@
+users:
+    resource: ../../src/Users
+    type: annotation
+
+objects:
+    resource: ../../src/Objects
+    type: annotation
+
+blog:
+    resource: ../../src/Blog
+    type: annotation
+
+storage:
+    resource: ../../src/Infrastructure/Storage
+    type: annotation
+
+complaints:
+    resource: ../../src/Complaints
+    type: annotation
+
+cities:
+    resource: ../../src/Cities
+    type: annotation
+
+feedback:
+    resource: ../../src/Feedback
+    type: annotation
+
+regionalRepresentatives:
+    resource: ../../src/RegionalRepresentatives
+    type: annotation
+
+regionalCoordinators:
+    resource: ../../src/RegionalCoordinators
+    type: annotation
+
+apiDocs:
+    resource: ../../src/Infrastructure/Api
+    type: annotation
+
+events:
+    resource: ../../src/UserEvents
+    type: annotation
+
+tasks:
+    resource: ../../src/Tasks
+    type: annotation
+
+awards:
+    resource: ../../src/Awards
+    type: annotation
+
+profileNotifications:
+    resource: ../../src/ProfileNotifications
+    type: annotation

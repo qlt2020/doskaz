@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  domain_events_dispatcher:
+    class: App\Infrastructure\DomainEvents\EventDispatcher
+    arguments:
+      - !tagged domain_events.listener
+
+  App\Infrastructure\DomainEvents\PostFlushListener:
+    arguments:
+      - '@domain_events_dispatcher'
+    tags:
+      - { name: doctrine.event_listener, event: postFlush }

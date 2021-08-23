@@ -1,0 +1,11 @@
+doctrine_json_odm:
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Blog'
+            - '%kernel.project_dir%/src/Complaints'
+            - '%kernel.project_dir%/src/Objects'
+            - '%kernel.project_dir%/src/Infrastructure'
+            - '%kernel.project_dir%/src/Users'
+            - '%kernel.project_dir%/src/UserEvents'
+            - '%kernel.project_dir%/src/RegionalCoordinators'
+            - '%kernel.project_dir%/src/ProfileNotifications'

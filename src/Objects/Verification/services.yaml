@@ -1,0 +1,13 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Objects\Verification\VerificationRepository:
+
+  App\Objects\Verification\CreateVerificationOnObjectCreated:
+    tags:
+      - { name: domain_events.listener }
+
+  App\Objects\Verification\VerificationController:
+    tags: ['controller.service_arguments']

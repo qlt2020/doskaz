@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Users\CommentsHistory\RememberWhenPostCommentCreated:
+    tags: ['domain_events.listener']
+
+  App\Users\CommentsHistory\RememberWhenReviewCreated:
+    tags: ['domain_events.listener']
+
+  App\Users\CommentsHistory\RememberWhenPostCommentPopularityIncreased:
+    tags: ['domain_events.listener']
+
+  App\Users\CommentsHistory\CommentHistoryRepository:

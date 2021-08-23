@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Tasks\Administration\AdministrationTaskController:
+    tags: ['controller.service_arguments']
+
+  App\Tasks\Administration\AdministrationTaskRepository:
+
+  App\Tasks\Administration\UserAdministrationTaskRepository:
+
+  App\Tasks\Administration\TaskForObjectFinder:
+
+  App\Tasks\Administration\TestCommand:
+    tags: ['console.command']

@@ -1,0 +1,91 @@
+imports:
+    - { resource: './CommentsHistory/services.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+
+    App\Users\UserRepository:
+
+    League\OAuth2\Client\Provider\Google:
+        lazy: true
+        arguments:
+            - {clientId: '%env(OAUTH_GOOGLE_CLIENT_ID)%', clientSecret: '%env(OAUTH_GOOGLE_CLIENT_SECRET)%', redirectUri: '%env(resolve:OAUTH_GOOGLE_REDIRECT_URI)%'}
+        tags:
+            - {name: 'oauth.provider', key: 'google'}
+
+    League\OAuth2\Client\Provider\Facebook:
+        lazy: true
+        arguments:
+            - {clientId: '%env(OAUTH_FACEBOOK_CLIENT_ID)%', clientSecret: '%env(OAUTH_FACEBOOK_CLIENT_SECRET)%', redirectUri: '%env(resolve:OAUTH_FACEBOOK_REDIRECT_URI)%', graphApiVersion: 'v2.10'}
+        tags:
+            - {name: 'oauth.provider', key: 'facebook'}
+
+    J4k\OAuth2\Client\Provider\Vkontakte:
+        lazy: true
+        arguments:
+            - {clientId: '%env(OAUTH_VK_CLIENT_ID)%', clientSecret: '%env(OAUTH_VK_CLIENT_SECRET)%', redirectUri: '%env(resolve:OAUTH_VK_REDIRECT_URI)%', graphApiVersion: 'v2.10', scopes: []}
+        tags:
+            - {name: 'oauth.provider', key: 'vkontakte'}
+
+    Aego\OAuth2\Client\Provider\Mailru:
+        lazy: true
+        arguments:
+            - {clientId: '%env(OAUTH_MAILRU_CLIENT_ID)%', clientSecret: '%env(OAUTH_MAILRU_CLIENT_SECRET)%', redirectUri: '%env(resolve:OAUTH_MAILRU_REDIRECT_URI)%'}
+        tags:
+            - {name: 'oauth.provider', key: 'mailru'}
+
+
+    App\Users\Security\Oauth\OauthController:
+        tags: [ 'controller.service_arguments' ]
+        arguments:
+            - !tagged_locator { tag: 'oauth.provider', index_by: 'key' }
+
+    App\Users\UserController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Users\Security\AccessTokenRepository:
+    App\Users\Security\UserAuthenticator:
+    App\Users\Security\Oauth\OauthCredentialsRepository:
+    App\Users\Security\CookieAccessTokenAuthenticator:
+    App\Users\Security\BearerTokenAuthenticator:
+    App\Users\Security\PhoneAuth\AuthController:
+        lazy: true
+        arguments:
+            - '%env(FIREBASE_API_KEY)%'
+        tags: [ 'controller.service_arguments' ]
+    App\Users\Security\PhoneAuth\CredentialsRepository:
+    App\Users\Security\AuthController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Users\MigrateFullName:
+        tags: ['console.command']
+
+    App\Users\UserAbilityVoter:
+        tags: ['security.voter']
+
+    App\Users\AdminPermissionsVoter:
+        tags: ['security.voter']
+
+    App\Users\Security\Oauth\OauthService:
+        arguments:
+            - !tagged_locator { tag: 'oauth.provider', index_by: 'key' }
+
+    App\Users\AdminController:
+        tags: ['controller.service_arguments']
+
+    App\Users\Security\SignInWithAppleController:
+        tags: ['controller.service_arguments']
+
+    App\Users\Security\SignInWithGoogleController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Users\Security\SignInWithFacebookController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Users\Security\SignInWithVkController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Users\Security\SignInWithMailruController:
+        tags: [ 'controller.service_arguments' ]

@@ -1,0 +1,10 @@
+sentry:
+    dsn: '%env(SENTRY_DSN)%'
+    options:
+        excluded_exceptions:
+            - 'App\Infrastructure\ObjectResolver\ValidationException'
+            - 'Symfony\Component\Security\Core\Exception\AccessDeniedException'
+            - 'Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException'
+            - 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException'
+            - 'Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException'
+            - 'Symfony\Component\Routing\Exception\MethodNotAllowedException'

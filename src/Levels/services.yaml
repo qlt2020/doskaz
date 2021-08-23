@@ -1,0 +1,24 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: false
+
+  App\Levels\LevelRepository:
+
+  App\Levels\SeedLevels:
+    tags: ['console.command']
+
+  App\Levels\IncreaseLevelOnTaskDone:
+    tags: ['domain_events.listener']
+
+  App\Levels\InitializeLevelWhenUserRegistered:
+    tags: ['domain_events.listener']
+
+  App\Levels\IncreaseLevelOnVerificationTaskDone:
+    tags: ['domain_events.listener']
+
+  App\Levels\IncreaseLevelOnDailyTaskDone:
+    tags: ['domain_events.listener']
+
+  App\Levels\IncreaseLevelOnAdministrationTaskDone:
+    tags: ['domain_events.listener']

@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: docker-compose/Dockerfile
+    image: travellist
+    container_name: dos_app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - doc
+  database:
+    image: mdillon/postgis:11-alpine
+    volumes:
+      - ./docker-compose/dump:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    networks:
+      - doc
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 1242:8080
+    volumes:
+      - ./docker-compose/adminer/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - doc
+
+  nginx:
+    image: nginx:latest
+    container_name: dos_nginx
+    restart: unless-stopped
+    ports:
+      - 8020:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - doc
+networks:
+  doc:
+    driver: bridge

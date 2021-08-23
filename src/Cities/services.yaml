@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+
+    App\Cities\ImportGeometry:
+        tags: ['console.command']
+
+    App\Cities\FindCityIdByLocation:
+
+    App\Cities\Seed:
+        tags: ['console.command']
+
+    App\Cities\TranslateCommand:
+        tags: [ 'console.command' ]
+
+    App\Cities\CitiesController:
+        tags: ['controller.service_arguments']
+
+    OpenCage\Geocoder\Geocoder:
+        arguments:
+            - '%env(OPENCAGE_API_KEY)%'
+
+    App\Cities\CityFinder:
