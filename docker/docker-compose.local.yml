@@ -1,0 +1,19 @@
+version: "3.4"
+
+services:
+  backend:
+    build:
+      target: dev
+      args:
+        - user_id=1000
+    volumes:
+      - ../backend:/var/www/html
+
+  worker:
+    volumes:
+      - ../backend:/var/www/html
+
+  backend_nginx:
+    labels:
+      - traefik.http.routers.doskaz_app.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`, `/storage`, `/static`, `/_profiler`)
+

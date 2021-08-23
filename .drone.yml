@@ -1,0 +1,137 @@
+kind: pipeline
+type: docker
+name: stage
+
+steps:
+  - name: deploy
+    image: docker/compose:1.27.0
+    commands:
+      - cd docker
+      - docker-compose up -d --build
+      - docker-compose exec -T --user www-data backend php bin/console d:m:m
+    environment:
+      COMPOSE_PROJECT_NAME: doskaz
+      COMPOSE_FILE: docker-compose.yml:docker-compose.stage.yml
+      COMPOSE_DOCKER_CLI_BUILD: 1
+      DOCKER_BUILDKIT: 1
+      APP_SECRET:
+        from_secret: stage_app_secret
+      APP_HOST: doskaz.vps3.zed.kz
+      BACKEND_DOMAIN: http://doskaz.vps3.zed.kz
+      FIREBASE_API_KEY:
+        from_secret: firebase_api_key
+      DB_NAME: doskaz
+      DB_PASSWORD:
+        from_secret: db_password
+      SENTRY_DSN:
+        from_secret: sentry_dsn
+      OAUTH_GOOGLE_CLIENT_ID:
+        from_secret: oauth_google_client_id
+      OAUTH_GOOGLE_CLIENT_SECRET:
+        from_secret: oauth_google_client_secret
+      OAUTH_GOOGLE_REDIRECT_URI: https://doskaz.vps3.zed.kz/oauth/callback
+      OPENCAGE_API_KEY:
+        from_secret: opencage_api_key
+      MAXMIND_LICENSE_KEY:
+        from_secret: maxmind_license_key
+      OAUTH_FACEBOOK_CLIENT_ID:
+        from_secret: oauth_facebook_client_id
+      OAUTH_FACEBOOK_REDIRECT_URI: https://doskaz.vps3.zed.kz/oauth/callback
+      OAUTH_FACEBOOK_CLIENT_SECRET:
+        from_secret: oauth_facebook_client_secret
+      OAUTH_VK_CLIENT_SECRET:
+        from_secret: oauth_vk_client_secret
+      OAUTH_VK_CLIENT_ID:
+        from_secret: oauth_vk_client_id
+      OAUTH_VK_REDIRECT_URI: https://doskaz.vps3.zed.kz/oauth/callback
+      OAUTH_MAILRU_CLIENT_ID:
+        from_secret: oauth_mailru_client_secret
+      OAUTH_MAILRU_CLIENT_SECRET:
+        from_secret: oauth_mailru_client_secret_test
+      OAUTH_MAILRU_REDIRECT_URI: https://doskaz.vps3.zed.kz/oauth/callback
+      SENTRY_DSN_FRONTEND:
+        from_secret: sentry_dsn_frontend
+    volumes:
+      - name: docker.sock
+        path: /var/run/docker.sock
+
+volumes:
+  - name: docker.sock
+    host:
+      path: /var/run/docker.sock
+
+node:
+  server: test
+
+trigger:
+  branch:
+    - master
+
+---
+kind: pipeline
+type: docker
+name: production
+
+steps:
+  - name: deploy
+    image: docker/compose:1.24.0
+    commands:
+      - cd docker
+      - docker-compose up -d --build --scale worker=3
+      - docker-compose exec -T --user www-data backend php bin/console d:m:m
+    environment:
+      COMPOSE_PROJECT_NAME: doskaz
+      COMPOSE_FILE: docker-compose.yml:docker-compose.prod.yml
+      APP_HOST: doskaz.kz
+      APP_SECRET:
+        from_secret: prod_app_secret
+      BACKEND_DOMAIN: http://doskaz.kz
+      FIREBASE_API_KEY:
+        from_secret: firebase_api_key
+      DB_NAME: doskaz
+      DB_PASSWORD:
+        from_secret: db_password
+      SENTRY_DSN:
+        from_secret: sentry_dsn
+      OAUTH_GOOGLE_CLIENT_ID:
+        from_secret: oauth_google_client_id_prod
+      OAUTH_GOOGLE_CLIENT_SECRET:
+        from_secret: oauth_google_client_secret
+      OAUTH_GOOGLE_REDIRECT_URI: https://doskaz.kz/oauth/callback
+      OPENCAGE_API_KEY:
+        from_secret: opencage_api_key
+      MAXMIND_LICENSE_KEY:
+        from_secret: maxmind_license_key
+      ROBOTS_ALLOW: 'true'
+      OAUTH_FACEBOOK_CLIENT_ID:
+        from_secret: oauth_facebook_client_id_prod
+      OAUTH_FACEBOOK_REDIRECT_URI: https://doskaz.kz/oauth/callback
+      OAUTH_FACEBOOK_CLIENT_SECRET:
+        from_secret: oauth_facebook_client_secret
+      OAUTH_VK_CLIENT_SECRET:
+        from_secret: oauth_vk_client_secret
+      OAUTH_VK_CLIENT_ID:
+        from_secret: oauth_vk_client_id_prod
+      OAUTH_VK_REDIRECT_URI: https://doskaz.kz/oauth/callback
+      OAUTH_MAILRU_CLIENT_ID:
+        from_secret: oauth_mailru_client_id_prod
+      OAUTH_MAILRU_CLIENT_SECRET:
+        from_secret: oauth_mailru_client_secret_prod
+      OAUTH_MAILRU_REDIRECT_URI: https://doskaz.kz/oauth/callback
+      SENTRY_DSN_FRONTEND:
+        from_secret: sentry_dsn_frontend
+    volumes:
+      - name: docker.sock
+        path: /var/run/docker.sock
+
+volumes:
+  - name: docker.sock
+    host:
+      path: /var/run/docker.sock
+
+node:
+  server: doskaz_production
+
+trigger:
+  branch:
+    - production

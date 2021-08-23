@@ -1,0 +1,86 @@
+version: "3.4"
+
+x-default-logging: &default-logging
+  logging:
+    driver: 'json-file'
+    options:
+      max-size: '5M'
+
+x-default-restart-policy: &default-restart-policy
+  restart: unless-stopped
+
+services:
+  backend:
+    <<: *default-restart-policy
+    <<: *default-logging
+    environment:
+      - SENTRY_DSN
+      - TRUSTED_PROXIES=172.21.0.3/8
+
+  worker:
+    environment:
+      - SENTRY_DSN
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  backend_nginx:
+    <<: *default-restart-policy
+    <<: *default-logging
+    networks:
+      default:
+        aliases:
+          - 'doskaz.kz'
+
+  frontend:
+    <<: *default-restart-policy
+    <<: *default-logging
+    environment:
+      - ROBOTS_ALLOW=true
+
+  database:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  imgproxy:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  adminpanel:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  gotenberg:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  geoip_updater:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  rabbitmq:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local:11-alpine
+    depends_on:
+      - database
+    volumes:
+      - pgbackups_data:/backups
+    environment:
+      - POSTGRES_HOST=database
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=postgres
+      - SCHEDULE=@daily
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=80
+      - POSTGRES_EXTRA_OPTS=-Z9
+    <<: *default-restart-policy
+    <<: *default-logging
+
+volumes:
+  pgbackups_data:
+    driver: local

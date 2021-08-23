@@ -1,0 +1,79 @@
+version: "3.4"
+
+x-default-logging: &default-logging
+  logging:
+    driver: 'json-file'
+    options:
+      max-size: '1M'
+
+x-default-restart-policy: &default-restart-policy
+  restart: unless-stopped
+
+
+services:
+  backend:
+    <<: *default-restart-policy
+    <<: *default-logging
+    environment:
+      - SENTRY_DSN
+      - TRUSTED_PROXIES=172.25.0.0/16
+
+  backend_nginx:
+    <<: *default-restart-policy
+    <<: *default-logging
+    labels:
+      - traefik.http.routers.doskaz_app.tls=true
+      - traefik.http.routers.doskaz_app.entrypoints=websecure
+      - traefik.http.routers.doskaz_app.tls.certresolver=le
+      - traefik.http.routers.app_rss.tls=true
+      - traefik.http.routers.app_rss.tls.certresolver=le
+    networks:
+      default:
+        aliases:
+          - 'doskaz.vps3.zed.kz'
+
+  frontend:
+    labels:
+      - traefik.http.routers.doskaz_frontend_insecure.rule=Host(`${APP_HOST}`)
+      - traefik.http.routers.doskaz_frontend_insecure.entrypoints=web
+      - traefik.http.middlewares.redirect_to_secured.redirectscheme.scheme=https
+      - traefik.http.routers.doskaz_frontend_insecure.middlewares=redirect_to_secured
+      - traefik.http.routers.doskaz_frontend.tls=true
+      - traefik.http.routers.doskaz_frontend.entrypoints=websecure
+      - traefik.http.routers.doskaz_frontend.tls.certresolver=le
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  database:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  imgproxy:
+    <<: *default-restart-policy
+    <<: *default-logging
+    labels:
+      - traefik.http.routers.doskaz_imgproxy.tls=true
+      - traefik.http.routers.doskaz_imgproxy.entrypoints=websecure
+      - traefik.http.routers.doskaz_imgproxy.tls.certresolver=le
+
+  adminpanel:
+    <<: *default-restart-policy
+    <<: *default-logging
+    labels:
+      - traefik.http.routers.doskaz_adminpanel.tls=true
+      - traefik.http.routers.doskaz_adminpanel.entrypoints=websecure
+      - traefik.http.routers.doskaz_adminpanel.tls.certresolver=le
+
+  gotenberg:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  rabbitmq:
+    <<: *default-restart-policy
+    <<: *default-logging
+
+  worker:
+    environment:
+      - SENTRY_DSN
+    <<: *default-restart-policy
+    <<: *default-logging

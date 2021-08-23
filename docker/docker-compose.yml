@@ -1,0 +1,164 @@
+version: "3.4"
+
+services:
+
+  backend:
+    environment:
+      - FIREBASE_API_KEY
+      - DATABASE_URL=pgsql://postgres:${DB_PASSWORD}@database:5432/${DB_NAME}
+      - OAUTH_GOOGLE_CLIENT_ID
+      - OAUTH_GOOGLE_CLIENT_SECRET
+      - OAUTH_GOOGLE_REDIRECT_URI
+      - OAUTH_FACEBOOK_CLIENT_ID
+      - OAUTH_FACEBOOK_CLIENT_SECRET
+      - OAUTH_FACEBOOK_REDIRECT_URI
+      - OAUTH_VK_CLIENT_ID
+      - OAUTH_VK_CLIENT_SECRET
+      - OAUTH_VK_REDIRECT_URI
+      - OAUTH_MAILRU_CLIENT_ID
+      - OAUTH_MAILRU_CLIENT_SECRET
+      - OAUTH_MAILRU_REDIRECT_URI
+      - OPENCAGE_API_KEY
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f/messages
+      - APP_SECRET
+    build:
+      context: ../backend
+      dockerfile: ./docker/fpm.Dockerfile
+      target: prod
+      args:
+        - app_env=prod
+    volumes:
+      - storage:/var/www/html/storage
+      - storage:/var/www/html/public/storage
+      - geoip_data:/geoip_data:ro
+    depends_on:
+      - database
+
+  worker:
+    environment:
+      - DATABASE_URL=pgsql://postgres:${DB_PASSWORD}@database:5432/${DB_NAME}
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f/messages
+      - OPENCAGE_API_KEY
+    image: ${COMPOSE_PROJECT_NAME}_backend:latest
+    command: su www-data -s /bin/bash -c "php /var/www/html/bin/console messenger:consume async --time-limit=3600"
+    restart: unless-stopped
+    volumes:
+      - storage:/var/www/html/storage
+      - storage:/var/www/html/public/storage
+    depends_on:
+      - database
+      - rabbitmq
+
+  backend_nginx:
+    build:
+      context: ../backend
+      dockerfile: ./docker/nginx.Dockerfile
+    labels:
+      - traefik.http.routers.doskaz_app.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`, `/storage`, `/static`)
+      - traefik.enable=true
+      - traefik.http.middlewares.doskaz_compress_app.compress=true
+      - traefik.http.routers.doskaz_app.middlewares=doskaz_compress_app
+      - traefik.http.routers.app_rss.rule=Host(`${APP_HOST}`) && Path(`/blog/rss`)
+      - traefik.http.middlewares.rss_replace.replacepath.path=/api/blogPosts/rss
+      - traefik.http.routers.app_rss.middlewares=rss_replace
+    networks:
+      - default
+      - web
+    volumes:
+      - storage:/var/www/html/storage
+    depends_on: [ backend ]
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      args:
+        firebase_api_key: ${FIREBASE_API_KEY}
+        sentry_dsn: ${SENTRY_DSN_FRONTEND}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.doskaz_frontend.rule=Host(`${APP_HOST}`)
+      - traefik.http.middlewares.doskaz_compress_frontend.compress=true
+      - traefik.http.routers.doskaz_frontend.middlewares=doskaz_compress_frontend
+      - traefik.port=3000
+    networks:
+      - web
+      - default
+    environment:
+      - BACKEND_DOMAIN
+      - SENTRY_DSN=${SENTRY_DSN_FRONTEND}
+      - NUXT_HOST=0.0.0.0
+      - TZ=Asia/Almaty
+    depends_on:
+      - backend
+
+  adminpanel:
+    build:
+      context: ../adminpanel
+      dockerfile: ./docker/Dockerfile
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.doskaz_adminpanel.rule=Host(`${APP_HOST}`) && PathPrefix(`/adminpanel`)
+      - traefik.http.middlewares.stripprefix.stripprefix.prefixes=/adminpanel
+      - traefik.http.routers.doskaz_adminpanel.middlewares=stripprefix
+    depends_on:
+      - backend
+
+  database:
+    image: mdillon/postgis:11-alpine
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  imgproxy:
+    image: darthsim/imgproxy:v2.10
+    environment:
+      - IMGPROXY_LOCAL_FILESYSTEM_ROOT=/mnt/data
+      - IMGPROXY_JPEG_PROGRESSIVE=true
+      - IMGPROXY_ENABLE_WEBP_DETECTION=true
+      - IMGPROXY_ENFORCE_WEBP=true
+    volumes:
+      - storage:/mnt/data/storage
+    networks:
+      - web
+    labels:
+      - traefik.enable=true
+      - traefik.port=8080
+      - traefik.docker.network=web
+      - traefik.http.routers.doskaz_imgproxy.rule=Host(`${APP_HOST}`) && PathPrefix(`/img`)
+      - traefik.http.middlewares.doskaz_imgproxy.stripprefix.prefixes=/img
+      - traefik.http.routers.doskaz_imgproxy.middlewares=doskaz_imgproxy
+
+  gotenberg:
+    image: thecodingmachine/gotenberg:6
+
+  geoip_updater:
+    image: crazymax/geoip-updater:latest
+    environment:
+      - TZ=Asia/Almaty
+      - EDITION_IDS=GeoLite2-City
+      - LICENSE_KEY=${MAXMIND_LICENSE_KEY}
+      - DOWNLOAD_PATH=/data
+      - SCHEDULE=0 0 * * 0
+    volumes:
+      - geoip_data:/data
+
+  rabbitmq:
+    image: rabbitmq:3.8.8-alpine
+    hostname: rabbitmq
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  db: { }
+  storage: { }
+  geoip_data: { }
+  rabbitmq_data: { }
+
+networks:
+  web:
+    external: true
