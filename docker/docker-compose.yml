@@ -19,6 +19,11 @@ services:
       - OAUTH_MAILRU_CLIENT_SECRET
       - OAUTH_MAILRU_REDIRECT_URI
       - OPENCAGE_API_KEY
+      - FRONTEND_HOST
+      - EMAIL_TO
+      - IMGPROXY_HOST
+      - GOTENBERG_HOST
+      - EMAIL_FROM
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f/messages
       - APP_SECRET
     build:

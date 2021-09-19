@@ -48,6 +48,9 @@ services:
     App\Objects\Command\UpdateCategoryTranslations:
         tags: [ 'console.command' ]
 
+    App\Objects\Command\UpdateObjectCategory:
+        tags: [ 'console.command' ]
+
     App\Objects\Command\DebugTranslations:
         tags: [ 'console.command' ]
         arguments:
@@ -55,3 +58,5 @@ services:
 
     App\Objects\EventListener\AddPhotosToObjectWhenRequestApproved:
         tags: ['domain_events.listener']
+    App\Objects\EventListener\AddNotificationToSubscribers:
+        tags: [ 'domain_events.listener' ]

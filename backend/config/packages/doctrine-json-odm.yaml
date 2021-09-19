@@ -9,3 +9,4 @@ doctrine_json_odm:
             - '%kernel.project_dir%/src/UserEvents'
             - '%kernel.project_dir%/src/RegionalCoordinators'
             - '%kernel.project_dir%/src/ProfileNotifications'
+            - '%kernel.project_dir%/src/Notification'

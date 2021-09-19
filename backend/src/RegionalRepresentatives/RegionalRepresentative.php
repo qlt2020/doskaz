@@ -44,12 +44,6 @@ class RegionalRepresentative
     private $phone;
 
     /**
-     * @var string
-     * @ORM\Column(type="text")
-     */
-    private $department;
-
-    /**
      * @var Image
      * @ORM\Column(type=Image::class, nullable=true, options={"jsonb" = true})
      */
@@ -79,16 +73,14 @@ class RegionalRepresentative
      * @param string $name
      * @param string $email
      * @param string $phone
-     * @param string $department
      * @param Image $image
      */
-    public function __construct(int $cityId, string $name, string $email, string $phone, string $department, Image $image)
+    public function __construct(int $cityId, string $name, string $email, string $phone, Image $image)
     {
         $this->cityId = $cityId;
         $this->name = $name;
         $this->email = $email;
         $this->phone = $phone;
-        $this->department = $department;
         $this->image = $image;
 
         $this->createdAt = new \DateTimeImmutable();
@@ -99,7 +91,6 @@ class RegionalRepresentative
     public function update(RegionalRepresentativeData $data)
     {
         $this->cityId = $data->cityId;
-        $this->department = $data->department;
         $this->email = $data->email;
         $this->name = $data->name;
         $this->image = $data->photo;

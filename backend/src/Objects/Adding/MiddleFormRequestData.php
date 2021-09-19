@@ -31,6 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 final class MiddleFormRequestData implements DataObject, Form
 {
+    public string $form = 'middle';
     /**
      * @var FirstStep|null
      * @Assert\Valid()

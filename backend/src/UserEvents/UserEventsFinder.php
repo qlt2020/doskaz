@@ -38,7 +38,11 @@ class UserEventsFinder
             ->fetchAll();
 
         $items = array_map(function ($item) {
-            $data = $this->connection->convertToPHPValue($item['data'], Data::class);
+            try {
+                $data = $this->connection->convertToPHPValue($item['data'], Data::class);
+            } catch (\Exception $exception) {
+                return [];
+            }
 
             $result = [
                 'userId' => $item['userId'],
@@ -72,7 +76,11 @@ class UserEventsFinder
             ->fetchAll();
 
         $items = array_map(function ($item) {
-            $data = $this->connection->convertToPHPValue($item['data'], Data::class);
+            try {
+                $data = $this->connection->convertToPHPValue($item['data'], Data::class);
+            } catch (\Exception $exception) {
+                return [];
+            }
 
             $result = [
                 'username' => $item['username'],

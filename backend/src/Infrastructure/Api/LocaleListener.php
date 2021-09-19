@@ -12,7 +12,9 @@ final class LocaleListener
         $request = $event->getRequest();
 
         $lang = $request->headers->get('Accept-Language');
-        if ($lang) {
+        if ($lang){
+            if ( count(explode(';', $lang) ) > 1)
+                $lang = 'ru';
             $request->setLocale($lang);
         }
     }

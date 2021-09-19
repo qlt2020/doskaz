@@ -29,4 +29,18 @@ class Storage
         $this->filesystem->rename($name, $nameWithExtension);
         return $nameWithExtension;
     }
+
+    public function deleteOldFile($avatar): bool
+    {
+        $presets = array('/static/presets/av1.svg', '/static/presets/av2.svg', '/static/presets/av3.svg', '/static/presets/av4.svg', 
+                            '/static/presets/av5.svg', '/static/presets/av6.svg');
+        if($avatar && !in_array($avatar, $presets)) {
+            $fileName = explode("/", $avatar)[2];
+            if($this->filesystem->has($fileName)) {
+                $this->filesystem->delete($fileName);
+            }
+        }
+        return true;
+    }
+
 }

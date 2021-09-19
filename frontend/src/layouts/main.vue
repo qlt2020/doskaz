@@ -1,527 +1,721 @@
 <template>
-    <div class="main-page" :class="{ opened: mobileOpened }">
-        <IntroForm/>
-        <div class="main-page__map">
-            <client-only>
-                <MainMap/>
-            </client-only>
-        </div>
-
-        <div class="main-page__options --desktop">
-            <button class="button button_blue" type="button" @click="popupOpen = true">
-                <img :src="require(`~/assets/icons/categories/${category}.svg`)" v-if="category"/>
-            </button>
-        </div>
-        <div class="main-page__actions --desktop">
-            <nuxt-link :to="localePath({name: 'objects-add'})" class="button button_green" type="button" name="add_object">
-                <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M12.5 0H7.5V7.5H0V12.5H7.5V20H12.5V12.5H20V7.5H12.5V0Z"
-                            fill="white"
-                    />
-                </svg>
-            </nuxt-link>
-            <nuxt-link :to="localePath({name: 'complaint'})" class="button button_red">
-                <svg
-                        width="19"
-                        height="21"
-                        viewBox="0 0 19 21"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            d="M15.5527 5.65379C16.2218 5.65379 16.7643 5.11137 16.7643 4.44225C16.7643 3.77314 16.2218 3.23071 15.5527 3.23071C14.8836 3.23071 14.3412 3.77314 14.3412 4.44225C14.3412 5.11137 14.8836 5.65379 15.5527 5.65379Z"
-                            fill="white"
-                    />
-                    <path
-                            d="M12.322 3.23082C12.9911 3.23082 13.5335 2.68839 13.5335 2.01928C13.5335 1.35016 12.9911 0.807739 12.322 0.807739C11.6529 0.807739 11.1105 1.35016 11.1105 2.01928C11.1105 2.68839 11.6529 3.23082 12.322 3.23082Z"
-                            fill="white"
-                    />
-                    <path
-                            d="M9.09118 2.42308C9.76029 2.42308 10.3027 1.88065 10.3027 1.21154C10.3027 0.542424 9.76029 0 9.09118 0C8.42206 0 7.87964 0.542424 7.87964 1.21154C7.87964 1.88065 8.42206 2.42308 9.09118 2.42308Z"
-                            fill="white"
-                    />
-                    <path
-                            d="M5.86046 4.03843C6.52958 4.03843 7.072 3.49601 7.072 2.82689C7.072 2.15778 6.52958 1.61536 5.86046 1.61536C5.19135 1.61536 4.64893 2.15778 4.64893 2.82689C4.64893 3.49601 5.19135 4.03843 5.86046 4.03843Z"
-                            fill="white"
-                    />
-                    <path
-                            d="M14.3412 4.44232V9.69232C14.3412 9.91524 14.1603 10.0962 13.9374 10.0962C13.7145 10.0962 13.5336 9.91524 13.5336 9.69232V2.01924H11.1105V8.88462C11.1105 9.10755 10.9296 9.28847 10.7066 9.28847C10.4837 9.28847 10.3028 9.10755 10.3028 8.88462V1.21155H7.87971V8.88462C7.87971 9.10755 7.69878 9.28847 7.47586 9.28847C7.25294 9.28847 7.07201 9.10755 7.07201 8.88462V2.82693H4.64894V12.9231L3.01336 10.685C2.52874 9.93786 1.58294 9.68747 0.889937 10.1155C0.19936 10.5533 0.0281296 11.508 0.506283 12.2527C0.506283 12.2527 3.14421 16.2451 4.26851 17.9542C5.39282 19.6633 7.21417 21 10.6202 21C16.2595 21 16.7643 16.6449 16.7643 15.3462C16.7643 14.0474 16.7643 4.44232 16.7643 4.44232H14.3412Z"
-                            fill="white"
-                    />
-                </svg>
-            </nuxt-link>
-        </div>
-
-        <StartCategoryForm/>
-        <nuxt/>
-        <div class="main-page__mobile">
-            <div class="main-page__mobile-left">
-                <div class="main-page__mobile-in">
-                    <div class="main-page__mobile-item --md">
-                        <nuxt-link :to="localePath({name: 'index'})" class="main-filter__logo">
-                            <img :src="require(`@/assets/logo_${$i18n.locale}.svg`)" alt/>
-                        </nuxt-link>
-                    <span class="main-page__mobile-close" @click="mobileOpenedFalse">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                            <path d="M13 1L1 13" stroke="#7B95A7" stroke-width="2"/>
-                            <path d="M1 1L13 13" stroke="#7B95A7" stroke-width="2"/>
-                        </svg>
-                    </span>
-                    </div>
-                    <div class="main-page__mobile-item">
-                        <city-selector/>
-                    </div>
-                    <div class="main-page__mobile-item">
-                        <div class="main-filter__menu">
-                            <nuxt-link :to="localePath({name: 'login'})" v-if="!user">{{ $t('login.linkTitle') }}</nuxt-link>
-
-                            <template v-if="user">
-                                <username :value="name"/>
-                                <nuxt-link :to="localePath({name: 'profile-achievements'})">{{ $t('profile.achievements.tabTitle') }}</nuxt-link>
-                                <nuxt-link :to="localePath({name: 'profile-objects'})">{{ $t('profile.objects.tabTitle') }}</nuxt-link>
-                                <nuxt-link :to="localePath({name: 'profile-tickets'})">{{ $t('profile.tickets.tabTitle') }}</nuxt-link>
-                                <nuxt-link :to="localePath({name: 'profile-tasks'})">{{ $t('profile.tasks.tabTitle') }}</nuxt-link>
-                                <nuxt-link :to="localePath({name: 'profile-comments'})">{{ $t('profile.comments.tabTitle') }}</nuxt-link>
-                            </template>
-
-                        </div>
-                    </div>
-                    <div class="main-page__mobile-item">
-                        <div class="main-filter__menu">
-<!--                            <a href="#"><span>Помощь</span></a>-->
-                            <nuxt-link :to="localePath({name: 'about'})"><span>{{ $t('mainMenu.about') }}</span></nuxt-link>
-                            <nuxt-link :to="localePath({name: 'blog-category'})"><span>{{ $t('mainMenu.blog') }}</span></nuxt-link>
-                            <nuxt-link :to="localePath({name: 'contacts'})"><span>{{ $t('mainMenu.contacts') }}</span></nuxt-link>
-                            <button class="button button_blue" type="button" @click="popupOpen = true" v-if="currentCategory">
-                                <span>{{ $t(`disabilityCategories.${currentCategory.key}`) }}</span>
-                                <img :src="require(`~/assets/icons/categories/${currentCategory.key}.svg`)"/>
-                            </button>
-                            <nuxt-link :to="localePath({name: 'objects-add'})" class="button button_green" type="button" name="add_object">
-                                <span>{{ $t('index.addObjectLink')}}</span>
-                                <svg
-                                        width="20"
-                                        height="20"
-                                        viewBox="0 0 20 20"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                            fill-rule="evenodd"
-                                            clip-rule="evenodd"
-                                            d="M12.5 0H7.5V7.5H0V12.5H7.5V20H12.5V12.5H20V7.5H12.5V0Z"
-                                            fill="white"
-                                    />
-                                </svg>
-                            </nuxt-link>
-                            <nuxt-link :to="localePath({name: 'complaint'})" class="button button_red">
-                                <span>{{ $t('index.makeComplaintLink') }}</span>
-                                <svg
-                                        width="19"
-                                        height="21"
-                                        viewBox="0 0 19 21"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                            d="M15.5527 5.65379C16.2218 5.65379 16.7643 5.11137 16.7643 4.44225C16.7643 3.77314 16.2218 3.23071 15.5527 3.23071C14.8836 3.23071 14.3412 3.77314 14.3412 4.44225C14.3412 5.11137 14.8836 5.65379 15.5527 5.65379Z"
-                                            fill="white"
-                                    />
-                                    <path
-                                            d="M12.322 3.23082C12.9911 3.23082 13.5335 2.68839 13.5335 2.01928C13.5335 1.35016 12.9911 0.807739 12.322 0.807739C11.6529 0.807739 11.1105 1.35016 11.1105 2.01928C11.1105 2.68839 11.6529 3.23082 12.322 3.23082Z"
-                                            fill="white"
-                                    />
-                                    <path
-                                            d="M9.09118 2.42308C9.76029 2.42308 10.3027 1.88065 10.3027 1.21154C10.3027 0.542424 9.76029 0 9.09118 0C8.42206 0 7.87964 0.542424 7.87964 1.21154C7.87964 1.88065 8.42206 2.42308 9.09118 2.42308Z"
-                                            fill="white"
-                                    />
-                                    <path
-                                            d="M5.86046 4.03843C6.52958 4.03843 7.072 3.49601 7.072 2.82689C7.072 2.15778 6.52958 1.61536 5.86046 1.61536C5.19135 1.61536 4.64893 2.15778 4.64893 2.82689C4.64893 3.49601 5.19135 4.03843 5.86046 4.03843Z"
-                                            fill="white"
-                                    />
-                                    <path
-                                            d="M14.3412 4.44232V9.69232C14.3412 9.91524 14.1603 10.0962 13.9374 10.0962C13.7145 10.0962 13.5336 9.91524 13.5336 9.69232V2.01924H11.1105V8.88462C11.1105 9.10755 10.9296 9.28847 10.7066 9.28847C10.4837 9.28847 10.3028 9.10755 10.3028 8.88462V1.21155H7.87971V8.88462C7.87971 9.10755 7.69878 9.28847 7.47586 9.28847C7.25294 9.28847 7.07201 9.10755 7.07201 8.88462V2.82693H4.64894V12.9231L3.01336 10.685C2.52874 9.93786 1.58294 9.68747 0.889937 10.1155C0.19936 10.5533 0.0281296 11.508 0.506283 12.2527C0.506283 12.2527 3.14421 16.2451 4.26851 17.9542C5.39282 19.6633 7.21417 21 10.6202 21C16.2595 21 16.7643 16.6449 16.7643 15.3462C16.7643 14.0474 16.7643 4.44232 16.7643 4.44232H14.3412Z"
-                                            fill="white"
-                                    />
-                                </svg>
-                            </nuxt-link>
-                        </div>
-                    </div>
-                    <div class="main-header__language">
-                        <LangSelect/>
-                    </div>
-                </div>
-            </div>
-            <div class="main-page__mobile-right" @click="mobileOpenedFalse"></div>
-        </div>
+  <div class="main-page" :class="{ opened: mobileOpened }">
+    <IntroForm />
+    <div class="main-page__map">
+      <client-only>
+        <MainMap :location="location" />
+      </client-only>
     </div>
+
+    <div class="main-page__options --desktop">
+      <div class="head-links">
+        <div class="main-filter__menu --desktop">
+          <nuxt-link :to="localePath({ name: 'help' })"
+            ><span>{{ $t("mainMenu.help") }}</span></nuxt-link
+          >
+          <nuxt-link :to="localePath({ name: 'about' })"
+            ><span>{{ $t("mainMenu.about") }}</span></nuxt-link
+          >
+          <nuxt-link :to="localePath({ name: 'blog-category' })"
+            ><span>{{ $t("mainMenu.blog") }}</span></nuxt-link
+          >
+          <nuxt-link :to="localePath({ name: 'contacts' })"
+            ><span>{{ $t("mainMenu.contacts") }}</span></nuxt-link
+          >
+        </div>
+        <div
+          class="main-filter__visual --desktop"
+          @click="enableVisualImpairedMode"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.09756 12C8.09756 14.1333 9.8439 15.8691 12 15.8691C14.1463 15.8691 15.8927 14.1333 15.8927 12C15.8927 9.85697 14.1463 8.12121 12 8.12121C9.8439 8.12121 8.09756 9.85697 8.09756 12ZM17.7366 6.04606C19.4439 7.36485 20.8976 9.29455 21.9415 11.7091C22.0195 11.8933 22.0195 12.1067 21.9415 12.2812C19.8537 17.1103 16.1366 20 12 20H11.9902C7.86341 20 4.14634 17.1103 2.05854 12.2812C1.98049 12.1067 1.98049 11.8933 2.05854 11.7091C4.14634 6.88 7.86341 4 11.9902 4H12C14.0683 4 16.0293 4.71758 17.7366 6.04606ZM12.0012 14.4124C13.3378 14.4124 14.4304 13.3264 14.4304 11.9979C14.4304 10.6597 13.3378 9.57362 12.0012 9.57362C11.8841 9.57362 11.767 9.58332 11.6597 9.60272C11.6207 10.6694 10.7426 11.5227 9.65971 11.5227H9.61093C9.58166 11.6779 9.56215 11.833 9.56215 11.9979C9.56215 13.3264 10.6548 14.4124 12.0012 14.4124Z"
+              fill="#3A3A3A"
+            />
+          </svg>
+        </div>
+        <LangSelect />
+      </div>
+      <div class="head-buttons">
+        <div class="availability" :class="{ opened: availabilityToggle }">
+          <span>{{ $t("showAvailability") }}</span>
+          <i
+            class="fas fa-check available"
+            @click="toggleAccessibilityLevel('full_accessible')"
+            :class="{
+              isActive: accessibilityLevels.includes('full_accessible'),
+            }"
+          >
+          </i>
+          <i
+            class="fas fa-minus partial-access"
+            @click="toggleAccessibilityLevel('partial_accessible')"
+            :class="{
+              isActive: accessibilityLevels.includes('partial_accessible'),
+            }"
+          >
+          </i>
+          <i
+            class="fas fa-times not-available"
+            @click="toggleAccessibilityLevel('not_accessible')"
+            :class="{
+              isActive: accessibilityLevels.includes('not_accessible'),
+            }"
+          >
+          </i>
+        </div>
+        <nuxt-link
+          class="head-buttons-full_name"
+          :to="localePath({ name: 'profile' })"
+          v-if="isAuthenticated"
+        >
+          <div class="sign-button">
+            <div v-if="user.avatar" class="head-buttons-avatar">
+              <img :src="user.avatar" alt="avatar" />
+            </div>
+            {{ name }}
+          </div>
+        </nuxt-link>
+        <nuxt-link v-else :to="localePath({ name: 'login' })">
+          <div class="sign-button sign-button-h">
+            {{ $t("login.linkTitle") }}
+            <img :src="require(`@/assets/icons/sign_in_circle.svg`)" />
+          </div>
+        </nuxt-link>
+      </div>
+    </div>
+    <StartCategoryForm @showDetectModal="showDetectModal" />
+    <IsParticipantModal
+      v-if="modal"
+      @close="modal = false"
+      @showCategories="selectCategoryModalVisible = true"
+      @updateUserCategory="updateUserCategory"
+    />
+    <SelectCategoryModal
+      v-if="selectCategoryModalVisible"
+      @close="selectCategoryModalVisible = false"
+      @updateUserCategory="updateUserCategory"
+    />
+    <SubscribeNotifModal
+      v-if="subscribeNotifModalVisible"
+      @close="subscribeNotifModalVisible = false"
+      @showNextModal="subscribeNotifDoneModalVisible = true"
+    />
+    <SubscribeNotifDoneModal
+      v-if="subscribeNotifDoneModalVisible"
+      @close="subscribeNotifDoneModalVisible = false"
+    />
+    <SelectObjectTypeModal
+      @close="openSelectTypeObject"
+      v-if="objectTypeSelect"
+    />
+    <detect-location
+      v-if="detectModal"
+      @close="closeDetectModal"
+      @setLocation="setLocation"
+    />
+    <nuxt />
+    <mobile-menu></mobile-menu>
+    <div class="btn-change-type" v-if="!mobileOpened && !objectTypeSelect">
+      <div>
+        <button @click="openSelectTypeObject" class="button">
+          {{ $t("selectObjectType") }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    import IntroForm from "./../components/IntroForm.vue";
-    import StartCategoryForm from "./../components/StartCategoryForm.vue";
-    import ObjectModal from "./../components/ObjectModal.vue";
-    import MainMap from "./../components/MainMap.vue";
-    import LoginForm from "../components/LoginForm";
-    import LangSelect from "./../components/LangSelect";
-    import CitySelector from "./../components/CitySelector";
-    import {sync, get} from 'vuex-pathify'
-    import Username from "../components/Username";
+import IntroForm from "./../components/IntroForm.vue";
+import StartCategoryForm from "./../components/StartCategoryForm.vue";
+import ObjectModal from "./../components/ObjectModal.vue";
+import MainMap from "./../components/MainMap.vue";
+import LoginForm from "../components/LoginForm";
+import LangSelect from "./../components/LangSelect";
+import CitySelector from "./../components/CitySelector";
+import { sync, call, get } from "vuex-pathify";
+import Username from "../components/Username";
+import IsParticipantModal from "../components/modals/IsParticipantModal";
+import SelectCategoryModal from "../components/modals/SelectCategoryModal";
+import SubscribeNotifModal from "../components/modals/SubscribeNotifModal";
+import SubscribeNotifDoneModal from "../components/modals/SubscribeNotifDoneModal";
+import SelectObjectTypeModal from "@/components/modals/SelectObjectTypeModal";
+import DetectLocation from "@/components/modals/AutoDetectLocation";
+import MobileMenu from "@/components/MobileMenu";
 
-    export default {
-        data() {
-            return {
-                mobileOpened: false
-            };
-        },
-        components: {
-            Username,
-            LoginForm,
-            IntroForm,
-            StartCategoryForm,
-            ObjectModal,
-            MainMap,
-            LangSelect,
-            CitySelector
-        },
-        computed: {
-            currentCategory: get('disabilitiesCategorySettings/currentCategory'),
-            popupOpen: sync('disabilitiesCategorySettings/popupOpen'),
-            category: sync('disabilitiesCategorySettings/category'),
-            user: get('authentication/user'),
-            name: get('authentication/name'),
-        },
-        created() {
-            this.$nuxt.$on('mainPageMobOpened', this.mobileOpenedTrue)
-        },
-        beforeDestroy() {
-          this.$nuxt.$off('mainPageMobOpened')
-        },
-      methods: {
-            mobileOpenedTrue: function (count) {
-                this.mobileOpened = true;
-            },
-            mobileOpenedFalse: function (count) {
-                this.mobileOpened = false;
-            }
-        },
-        head() {
-          return {
-            title: this.$t('meta.title'),
-            meta: [
-              {
-                hid: 'description',
-                name: 'description',
-                content: this.$t('meta.description')
-              },
-              {
-                hid: 'keywords',
-                name: 'keywords',
-                content: this.$t('meta.keywords')
-              }
-            ]
-          }
+export default {
+  data() {
+    return {
+      mobileOpened: false,
+      availabilityToggle: false,
+      isParticipantModalVisible: false,
+      selectCategoryModalVisible: false,
+      subscribeNotifModalVisible: false,
+      subscribeNotifDoneModalVisible: false,
+      objectTypeSelect: false,
+      location: [],
+      detectModal: false,
+    };
+  },
+  components: {
+    Username,
+    LoginForm,
+    IntroForm,
+    StartCategoryForm,
+    ObjectModal,
+    MainMap,
+    LangSelect,
+    CitySelector,
+    IsParticipantModal,
+    SelectCategoryModal,
+    SubscribeNotifModal,
+    SubscribeNotifDoneModal,
+    SelectObjectTypeModal,
+    DetectLocation,
+    MobileMenu,
+  },
+  computed: {
+    currentCategory: get("disabilitiesCategorySettings/currentCategory"),
+    popupOpen: sync("disabilitiesCategorySettings/popupOpen"),
+    category: sync("disabilitiesCategorySettings/category"),
+    user: sync("authentication/user"),
+    name: get("authentication/name"),
+    modal: sync("authentication/modal"),
+    isCitySelected: get("settings/citySelected"),
+    ...sync("map", ["accessibilityLevels"]),
+    isAuthenticated() {
+      return !!this.user;
+    },
+  },
+  created() {
+    this.$nuxt.$on("mainPageMobOpened", this.mobileOpenedTrue);
+  },
+  beforeDestroy() {
+    this.$nuxt.$off("mainPageMobOpened");
+  },
+  methods: {
+    showDetectModal() {
+      setTimeout(() => {
+        if (!this.isCitySelected) {
+          this.detectModal = true;
         }
-    }
+      }, 100);
+    },
+    setLocation(event) {
+      this.location = event;
+    },
+    closeDetectModal() {
+      this.detectModal = false;
+    },
+    mobileOpenedTrue: function(count) {
+      this.mobileOpened = !this.mobileOpened;
+    },
+    mobileOpenedFalse: function(count) {
+      this.mobileOpened = false;
+    },
+    enableVisualImpairedMode: call("visualImpairedModeSettings/enable"),
+    ...call("map", ["toggleCategory", "toggleAccessibilityLevel"]),
+    async updateUserCategory(category) {
+      var newUser = {
+        ...this.user,
+      };
+      newUser.category = category;
+      var result = await this.$store.dispatch(
+        "authentication/updateProfile",
+        newUser
+      );
+      if (category !== "") {
+        this.subscribeNotifModalVisible = true;
+      }
+    },
+    openSelectTypeObject() {
+      this.objectTypeSelect = !this.objectTypeSelect;
+    },
+  },
+  head() {
+    return {
+      title: this.$t("meta.title"),
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.$t("meta.description"),
+        },
+        {
+          hid: "keywords",
+          name: "keywords",
+          content: this.$t("meta.keywords"),
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style lang="scss">
-    @import "./../styles/mixins.scss";
+@import "./../styles/mixins.scss";
 
-    .main-page {
-        display: block;
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        background: #e5e5e5;
-        overflow: hidden;
-
-        &.opened {
-            .main-page__mobile {
-                display: block;
-            }
-        }
-
-        &__mobile {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            background: rgba(0,0,0,.5);
-            .main-filter__logo {
-                img {
-                    width: 137px;
-                    height: auto;
-                }
-            }
-            .main-header__language {
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 100%;
-                height: 53px;
-                border-top: 1px solid rgba(123, 149, 167, 0.3);
-            }
-            .lang-select {
-                padding: 0 40px;
-                @media all and (max-width: 768px){
-                    padding: 0 20px;
-                }
-            }
-            &-close {
-                cursor: pointer;
-                width: 36px;
-                height: 36px;
-                justify-content: center;
-                align-items: center;
-                display: flex;
-                margin: 0 -11px 0 0;
-                svg {
-                    width: 14px;
-                    height: 14px;
-                }
-            }
-            &-right {
-                position: absolute;
-                left: 350px;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                cursor: pointer;
-                @media all and (max-width: 768px){
-                    left: 0;
-                    right: auto;
-                    width: calc(100% - 270px);
-                }
-            }
-            &-left {
-                width: 350px;
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                background: #FFFFFF;
-                overflow-y: auto;
-                @media all and (max-width: 768px){
-                    width: 270px;
-                    left: auto;
-                    right: 0;
-                }
-            }
-            &-in {
-                position: relative;
-                width: 100%;
-                min-height: 100%;
-                padding: 0 0 64px;
-            }
-            &-item {
-                display: flex;
-                padding: 25px 40px;
-                justify-content: space-between;
-                align-items: center;
-                border-top: 1px solid rgba(123, 149, 167, 0.3);
-                &:first-child {
-                    border: none;
-                }
-                @media all and (max-width: 768px) {
-                    padding: 20px;
-                }
-                &.--md {
-                    padding: 15px 40px;
-                    @media all and (max-width: 768px) {
-                        padding: 15px 20px;
-                    }
-                }
-                .main-filter {
-                    &__menu {
-                        display: block;
-                        width: 100%;
-                        a {
-                            display: block;
-                            margin: 20px 0 0;
-                            &:first-child {
-                                margin: 0;
-                            }
-                        }
-                        .button {
-                            line-height: 1;
-                            width: 100%;
-                            margin: 20px 0 0;
-                            display: flex;
-                            justify-content: space-between;
-                            cursor: pointer;
-                            background: transparent;
-                            padding: 0;
-                            span {
-                                line-height: 20px;
-                            }
-                            img, svg {
-                                width: 20px;
-                                height: 20px;
-                                padding: 4px;
-                            }
-                            &_blue {
-                                img, svg {
-                                    background: $blue;
-                                }
-                            }
-                            &_green {
-                                img, svg {
-                                    background: $green;
-                                }
-                            }
-                            &_red {
-                                img, svg {
-                                    background: $red;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        &__map {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            z-index: 1;
-        }
-
-        &__options {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-            &.--desktop {
-                @media all and (max-width: 768px) {
-                    display: none;
-                }
-            }
-
-            @media all and (max-width: 1023px) {
-                flex-direction: column;
-            }
-
-            .button {
-                border: none;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                transition: opacity 0.3s;
-                margin-right: 20px;
-
-                @media all and (max-width: 1023px) {
-                    margin: 0 0 10px;
-                }
-
-                &:last-child {
-                    margin-right: 0;
-                    @media all and (max-width: 1023px) {
-                        margin: 0;
-                    }
-                }
-
-                &:hover {
-                    opacity: 0.7;
-                }
-
-                &_red {
-                    background: $red;
-                }
-
-                &_green {
-                    background: $green;
-                }
-
-                &_blue {
-                    background: $blue;
-                }
-            }
-        }
-
-        &__actions {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: center;
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10;
-
-            @media all and (max-width: 1023px) {
-                flex-direction: column;
-            }
-            &.--desktop {
-                @media all and (max-width: 768px) {
-                    display: none;
-                }
-            }
-
-            .button {
-                border: none;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                transition: opacity 0.3s;
-                margin-right: 10px;
-
-                @media all and (max-width: 1023px) {
-                    margin: 0 0 10px;
-                }
-
-                &:last-child {
-                    margin-right: 0;
-                    @media all and (max-width: 1023px) {
-                       margin: 0;
-                    }
-                }
-
-                &:hover {
-                    opacity: 0.7;
-                }
-
-                &_red {
-                    background: $red;
-                }
-
-                &_green {
-                    background: $green;
-                }
-
-                &_blue {
-                    background: $blue;
-                }
-            }
-        }
+.main-page {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: #e5e5e5;
+  overflow: hidden;
+  &.opened {
+    .main-page__mobile {
+      display: block;
     }
+  }
+  &__mobile {
+    /* display: none; */
+    position: fixed;
+    z-index: 11;
+    left: 0;
+    top: 50px;
+    bottom: 0;
+    right: 0;
+    /* background: rgba(0,0,0,.5); */
+    .main-filter__logo {
+      img {
+        width: 137px;
+        height: auto;
+      }
+    }
+    .main-header__language {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 53px;
+      border-top: 1px solid rgba(123, 149, 167, 0.3);
+    }
+    .lang-select {
+      padding: 0 40px;
+      @media all and (max-width: 768px) {
+        padding: 0 20px;
+      }
+    }
+    &-close {
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      margin: 0 -11px 0 0;
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+    }
+    &-right {
+      position: absolute;
+      left: 350px;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      cursor: pointer;
+      @media all and (max-width: 768px) {
+        left: 0;
+        right: auto;
+        width: calc(100% - 270px);
+      }
+    }
+    &-left {
+      width: 350px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: #ffffff;
+      overflow-y: auto;
+      right: -400px;
+      @media all and (max-width: 768px) {
+        width: 270px;
+        left: auto;
+        top: 0;
+      }
+      &.opened {
+        right: 0px;
+        transition: 0.5s;
+      }
+    }
+    &-in {
+      position: relative;
+      width: 100%;
+      min-height: 100%;
+      /* padding: 0 0 64px; */
+    }
+    &-item {
+      display: flex;
+      padding: 25px 40px;
+      justify-content: space-between;
+      align-items: center;
+      /* border-top: 1px solid rgba(123, 149, 167, 0.3);
+      &:first-child {
+        border: none;
+      } */
+      @media all and (max-width: 768px) {
+        padding: 20px;
+      }
+      &.--md {
+        padding: 15px 40px;
+        @media all and (max-width: 768px) {
+          padding: 15px 20px;
+        }
+      }
+      .main-filter {
+        &__menu {
+          display: block;
+          width: 100%;
+          a {
+            display: block;
+            margin: 20px 0 0;
+            &:first-child {
+              margin: 0;
+            }
+          }
+          .button {
+            line-height: 1;
+            width: 100%;
+            margin: 20px 0 0;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            /* background: transparent; */
+            padding: 10px 10px;
+            gap: 10px;
+            span {
+              font-style: normal;
+              font-weight: 500;
+              font-size: 16px;
+            }
+            img,
+           /*  svg {
+              width: 25px;
+              height: 25px;
+              padding: 4px;
+            } */
+            &_blue {
+              background: $blue;
+              img,
+              svg {
+                background: $blue;
+              }
+            }
+            &_green {
+              background: $green;
+              img,
+              svg {
+                background: $green;
+              }
+            }
+            &_red {
+              background: $red;
+              img,
+              svg {
+                background: $red;
+              }
+            }
+            &_white {
+              background: $white;
+              img,
+              svg {
+                background: $white;
+              }
+            }
+          }
+          .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            fill: #3a3a3a;
+            stroke: #3a3a3a;
+            &:hover {
+              fill: #2d9cdb;
+              stroke: #2d9cdb;
+              opacity: 1;
+            }
+            span {
+              &:hover {
+                color: #2d9cdb;
+              }
+            }
+          }
+        }
+      }
+      .mobile-city-selector {
+        @media screen and (max-width: 991px) {
+          display: block;
+        }
+      }
+    }
+  }
+  &__map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+  }
+  &__options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 20px;
+    left: 25px;
+    right: 20px;
+    z-index: 10;
+    &.--desktop {
+      @media all and (max-width: 768px) {
+        display: none;
+      }
+    }
+    .head-links {
+      display: flex;
+      align-items: center;
+      background-color: $white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+        0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      width: 570px;
+      @media screen and (max-width: 1366px) {
+        width: auto;
+        justify-content: center;
+      }
+    }
+    .head-buttons {
+      display: flex;
+      gap: 20px;
+      &-full_name {
+        display: flex;
+        .head-buttons-avatar {
+          height: 100%;
+          box-shadow: none;
+          padding: 0;
+          margin-right: 10px;
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
+        }
+      }
+
+      div {
+        background-color: #ffffff;
+        box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+          0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+        display: flex;
+        padding: 10px;
+        border-radius: 10px;
+        align-items: center;
+      }
+      .availability {
+        gap: 10px;
+        span {
+          font-family: "Montserrat";
+          font-weight: 500;
+          font-size: 14px;
+        }
+        .available {
+          display: flex;
+          width: 40px;
+          height: 40px;
+          align-items: center;
+          justify-content: center;
+          color: #27ae60;
+          background-color: $white;
+          border: 1px solid #27ae60;
+          border-radius: 10px;
+          &.isActive {
+            color: $white;
+            background-color: #27ae60;
+          }
+        }
+        .partial-access {
+          display: flex;
+          width: 40px;
+          height: 40px;
+          align-items: center;
+          justify-content: center;
+          color: #f2994a;
+          background-color: $white;
+          border: 1px solid #f2994a;
+          border-radius: 10px;
+          &.isActive {
+            color: $white;
+            background-color: #f2994a;
+          }
+        }
+        .not-available {
+          display: flex;
+          width: 40px;
+          height: 40px;
+          align-items: center;
+          justify-content: center;
+          color: #eb5757;
+          background-color: $white;
+          border: 1px solid #eb5757;
+          border-radius: 10px;
+          &.isActive {
+            color: $white;
+            background-color: #eb5757;
+          }
+        }
+      }
+      .sign-button {
+        display: flex;
+        background: #ffffff;
+        border-radius: 10px;
+        color: #333333;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 500;
+        &-h {
+          height: 100%;
+        }
+        img {
+          margin-left: 5px;
+        }
+      }
+    }
+    @media all and (max-width: 1023px) {
+      flex-direction: column;
+    }
+    .button {
+      border: none;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      margin-right: 20px;
+      @media all and (max-width: 1023px) {
+        margin: 0 0 10px;
+      }
+      &:last-child {
+        margin-right: 0;
+        @media all and (max-width: 1023px) {
+          margin: 0;
+        }
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+      &_red {
+        background: $red;
+      }
+      &_green {
+        background: $green;
+      }
+      &_blue {
+        background: $blue;
+      }
+    }
+  }
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    @media all and (max-width: 1023px) {
+      flex-direction: column;
+    }
+    &.--desktop {
+      @media all and (max-width: 768px) {
+        display: none;
+      }
+    }
+    .button {
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      margin-right: 10px;
+      @media all and (max-width: 1023px) {
+        margin: 0 0 10px;
+      }
+      &:last-child {
+        margin-right: 0;
+        @media all and (max-width: 1023px) {
+          margin: 0;
+        }
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+      &_red {
+        background: $red;
+      }
+      &_green {
+        background: $green;
+      }
+      &_blue {
+        background: $blue;
+      }
+      &_white {
+        background: $white;
+      }
+    }
+  }
+
+  .btn-change-type {
+    display: none;
+  }
+  @media screen and (max-width: 991px) {
+    .btn-change-type {
+      position: absolute;
+      width: 100%;
+      bottom: 20px;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      div {
+        background-color: #ffffff;
+        padding: 7px;
+        border-radius: 10px;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        button {
+          width: 100%;
+          border-radius: 10px;
+          font-family: Montserrat;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+}
 </style>

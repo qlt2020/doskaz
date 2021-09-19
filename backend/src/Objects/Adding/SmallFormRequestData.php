@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 final class SmallFormRequestData implements DataObject, Form
 {
+    public string $form = 'small';
     /**
      * @var FirstStep
      * @Assert\Valid()

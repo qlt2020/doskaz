@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Storage;
 
-use App\Blog\Image;
 use App\Infrastructure\ImageConversion\ImageConversion;
 use Hoa\Mime\Mime;
 use League\Flysystem\FilesystemInterface;
@@ -15,13 +14,14 @@ use OpenApi\Annotations\RequestBody;
 use OpenApi\Annotations\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Blog\Image;
 
 /**
- * @IsGranted("ROLE_USER")
  * @Route(path="/api/storage")
  */
 final class StorageController extends AbstractController

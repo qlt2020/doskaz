@@ -29,7 +29,6 @@
                     {key: 'name', label: 'Имя', required: true},
                     {key: 'phone', label: 'Телефон', required: true},
                     {key: 'email', label: 'Email', required: true},
-                    {key: 'department', label: 'Отдел', required: true},
                     {
                         key: 'cityId', label: 'Город', type: Selection, required: true, options: {
                             async asyncOptions() {

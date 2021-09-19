@@ -10,7 +10,7 @@
         props: {
             value: [String, Number, Array],
             options: {
-                type: Object,
+                type: [Object, Array],
                 default() {
                     return {
                         multiple: false,

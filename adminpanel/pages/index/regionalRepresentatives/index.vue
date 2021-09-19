@@ -20,8 +20,7 @@
                 return [
                     {key: 'name', label: 'Имя'},
                     {key: 'email', label: 'Email'},
-                    {key: 'phone', label: 'Телефон'},
-                    {key: 'department', label: 'Отдел'},
+                    {key: 'phone', label: 'Телефон'}
                 ]
             }
         }

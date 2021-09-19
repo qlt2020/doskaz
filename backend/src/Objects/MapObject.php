@@ -102,7 +102,7 @@ class MapObject implements EventProducer
 
     /**
      * @var FileReferenceCollection
-     * @ORM\Column(type=App\Infrastructure\FileReferenceCollection::class, options={"jsonb" = true})
+     * @ORM\Column(type=FileReferenceCollection::class, options={"jsonb" = true})
      */
     private $photos;
 
@@ -125,17 +125,18 @@ class MapObject implements EventProducer
     private $createdBy;
 
     public function __construct(
-        Point $point,
-        string $title,
-        ?int $categoryId,
-        Zones $zones,
-        string $address,
-        ?string $description,
+        Point                   $point,
+        string                  $title,
+        ?int                    $categoryId,
+        Zones                   $zones,
+        string                  $address,
+        ?string                 $description,
         FileReferenceCollection $photos,
-        array $videos,
-        ?int $createdBy = null,
-        ?string $otherNames = null
-    ) {
+        array                   $videos,
+        ?int                    $createdBy = null,
+        ?string                 $otherNames = null
+    )
+    {
         $this->uuid = Uuid::uuid4();
         $this->point = $point;
         $this->categoryId = $categoryId;
@@ -157,18 +158,19 @@ class MapObject implements EventProducer
     }
 
     public static function createFromRequest(
-        int $requestId,
-        Point $point,
-        string $title,
-        ?int $categoryId,
-        Zones $zones,
-        string $address,
-        string $description,
+        int                     $requestId,
+        Point                   $point,
+        string                  $title,
+        ?int                    $categoryId,
+        Zones                   $zones,
+        string                  $address,
+        string                  $description,
         FileReferenceCollection $photos,
-        array $videos,
-        ?int $createdBy = null,
-        ?string $otherNames = null
-    ): self {
+        array                   $videos,
+        ?int                    $createdBy = null,
+        ?string                 $otherNames = null
+    ): self
+    {
         $self = new self($point, $title, $categoryId, $zones, $address, $description, $photos, $videos, $createdBy, $otherNames);
         $self->requestId = $requestId;
         return $self;
@@ -260,5 +262,15 @@ class MapObject implements EventProducer
     public function recalculateAccessibilityScore()
     {
         $this->overallScore = $this->zones->overallScore();
+    }
+
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    public function getOverallScope(): AccessibilityScore
+    {
+        return $this->overallScore;
     }
 }

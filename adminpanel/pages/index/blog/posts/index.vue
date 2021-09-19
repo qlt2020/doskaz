@@ -1,6 +1,6 @@
 <template>
     <crud-list
-        title="Записи блога"
+        title="Записи медиатеки"
         api-path="/api/admin/blog/posts"
         :table-fields="fields"
     />

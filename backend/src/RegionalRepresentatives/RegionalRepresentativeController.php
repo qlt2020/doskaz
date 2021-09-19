@@ -25,8 +25,8 @@ class RegionalRepresentativeController extends AbstractController
      * @return array
      * @Get(
      *     path="/api/regionalRepresentatives",
-     *     tags={"Региональные координаторы"},
-     *     summary="Список региональных координаторов",
+     *     tags={"Региональные представители"},
+     *     summary="Список региональных представителей",
      *     @Response(
      *         response=200,
      *         description="",
@@ -38,7 +38,6 @@ class RegionalRepresentativeController extends AbstractController
      *                 @Property(property="name", type="string"),
      *                 @Property(property="email", type="string"),
      *                 @Property(property="phone", type="string"),
-     *                 @Property(property="department", type="string"),
      *                 @Property(property="cityId", type="integer"),
      *                 @Property(property="image", type="string"),
      *             )
@@ -54,7 +53,6 @@ class RegionalRepresentativeController extends AbstractController
                 'name',
                 'email',
                 'phone',
-                'department',
                 'city_id as "cityId"',
                 'image'
             ])
@@ -88,7 +86,6 @@ class RegionalRepresentativeController extends AbstractController
                 'name',
                 'email',
                 'phone',
-                'department',
                 'city_id as "cityId"'
             ])
             ->from('regional_representatives')
@@ -122,7 +119,6 @@ class RegionalRepresentativeController extends AbstractController
             $data->name,
             $data->email,
             $data->phone,
-            $data->department,
             $data->photo
         );
         $repository->add($item);
@@ -146,7 +142,6 @@ class RegionalRepresentativeController extends AbstractController
                 'name',
                 'phone',
                 'city_id',
-                'department',
                 'image',
                 'email'
             ])
@@ -166,7 +161,6 @@ class RegionalRepresentativeController extends AbstractController
         $data->name = $item['name'];
         $data->email = $item['email'];
         $data->phone = $item['phone'];
-        $data->department = $item['department'];
         $data->cityId = $item['city_id'];
         $data->photo = $connection->convertToPHPValue($item['image'], Image::class);
 

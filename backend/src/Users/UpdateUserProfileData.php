@@ -38,4 +38,25 @@ class UpdateUserProfileData implements DataObject
      * @var string|null
      */
     public ?string $status = null;
+
+    /**
+     * @var string|null
+     */
+    public $gender;
+
+    /**
+     * @var string|null
+     */
+    public $category;
+
+    /**
+     * @var integer|null
+     */
+    public $city_id;
+
+    /**
+     * @var string|null
+     * @Assert\Date()
+     */
+    public $birthday;
 }

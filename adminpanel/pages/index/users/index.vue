@@ -17,9 +17,10 @@
     import Roles from "@/components/crud/list-fields/Roles";
     import FilterBlock from "../../../components/FilterBlock";
     import UserAwardsAction from "../../../components/UserAwardsAction";
+    import UserCategory from "../../../components/crud/list-fields/UserCategory";
 
     export default {
-        components: {FilterBlock, CrudList},
+        components: {FilterBlock, CrudList, UserCategory},
         middleware: ['authenticated'],
         computed: {
             customActions() {
@@ -33,6 +34,8 @@
                     {key: 'email', label: 'Email'},
                     {key: 'phone', label: 'Телефон'},
                     {key: 'roles', label: 'Роли', type: Roles},
+                    {key: 'category', label: 'Категория', type: UserCategory},
+                    {key: 'city', label: 'Город'},
                     {key: 'createdAt', label: 'Дата регистрации', type: FormattedDate},
                 ]
             }

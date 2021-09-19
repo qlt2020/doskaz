@@ -9,6 +9,7 @@ use Ramsey\Uuid\UuidInterface;
 class AwardIssuedData extends Data
 {
     public UuidInterface $awardId;
+    public string $type = 'award_issued';
 
     /**
      * AwardIssuedData constructor.

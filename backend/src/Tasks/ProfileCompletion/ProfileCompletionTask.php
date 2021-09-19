@@ -19,7 +19,13 @@ class ProfileCompletionTask implements EventProducer
 
     /**
      * @ORM\Column(type="integer")
-     * @ORM\Id()
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer")
      */
     private $userId;
 

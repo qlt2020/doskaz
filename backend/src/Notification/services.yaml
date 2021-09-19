@@ -1,0 +1,8 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+    App\Notification\SubscribeData:
+
+    App\Notification\NotificationApiController:
+        tags: [ 'controller.service_arguments' ]

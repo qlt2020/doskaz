@@ -34,6 +34,8 @@ final class ObjectArgumentResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument)
     {
+        $json = json_decode($request->getContent(), true);
+        if($json == NULL) throw new \JsonException('data is invalid');
         $data = $this->serializer->deserialize($request->getContent(), $argument->getType(), 'json', [
         //    ObjectNormalizer::DISABLE_TYPE_ENFORCEMENT => true
         ]);

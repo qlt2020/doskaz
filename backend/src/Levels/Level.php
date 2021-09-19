@@ -30,7 +30,13 @@ class Level implements EventProducer
     ];
 
     /**
+     * @ORM\Column(type="integer")
      * @ORM\Id()
+     * @ORM\GeneratedValue
+     */
+    private $id;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private int $userId;

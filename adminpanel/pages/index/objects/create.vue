@@ -69,6 +69,10 @@
                     serviceAccessibility: {
                         attributes: {},
                         overriddenScore: null,
+                    },
+                    kidsAccessibility: {
+                        attributes: {},
+                        overriddenScore: null,
                     }
                 }
             })

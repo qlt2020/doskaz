@@ -5,8 +5,12 @@ namespace App\Complaints;
 
 use App\Cities\Cities;
 use App\Cities\FindCityIdByLocation;
+use App\Complaints\Services\ExportToExcelService;
 use App\Infrastructure\Doctrine\Flusher;
+use App\Objects\MapObject;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Annotations\Get;
 use OpenApi\Annotations\JsonContent;
 use OpenApi\Annotations\Parameter;
@@ -20,6 +24,7 @@ use Safe\Exceptions\FilesystemException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,6 +34,7 @@ use TheCodingMachine\Gotenberg\DocumentFactory;
 use TheCodingMachine\Gotenberg\HTMLRequest;
 use TheCodingMachine\Gotenberg\OfficeRequest;
 use TheCodingMachine\Gotenberg\RequestException;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @IsGranted("ROLE_USER")
@@ -91,7 +97,7 @@ final class ComplaintController extends AbstractController
             $complaintData->content,
             $complaintData->authorityId,
             $this->getUser()->id(),
-            $complaintData->objectId,
+            $complaintData->objectId == 0 ? null : $complaintData->objectId,
             $complaintData->rememberPersonalData
         );
         $complaintRepository->add($complaint);
@@ -179,7 +185,7 @@ final class ComplaintController extends AbstractController
     public function pdfExport($id, ComplaintPdfExporter $complaintPdfExporter, Request $request)
     {
         $this->denyAccessUnlessGranted(ComplaintPermissions::PDF_EXPORT, $id);
-        return (new BinaryFileResponse($complaintPdfExporter->execute((int) $id, $request->query->get('locale', 'ru')), 200, [], true))->deleteFileAfterSend();
+        return (new BinaryFileResponse($complaintPdfExporter->execute((int)$id, $request->query->get('locale', 'ru')), 200, [], true))->deleteFileAfterSend();
     }
 
     /**
@@ -205,7 +211,7 @@ final class ComplaintController extends AbstractController
     public function docExport($id, Connection $connection, ComplaintDocExporter $complaintDocExporter, Request $request)
     {
         $this->denyAccessUnlessGranted(ComplaintPermissions::PDF_EXPORT, $id);
-        return (new BinaryFileResponse($complaintDocExporter->execute((int) $id, $request->query->get('locale', 'ru')), 200, [], true))->deleteFileAfterSend();
+        return (new BinaryFileResponse($complaintDocExporter->execute((int)$id, $request->query->get('locale', 'ru')), 200, [], true))->deleteFileAfterSend();
     }
 
     /**
@@ -265,7 +271,6 @@ final class ComplaintController extends AbstractController
             $cityId = $findCityIdByLocation->execute($object['lat'], $object['lon']);
         }
 
-
         $result = [
             'content' => [
                 'objectName' => $object['title'] ?? '',
@@ -314,5 +319,181 @@ final class ComplaintController extends AbstractController
     public function complaintAttributes()
     {
         return ComplaintAttributes::$attributes;
+    }
+
+    /**
+     * @Route(path="/statistic", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     * @Get(
+     *     path="/api/complaints/statistic",
+     *     summary="Статистика по жалобам",
+     *     tags={"Жалобы"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="year_id", in="query", description="Год", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="dateFrom", in="query", description="Период с", @Schema(type="string", nullable=true)),
+     *     @Parameter(name="dateTo", in="query", description="Период по", @Schema(type="string", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     */
+    public function statistic(Connection $connection, Request $request)
+    {
+        $query = $connection->createQueryBuilder()
+            ->select('COUNT(complaints.id) as count')
+            ->addSelect('EXTRACT(YEAR FROM complaints.created_at) as year')
+            ->addSelect('EXTRACT(MONTH FROM complaints.created_at) as month')
+            ->addSelect('cities.name as city_name')
+            ->addSelect('cities.id as city_id')
+            ->from('complaints', 'complaints')
+            ->leftJoin('complaints', 'cities', 'cities', '(complaints.content->>\'cityId\')::INT = cities.id');
+
+        if ($request->query->getInt('city_id') != 0) {
+            $query = $query
+                ->andWhere('cities.id = :cityId')
+                ->setParameter('cityId', $request->query->getInt('city_id'));
+        }
+
+        if ($request->query->getInt('year_id') != 0) {
+            $query = $query
+                ->andWhere('EXTRACT(YEAR FROM complaints.created_at) = :yearId')
+                ->setParameter('yearId', $request->query->getInt('year_id'));
+        }
+
+        if ($request->query->getAlnum('dateFrom') != '') {
+            $dateFrom = date_create($request->query->getAlnum('dateFrom'));
+            if ($request->query->getAlnum('dateTo') != '') {
+                $dateTo = date_create($request->query->getAlnum('dateTo'));
+                $query = $query
+                    ->andWhere('complaints.created_at > :dateFrom')
+                    ->andWhere('complaints.created_at < :dateTo')
+                    ->setParameter('dateFrom', date_format($dateFrom, 'Y-m-d H:i:s'))
+                    ->setParameter('dateTo', date_format($dateTo, 'Y-m-d H:i:s'));
+            } else {
+                $query = $query
+                    ->andWhere('complaints.created_at > :dateFrom')
+                    ->setParameter('dateFrom', date_format($dateFrom, 'Y-m-d H:i:s'));
+            }
+
+        }
+
+        $query = $query
+            ->groupBy('cities.id, year, month')
+            ->execute()
+            ->fetchAll();
+
+        if (count($query) == 0)
+            return [];
+
+        $years = array();
+
+        foreach ($query as $q) {
+            if (!in_array($q['year'], $years))
+                array_push($years, $q['year']);
+        }
+
+        return ['years' => $years, 'result' => $query];
+
+    }
+
+    /**
+     * @Route(path="/export/excel", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     * @Get(
+     *     path="/api/complaints/export/excel",
+     *     summary="Экспорт статистики по жалобам и обращениям",
+     *     tags={"Жалобы"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="dateFrom", in="query", description="Период с", @Schema(type="string", nullable=true)),
+     *     @Parameter(name="dateTo", in="query", description="Период по", @Schema(type="string", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
+     */
+    public function exportToExcel(Connection $connection, Request $request)
+    {
+        $data = $this->statisticAll($connection, $request);
+        $export = new ExportToExcelService($data, $request);
+
+        try {
+            $fileName = $export->writeFile();
+            $file = new File($fileName);
+            return $this->file($file, 'Статистика_по_жалобам_и_обращениям.xlsx')->deleteFileAfterSend();
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), 400);
+        }
+    }
+
+    /**
+     * @Route(path="/allstatistic", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     * @Get(
+     *     path="/api/complaints/allstatistic",
+     *     summary="Общая статистика по жалобам и обращениям",
+     *     tags={"Жалобы"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="dateFrom", in="query", description="Период с", @Schema(type="string", nullable=true)),
+     *     @Parameter(name="dateTo", in="query", description="Период по", @Schema(type="string", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
+     * @param Connection $connection
+     * @param Request $request
+     */
+    public function statisticAll(Connection $connection, Request $request)
+    {
+        $queryComplaints = $connection->createQueryBuilder()
+            ->select('COUNT(cm.id) as complaint_count')
+            ->addSelect('COUNT(f.id) as feedback_count')
+            ->addSelect('c.name as city_name')
+            ->addSelect('c.id as city_id')
+            ->from('cities', 'c')
+            ->leftJoin('c', 'complaints', 'cm', '(cm.content->>\'cityId\')::INT = c.id')
+            ->leftJoin('c', 'feedback', 'f', 'c.id = f.city_id');
+
+        if ($request->query->getInt('city_id') != 0) {
+            $queryComplaints = $queryComplaints
+                ->andWhere('c.id = :cityId')
+                ->setParameter('cityId', $request->query->getInt('city_id'));
+        }
+
+        if ($request->query->getAlnum('dateFrom') != '') {
+            $dateFrom = date_create($request->query->getAlnum('dateFrom'));
+            if ($request->query->getAlnum('dateTo') != '') {
+                $dateTo = date_create($request->query->getAlnum('dateTo'));
+                $queryComplaints = $queryComplaints
+                    ->andWhere('cm.created_at > :dateFrom')
+                    ->andWhere('f.created_at > :dateFrom')
+                    ->andWhere('cm.created_at < :dateTo')
+                    ->andWhere('f.created_at < :dateTo')
+                    ->setParameter('dateFrom', date_format($dateFrom, 'Y-m-d H:i:s'))
+                    ->setParameter('dateTo', date_format($dateTo, 'Y-m-d H:i:s'));
+            }
+        }
+
+        $data = $queryComplaints
+            ->orderBy('c.name')
+            ->groupBy('c.id')
+            ->execute()
+            ->fetchAll();
+
+
+        if (!$request->query->get('city_id') &&
+            (!$request->query->get('dateFrom') && !$request->query->get('dateTo'))) {
+
+            $arr = [
+                'city_name' => 'Весь РК',
+                'complaint_count' => 0,
+                'feedback_count' => 0,
+            ];
+            foreach ($data as $datum) {
+                $arr['complaint_count'] += $datum['complaint_count'];
+                $arr['feedback_count'] += $datum['feedback_count'];
+            }
+            array_unshift($data, $arr);
+        }
+
+        return $data;
     }
 }

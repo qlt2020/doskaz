@@ -59,7 +59,7 @@ class CategoriesController extends AbstractController
          */
         $categories = $query->getResult();
 
-        return array_map(function (Category $category) use ($categories) {
+        $map = array_map(function (Category $category) use ($categories) {
             return new CategoryData(
                 $category->getId(),
                 $category->getTitle(),
@@ -78,5 +78,10 @@ class CategoriesController extends AbstractController
         }, array_filter($categories, function ($category) {
             return is_null($category->getParentId());
         }));
+        $data = [];
+        foreach ($map as $item) {
+            $data[] = (array)$item;
+        }
+        return $data;
     }
 }

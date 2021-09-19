@@ -14,6 +14,8 @@ class ReviewCreated implements EventData
 {
     public $reviewId;
 
+    public string $type = 'review_created';
+
     public function __construct($reviewId)
     {
         $this->reviewId = $reviewId;

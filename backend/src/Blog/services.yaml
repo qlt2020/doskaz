@@ -30,3 +30,9 @@ services:
 
   App\Blog\Categories\TranslateCategoriesCommand:
     tags: [ 'console.command' ]
+
+  App\Blog\ClearBlogsCommand:
+    tags: [ 'console.command' ]
+
+  App\Blog\CreateHelpBlogCategoryCommand:
+    tags: [ 'console.command' ]

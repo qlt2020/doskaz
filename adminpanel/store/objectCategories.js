@@ -4,6 +4,10 @@ export const state = () => ({
     items: [],
 })
 
+export const getters = {
+    getCategories: state => state.items
+  }
+
 export const mutations = make.mutations(state)
 
 export const actions = {

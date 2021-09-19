@@ -7,6 +7,7 @@ use App\Infrastructure\Doctrine\Flusher;
 use Doctrine\DBAL\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -54,8 +55,14 @@ class AwardsAdminController extends AbstractController
      */
     public function create(AwardData $data, Flusher $flusher, Request $request, AwardRepository $awardRepository)
     {
-        $award = Award::fromAwardData($data, $request->get('userId'), $this->getUser()->id());
-        $awardRepository->add($award);
-        $flusher->flush();
+        try {
+            $award = Award::fromAwardData($data, $request->get('userId'), $this->getUser()->id());
+            $awardRepository->add($award);
+            $flusher->flush();
+            return new JsonResponse(['status' => true, 'data' => $award]);
+        }catch (\DomainException $exception)
+        {
+            return new JsonResponse(['status' => false]);
+        }
     }
 }

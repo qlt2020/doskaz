@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: false
+
+    App\Help\HelpRepository:
+
+    App\Help\HelpCategory\HelpCategoryRepository:
+
+    App\Help\HelpController:
+        tags: [ 'controller.service_arguments' ]
+
+    App\Help\HelpCategory\HelpCategoryController:
+        tags: [ 'controller.service_arguments' ]

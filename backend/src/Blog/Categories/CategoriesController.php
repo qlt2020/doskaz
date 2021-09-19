@@ -18,6 +18,7 @@ use OpenApi\Annotations\Property;
 use OpenApi\Annotations\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +32,6 @@ final class CategoriesController extends AbstractController
      * @Route(methods={"GET"})
      * @param Request $request
      * @param Connection $connection
-     * @return CategoryData[]
      * @Get(
      *     path="/api/blog/categories",
      *     tags={"Блог"},
@@ -50,7 +50,7 @@ final class CategoriesController extends AbstractController
      *     )
      * )
      */
-    public function list(Request $request, EntityManagerInterface $entityManager, Connection $connection): array
+    public function list(Request $request, EntityManagerInterface $entityManager, Connection $connection) : JsonResponse
     {
         $query = $entityManager->createQueryBuilder()->select('c')->from(Category::class, 'c')
             ->where('c.deletedAt is null')
@@ -61,13 +61,14 @@ final class CategoriesController extends AbstractController
             ->setHint(TranslatableListener::HINT_FALLBACK, 1);
 
         $categories = $query->execute();
+        $locale = $request->getLocale();
 
-        return array_map(function (Category $item) {
-            $categoryData = new CategoryData();
-            $categoryData->id = $item->id();
-            $categoryData->title = $item->getTitle();
-            $categoryData->slug = $item->getSlug()->value;
-            return $categoryData;
-        }, $categories);
+        return new JsonResponse(array_map(function (Category $item) use ($locale){
+            return [
+                'id' => $item->id(),
+                'title' => $item->getTranslation($locale, 'title'),
+                'slug' => $item->getSlug()->value
+            ];
+        }, $categories));
     }
 }

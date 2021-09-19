@@ -44,6 +44,8 @@ final class PostsController extends AbstractController
      *     @Parameter(name="categoryId", in="query", description="id категории", @Schema(type="integer")),
      *     @Parameter(name="page", in="query", description="Номер страницы", @Schema(type="integer")),
      *     @Parameter(name="period", in="query", description="Период времени", @Schema(type="string", enum={"year", "month", "week"})),
+     *     @Parameter(name="post_date_from", in="query", description="Дата публикации от", @Schema(type="string")),
+     *     @Parameter(name="post_date_to", in="query", description="Дата публлиации до", @Schema(type="string")),
      *     @Parameter(name="search", in="query", description="Текст для поиска", @Schema(type="string")),
      *     @\OpenApi\Annotations\Response(
      *         response=200,

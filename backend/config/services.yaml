@@ -4,12 +4,15 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    app.email_from: '%env(EMAIL_FROM)%'
+    app.email_to: '%env(EMAIL_TO)%'
+    app.frontend_url: '%env(FRONTEND_HOST)%'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true       # Automatically injects dependencies in your services.
-        autoconfigure: false # Automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
     Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
         arguments:
@@ -28,6 +31,9 @@ services:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
             - [ setDefaultLocale, [ 'ru' ] ]
             - [ setTranslationFallback, [ false ] ]
+    App\Infrastructure\Api\CorsListener:
+        tags:
+            - { name: kernel.event_subscriber }
 
 imports:
     - { resource: '../src/Infrastructure/services.yaml' }
@@ -46,3 +52,5 @@ imports:
     - { resource: '../src/RegionalCoordinators/services.yaml' }
     - { resource: '../src/ProfileNotifications/services.yaml' }
     - { resource: '../src/Sitemap/services.yaml' }
+    - { resource: '../src/Notification/services.yaml' }
+    - { resource: '../src/Help/services.yaml' }

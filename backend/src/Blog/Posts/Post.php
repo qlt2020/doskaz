@@ -30,12 +30,42 @@ class Post
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    private $title_kz;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $title_en;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $annotation;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    private $annotation_kz;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $annotation_en;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $content;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $content_kz;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $content_en;
 
     /**
      * @var Slug
@@ -88,6 +118,8 @@ class Post
     public function __construct(PostData $postData, ?Image $image, Meta $meta, Slug $slug)
     {
         $this->title = $postData->title;
+        $this->title_kz = $postData->title_kz;
+        $this->title_en = $postData->title_en;
         $this->categoryId = $postData->categoryId;
         $this->publishedAt = $postData->publishedAt;
         $this->isPublished = $postData->isPublished;
@@ -95,7 +127,11 @@ class Post
         $this->meta = $meta;
         $this->slug = $slug;
         $this->annotation = $postData->annotation;
+        $this->annotation_kz = $postData->annotation_kz;
+        $this->annotation_en = $postData->annotation_en;
         $this->content = $postData->content;
+        $this->content_kz = $postData->content_kz;
+        $this->content_en = $postData->content_en;
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }
@@ -113,6 +149,8 @@ class Post
     public function update(PostData $postData, ?Image $image, Meta $meta, Slug $slug)
     {
         $this->title = $postData->title;
+        $this->title_kz = $postData->title_kz;
+        $this->title_en = $postData->title_en;
         $this->categoryId = $postData->categoryId;
         $this->publishedAt = $postData->publishedAt;
         $this->isPublished = $postData->isPublished;
@@ -120,7 +158,16 @@ class Post
         $this->meta = $meta;
         $this->slug = $slug;
         $this->annotation = $postData->annotation;
+        $this->annotation_kz = $postData->annotation_kz;
+        $this->annotation_en = $postData->annotation_en;
         $this->content = $postData->content;
+        $this->content_kz = $postData->content_kz;
+        $this->content_en = $postData->content_en;
         $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    public function getTranslation($locale, $field): ?string
+    {
+        return $this->{$field . ($locale === 'ru' ? '' : '_' .$locale)};
     }
 }

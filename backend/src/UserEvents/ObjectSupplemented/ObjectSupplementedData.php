@@ -16,6 +16,8 @@ class ObjectSupplementedData extends Data
 
     public UuidInterface $objectId;
 
+    public string $type = 'object_supplemented';
+
     /**
      * ObjectSupplementedData constructor.
      * @param $userId

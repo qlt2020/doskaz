@@ -55,6 +55,8 @@ services:
     App\Infrastructure\Storage\StorageController:
         tags: ['controller.service_arguments']
 
+    App\Infrastructure\Storage\FileUploader:
+
     App\Infrastructure\Api\DocumentationController:
         tags: ['controller.service_arguments']
         arguments:
@@ -74,13 +76,13 @@ services:
 
     Imgproxy\UrlBuilder:
         arguments:
-            - '/img'
+            - '%env(IMGPROXY_HOST)%'
 
     App\Infrastructure\Doctrine\Transactional:
 
     TheCodingMachine\Gotenberg\Client:
         arguments:
-            - 'http://gotenberg:3000'
+            - '%env(GOTENBERG_HOST)%'
 
     App\Infrastructure\Firebase\ProfileFetcher:
         arguments:

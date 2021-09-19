@@ -1,6 +1,6 @@
 <template>
-    <li :class="{active: isActive}">
-        <nuxt-link :to="path">
+    <li>
+        <nuxt-link exact :to="path" :class="{active: isActive}">
             <slot/>
         </nuxt-link>
     </li>

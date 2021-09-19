@@ -41,7 +41,8 @@ class AuthController extends AbstractController
      * @return Response|null
      * @throws \Exception
      */
-    public function index(Request $request, PhoneAuthData $authData, CredentialsRepository $credentialsRepository, UserRepository $userRepository, Flusher $flusher, UserAuthenticator $authenticator)
+    public function index(Request $request, PhoneAuthData $authData, CredentialsRepository $credentialsRepository,
+                          UserRepository $userRepository, Flusher $flusher, UserAuthenticator $authenticator)
     {
         $client = new Client([
             'query' => [

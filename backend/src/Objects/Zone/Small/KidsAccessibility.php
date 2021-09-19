@@ -3,6 +3,7 @@
 
 namespace App\Objects\Zone\Small;
 
+use App\Objects\AccessibilityScoreBuilder;
 use App\Objects\Adding\AccessibilityScore;
 use App\Objects\Adding\Attribute;
 use App\Objects\AttributesConfiguration;
@@ -17,18 +18,21 @@ class KidsAccessibility extends Zone
 
     public function calculateScore(): AccessibilityScore
     {
+        $builder = AccessibilityScoreBuilder::initNotProvided();
+
         if ($this->isMatchesAll(Attribute::yes())) {
-            return AccessibilityScore::fullAccessible();
+            $builder->withKidsFullAccessible();
         }
-        if ($this->isMatchesAll(Attribute::no())) {
-            return AccessibilityScore::notAccessible();
+        else if ($this->isMatchesAll(Attribute::no())) {
+            $builder->withKidsNotAccessible();
         }
-        if ($this->isMatchesAll(Attribute::unknown())) {
-            return AccessibilityScore::unknown();
+        else if ($this->isMatchesAll(Attribute::unknown())) {
+            $builder->withKidsUnknown();
         }
-        if ($this->isMatchesAll(Attribute::notProvided())) {
-            return AccessibilityScore::notProvided();
+        else if (!$this->isMatchesAll(Attribute::notProvided())) {
+            $builder->withKidsNotAccessible();
         }
-        return AccessibilityScore::notAccessible();
+
+        return $builder->build();
     }
 }

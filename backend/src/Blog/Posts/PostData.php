@@ -23,13 +23,45 @@ final class PostData implements DataObject
 
     /**
      * @var string|null
+     * @Assert\NotBlank()
+     */
+    public $title_kz;
+
+    /**
+     * @var string|null
+     * @Assert\NotBlank()
+     */
+    public $title_en;
+
+    /**
+     * @var string|null
      */
     public $annotation;
 
     /**
      * @var string|null
      */
+    public $annotation_kz;
+
+    /**
+     * @var string|null
+     */
+    public $annotation_en;
+
+    /**
+     * @var string|null
+     */
     public $content;
+
+    /**
+     * @var string|null
+     */
+    public $content_kz;
+
+    /**
+     * @var string|null
+     */
+    public $content_en;
 
     /**
      * @var string|null

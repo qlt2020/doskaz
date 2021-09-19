@@ -1,52 +1,72 @@
 <template>
-    <div class="add-object__line" :class="{'--lrg': !!title}">
-        <div class="col">
-            <label class="add-object__label pre-formatted" v-if="title">{{ title }}</label>
-            <span class="add-object__label-text pre-formatted" v-if="title && subTitle">{{ subTitle }}</span>
-            <label class="add-object__label --gray pre-formatted" v-if="!title && subTitle">{{subTitle}}</label>
-        </div>
-        <div class="col --small">
-            <div class="select">
-                <select v-model="val">
-                    <option v-for="option in options" :key="option" :value="option">{{ $t(`objects.attribute.${option}`) }}
-                    </option>
-                </select>
-            </div>
-        </div>
+  <div class="add-object__line" :class="{ '--lrg': !!title }">
+    <div class="col">
+      <label class="add-object__label pre-formatted" v-if="title">{{
+        title
+      }}</label>
+      <span
+        class="add-object__label-text pre-formatted"
+        v-if="title && subTitle"
+        >{{ subTitle }}</span
+      >
+      <label
+        class="add-object__label --gray pre-formatted"
+        v-if="!title && subTitle"
+        >{{ subTitle }}</label
+      >
     </div>
+    <div class="col --small">
+      <div class="select">
+        <DropdownBlock
+          :options="[
+            {
+              value: 'unknown',
+              title: $t(`objects.attribute.unknown`),
+            },
+            {
+              value: 'not_provided',
+              title: $t(`objects.attribute.not_provided`),
+            },
+            {
+              value: 'no',
+              title: $t(`objects.attribute.no`),
+            },
+            {
+              value: 'yes',
+              title: $t(`objects.attribute.yes`),
+            },
+          ]"
+          v-model="val"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import DropdownBlock from "@/components/DropdownBlock";
 export default {
-    name: "AttributeField",
-    props: [
-        'title',
-        'subTitle',
-        'value'
-    ],
-    computed: {
-        val: {
-            get() {
-                return this.value
-            },
-            set(v) {
-                this.$emit('input', v)
-            }
-        },
-        options() {
-          return [
-            'unknown',
-            'not_provided',
-            'no',
-            'yes'
-          ]
-        }
-    }
-}
+  components: { DropdownBlock },
+  name: "AttributeField",
+  props: ["title", "subTitle", "value"],
+  computed: {
+    val: {
+      get() {
+        return this.value;
+      },
+      set(v) {
+        this.$emit("input", v);
+      },
+    },
+    options() {
+      var arr = ["unknown", "not_provided", "no", "yes"];
+    },
+  },
+};
 </script>
 
 <style scoped>
 .pre-formatted {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 </style>

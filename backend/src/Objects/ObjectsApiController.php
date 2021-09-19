@@ -23,6 +23,7 @@ use OpenApi\Annotations\Response;
 use OpenApi\Annotations\Schema;
 use Safe\Exceptions\FilesystemException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,9 +47,10 @@ final class ObjectsApiController extends AbstractController
      */
     private CsvFileLoader $csvFileLoader;
 
-    public function __construct(CsvFileLoader $csvFileLoader)
+    public function __construct(CsvFileLoader $csvFileLoader, ParameterBagInterface $params)
     {
         $this->csvFileLoader = $csvFileLoader;
+        $this->params = $params;
     }
 
     /**
@@ -94,6 +96,9 @@ final class ObjectsApiController extends AbstractController
             ->select([
                 'COUNT(*) AS number',
                 'ST_GEOHASH(point_value, :precision) AS hash',
+                "SUM(case when overall_score_$disabilitiesCategory = 'not_accessible' THEN 1 else 0 end) as not_accessible",
+                "SUM(case when overall_score_$disabilitiesCategory = 'partial_accessible' THEN 1 else 0 end) as partial_accessible",
+                "SUM(case when overall_score_$disabilitiesCategory = 'full_accessible' THEN 1 else 0 end) as full_accessible",
                 'ST_XMIN(ST_COLLECT(objects.point_value::GEOMETRY)) AS p1x',
                 'ST_YMIN(ST_COLLECT(objects.point_value::GEOMETRY)) AS p1y',
                 'ST_XMAX(ST_COLLECT(objects.point_value::GEOMETRY)) AS p2x',
@@ -104,7 +109,7 @@ final class ObjectsApiController extends AbstractController
             ->from('objects')
             ->andWhere('ST_Contains(ST_MAKEENVELOPE(:x1,:y1,:x2,:y2, 4326)::geometry, point_value::geometry)')
             ->andWhere('objects.deleted_at IS NULL')
-            ->groupBy('hash')
+            ->groupBy('hash' )
             ->having('COUNT(*) > 1')
             ->setParameters([
                 'x1' => $boundary[1],
@@ -203,6 +208,8 @@ final class ObjectsApiController extends AbstractController
                 'properties' => [
                     'color' => $colors[$item['score']],
                     'icon' => $item['icon'],
+                    'background' => $colors[$item['score']],
+                    'fill' => 'white',
                 ]
             ];
         }, $points);
@@ -211,6 +218,11 @@ final class ObjectsApiController extends AbstractController
         $clustersPrepared = array_map(function ($item) {
             return [
                 'type' => 'Cluster',
+                'levels' => [
+                    'not_accessible' => $item['not_accessible'],
+                    'partial' => $item['partial_accessible'],
+                    'full' => $item['full_accessible']
+                ],
                 'id' => $item['hash'],
                 'geometry' => [
                     'type' => 'Point',
@@ -345,6 +357,7 @@ final class ObjectsApiController extends AbstractController
                 'objects.overall_score_vision',
                 'objects.overall_score_hearing',
                 'objects.overall_score_intellectual',
+                'objects.overall_score_kids',
                 'objects.zones',
                 'objects.category_id as sub_category_id',
                 'object_categories.id as category_id',
@@ -597,8 +610,7 @@ final class ObjectsApiController extends AbstractController
      */
     public function pdf(Request $request, MapObject $mapObject, Client $client)
     {
-        //  $request = new URLRequest('http://frontend:3000/objects/pdf?id='.$mapObject->id());
-        $request = new URLRequest('http://frontend:3000/objects/pdf?id=' . $mapObject->id());
+        $request = new URLRequest($this->params->get('app.frontend_url').'/objects/pdf?id=' . $mapObject->id());
         $request->setMargins([0, 0, 0, 0]);
         $request->setPaperSize(URLRequest::A4);
         $path = tempnam('/tmp', 'pdf');
@@ -926,6 +938,10 @@ final class ObjectsApiController extends AbstractController
                 AccessibilityScore::SCORE_UNKNOWN => '#7B95A7',
                 AccessibilityScore::SCORE_FULL_ACCESSIBLE => '#3DBA3B'
             ];
+
+            if (!isset($item['score'])) {
+                $item['score'] = AccessibilityScore::SCORE_NOT_PROVIDED;
+            }
 
             return [
                 'id' => $item['id'],

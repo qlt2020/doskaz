@@ -1,22 +1,30 @@
 <template>
   <div class="user-tabs">
     <div class="user-tabs__links">
-      <div class="user-tabs__link" :class="{'isActive': activeTab===0}" @click="setActiveTab(0)">
+      <div
+        class="user-tabs__link"
+        :class="{ isActive: activeTab === 0 }"
+        @click="setActiveTab(0)"
+      >
         <span>Мои задания</span>
       </div>
       <div
         class="user-tabs__link isUpdated"
-        :class="{'isActive': activeTab===1}"
+        :class="{ isActive: activeTab === 1 }"
         @click="setActiveTab(1)"
       >
         <span>Мои комментарии</span>
       </div>
-      <div class="user-tabs__link" :class="{'isActive': activeTab===2}" @click="setActiveTab(2)">
+      <div
+        class="user-tabs__link"
+        :class="{ isActive: activeTab === 2 }"
+        @click="setActiveTab(2)"
+      >
         <span>Мои объекты</span>
       </div>
     </div>
     <div class="user-tabs__tabs">
-      <div class="user-tabs__tab" :class="{'isActive': activeTab===0}">
+      <div class="user-tabs__tab" :class="{ isActive: activeTab === 0 }">
         <div class="scroll">
           <div class="item">
             <div class="item__icon">

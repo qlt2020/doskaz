@@ -67,7 +67,9 @@ class SmallFormZones extends Zones
      * @param ServiceAccessibility $serviceAccessibility
      * @param KidsAccessibility|null $kidsAccessibility
      */
-    public function __construct(Parking $parking, Entrance $entrance1, Movement $movement, Service $service, Toilet $toilet, Navigation $navigation, ServiceAccessibility $serviceAccessibility, ?KidsAccessibility $kidsAccessibility = null)
+    public function __construct(Parking $parking, Entrance $entrance1, Movement $movement, Service $service,
+                                Toilet $toilet, Navigation $navigation, ServiceAccessibility $serviceAccessibility,
+                                ?KidsAccessibility $kidsAccessibility = null)
     {
         $this->parking = $parking;
         $this->entrance1 = $entrance1;

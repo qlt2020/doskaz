@@ -34,6 +34,6 @@ class LevelRepository
 
     public function find($id): ?Level
     {
-        return $this->repository->find($id);
+        return $this->repository->findOneBy(['userId' => $id]);
     }
 }

@@ -31,12 +31,6 @@ class RegionalRepresentativeData implements DataObject
     public $phone;
 
     /**
-     * @var string|null
-     * @Assert\NotBlank()
-     */
-    public $department;
-
-    /**
      * @var string|int|null
      * @Assert\NotBlank()
      */

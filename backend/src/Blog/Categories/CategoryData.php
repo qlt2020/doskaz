@@ -22,6 +22,18 @@ final class CategoryData implements DataObject
 
     /**
      * @var string|null
+     * @Assert\NotBlank()
+     */
+    public $title_kz;
+
+    /**
+     * @var string|null
+     * @Assert\NotBlank()
+     */
+    public $title_en;
+
+    /**
+     * @var string|null
      */
     public $slug;
 

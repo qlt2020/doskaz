@@ -12,4 +12,5 @@ use Ramsey\Uuid\Uuid;
  */
 class VerificationConfirmed implements EventData
 {
+    public string $type = 'verification_confirmed';
 }

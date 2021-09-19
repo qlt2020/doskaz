@@ -44,7 +44,8 @@ abstract class Zones
         $builder = AccessibilityScoreBuilder::initUnknown();
 
         foreach (AccessibilityScore::SCORE_CATEGORIES as $category) {
-            if ($entrance->{$category} === AccessibilityScore::SCORE_NOT_ACCESSIBLE || $serviceAccessibilityScore->{$category} === AccessibilityScore::SCORE_NOT_ACCESSIBLE) {
+            if ($entrance->{$category} === AccessibilityScore::SCORE_NOT_ACCESSIBLE ||
+                $serviceAccessibilityScore->{$category} === AccessibilityScore::SCORE_NOT_ACCESSIBLE) {
                 $builder->withCategoryNotAccessible($category);
             } else {
                 $builder->withCategoryScore($category, $average->{$category});

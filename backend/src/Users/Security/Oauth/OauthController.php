@@ -8,6 +8,7 @@ use App\Users\FullName;
 use App\Users\Security\UserAuthenticator;
 use App\Users\User;
 use App\Users\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Provider\GoogleUser;
@@ -95,14 +96,18 @@ final class OauthController extends AbstractController
      *     @\OpenApi\Annotations\Response(response="200", description="Аутентифицирован существующий пользователь", @JsonContent(@Property(type="string", property="token"))),
      * )
      */
-    public function oauthAccessTokenAuthenticate(OauthService $oauthService, Request $request, OauthData $oauthData, UserAuthenticator $authenticator)
+    public function oauthAccessTokenAuthenticate(OauthService $oauthService, Request $request, OauthData $oauthData, UserAuthenticator $authenticator, EntityManagerInterface $em)
     {
+        $em->getConnection()->beginTransaction();
         try {
             ['user' => $user, 'created' => $created] = $oauthService->userByProviderAndCode($oauthData->provider, $oauthData->code, $oauthData->redirectUri);
+            $em->getConnection()->commit();
             return $authenticator->authenticate($request, $user)->setStatusCode($created ? Response::HTTP_CREATED : Response::HTTP_OK);
         } catch (ProviderNotFound $exception) {
+            $em->getConnection()->rollBack();
             throw new NotFoundHttpException($exception->getMessage(), $exception);
         } catch (InvalidCode $exception) {
+            $em->getConnection()->rollBack();
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
     }

@@ -1,121 +1,199 @@
 <template>
-    <div>
-        <UserAchievments :events="items" :awards="awards"/>
+  <div>
+    <UserAchievments :events="items" :awards="awards" />
 
-        <template v-if="notification">
-            <div class="popup__wrapper" v-if="notification.data.type === 'levelReached'">
-                <div class="popup__scroll">
-                    <div class="popup__in">
-                        <span class="popup__close" v-on:click="closeNotification(notification)"></span>
-                        <h5 class="popup__title">{{ $t('profile.notifications.levelReachedTitle') }}</h5>
-                        <p class="popup__text">{{ $t('profile.notifications.levelReachedText', {level: notification.data.level}) }}
-                            <template v-if="notification.data.unlockedAbility">
-                                <br>{{ $t(`profile.notifications.ability.${notification.data.unlockedAbility}`) }}
-                            </template>
-                        </p>
-                        <div class="popup__new-level"
-                             v-bind:style="{'background-image': 'url(' + require('~/assets/img/user/newLevel.svg') + ')'}"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="popup__wrapper" v-if="notification.data.type === 'pointsEarned'">
-                <div class="popup__scroll">
-                    <div class="popup__in">
-                        <span class="popup__close" v-on:click="closeNotification(notification)"></span>
-                        <h5 class="popup__title">{{ $t('profile.notifications.pointsEarnedTitle', {n: $tc('pointsCount', notification.data.points)})}}</h5>
-                        <p class="popup__text">{{ $t(`profile.notifications.pointsEarnedTasks.${notification.data.taskType}`) }}
-                            <br>«{{ notification.data.taskName }}»</p>
-                        <div class="popup__new-points">{{ notification.data.points }}</div>
-                    </div>
-                </div>
-            </div>
-        </template>
-
-        <div class="popup__wrapper" v-if="addAwardPopup">
-            <div class="popup__scroll">
-                <div class="popup__in">
-                    <span class="popup__close" v-on:click="addAwardPopup = false"></span>
-                    <h5 class="popup__title">Добавить награду</h5>
-                    <div class="popup__award-wrapper">
-                        <form>
-                            <div class="popup__award-list">
-                                <div class="popup__award">
-                                    <div class="popup__award-icon"
-                                         v-bind:style="{'background-image': 'url(' + require('~/assets/img/user/award-gold.svg') + ')'}"></div>
-                                    <input id="award-gold" type="radio" class="popup__award-input" name="award">
-                                    <label for="award-gold">золотая</label>
-                                </div>
-                                <div class="popup__award">
-                                    <div class="popup__award-icon"
-                                         v-bind:style="{'background-image': 'url(' + require('~/assets/img/user/award-silver.svg') + ')'}"></div>
-                                    <input id="award-silver" type="radio" class="popup__award-input" name="award">
-                                    <label for="award-silver">серебряная</label>
-                                </div>
-                                <div class="popup__award">
-                                    <div class="popup__award-icon"
-                                         v-bind:style="{'background-image': 'url(' + require('~/assets/img/user/award-bronze.svg') + ')'}"></div>
-                                    <input id="award-bronze" type="radio" class="popup__award-input" name="award">
-                                    <label for="award-bronze">бронзовая</label>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="select">
-                        <select>
-                            <option disabled selected>Выберите категорию</option>
-                            <option>Категория1</option>
-                            <option>Категория2</option>
-                            <option>Категория3</option>
-                            <option>Категория4</option>
-                        </select>
-                    </div>
-                    <button type="button" class="user-page__button">Добавить</button>
-                </div>
-            </div>
+    <template v-if="notification">
+      <div
+        class="popup__wrapper"
+        v-if="notification.data.type === 'levelReached'"
+      >
+        <div class="popup__scroll">
+          <div class="popup__in">
+            <span
+              class="popup__close"
+              v-on:click="closeNotification(notification)"
+            ></span>
+            <h5 class="popup__title">
+              {{ $t("profile.notifications.levelReachedTitle") }}
+            </h5>
+            <p class="popup__text">
+              {{
+                $t("profile.notifications.levelReachedText", {
+                  level: notification.data.level
+                })
+              }}
+              <template v-if="notification.data.unlockedAbility">
+                <br />{{
+                  $t(
+                    `profile.notifications.ability.${notification.data.unlockedAbility}`
+                  )
+                }}
+              </template>
+            </p>
+            <div
+              class="popup__new-level"
+              v-bind:style="{
+                'background-image':
+                  'url(' + require('~/assets/img/user/newLevel.svg') + ')'
+              }"
+            ></div>
+          </div>
         </div>
+      </div>
+
+      <div
+        class="popup__wrapper"
+        v-if="notification.data.type === 'pointsEarned'"
+      >
+        <div class="popup__scroll">
+          <div class="popup__in">
+            <span
+              class="popup__close"
+              v-on:click="closeNotification(notification)"
+            ></span>
+            <h5 class="popup__title">
+              {{
+                $t("profile.notifications.pointsEarnedTitle", {
+                  n: $tc("pointsCount", notification.data.points)
+                })
+              }}
+            </h5>
+            <p class="popup__text">
+              {{
+                $t(
+                  `profile.notifications.pointsEarnedTasks.${notification.data.taskType}`
+                )
+              }}
+              <br />«{{ notification.data.taskName }}»
+            </p>
+            <div class="popup__new-points">{{ notification.data.points }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div class="popup__wrapper" v-if="addAwardPopup">
+      <div class="popup__scroll">
+        <div class="popup__in">
+          <span class="popup__close" v-on:click="addAwardPopup = false"></span>
+          <h5 class="popup__title">Добавить награду</h5>
+          <div class="popup__award-wrapper">
+            <form>
+              <div class="popup__award-list">
+                <div class="popup__award">
+                  <div
+                    class="popup__award-icon"
+                    v-bind:style="{
+                      'background-image':
+                        'url(' +
+                        require('~/assets/img/user/award-gold.svg') +
+                        ')'
+                    }"
+                  ></div>
+                  <input
+                    id="award-gold"
+                    type="radio"
+                    class="popup__award-input"
+                    name="award"
+                  />
+                  <label for="award-gold">золотая</label>
+                </div>
+                <div class="popup__award">
+                  <div
+                    class="popup__award-icon"
+                    v-bind:style="{
+                      'background-image':
+                        'url(' +
+                        require('~/assets/img/user/award-silver.svg') +
+                        ')'
+                    }"
+                  ></div>
+                  <input
+                    id="award-silver"
+                    type="radio"
+                    class="popup__award-input"
+                    name="award"
+                  />
+                  <label for="award-silver">серебряная</label>
+                </div>
+                <div class="popup__award">
+                  <div
+                    class="popup__award-icon"
+                    v-bind:style="{
+                      'background-image':
+                        'url(' +
+                        require('~/assets/img/user/award-bronze.svg') +
+                        ')'
+                    }"
+                  ></div>
+                  <input
+                    id="award-bronze"
+                    type="radio"
+                    class="popup__award-input"
+                    name="award"
+                  />
+                  <label for="award-bronze">бронзовая</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="select">
+            <select>
+              <option disabled selected>Выберите категорию</option>
+              <option>Категория1</option>
+              <option>Категория2</option>
+              <option>Категория3</option>
+              <option>Категория4</option>
+            </select>
+          </div>
+          <button type="button" class="user-page__button">Добавить</button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-import {get} from 'vuex-pathify'
-import first from 'lodash/first'
+import { get } from "vuex-pathify";
+import first from "lodash/first";
 import UserAchievments from "~/components/user/UserAchievments";
 
 export default {
-    data() {
-        return {
-            newLevelPopup: false,
-            newPointsPopup: false,
-            addAwardPopup: false,
-            closedNotifications: []
-        };
-    },
-    async asyncData({$axios}) {
-        const [{items}, notifications] = await Promise.all([
-            $axios.$get('/api/profile/events'),
-            $axios.$get('/api/profileNotifications')
-        ])
-        return {items, notifications}
-    },
-    methods: {
-        async closeNotification(notification) {
-            await this.$axios.$delete(`/api/profileNotifications/${notification.id}`)
-            this.closedNotifications.push(notification)
-        }
-    },
-    computed: {
-        currentPage() {
-            return this.$route.path;
-        },
-        awards: get('awards/items'),
-        notification() {
-            return first(this.notifications.filter(n => !this.closedNotifications.includes(n)));
-        }
-    },
-    components: {
-        UserAchievments
+  data() {
+    return {
+      newLevelPopup: false,
+      newPointsPopup: false,
+      addAwardPopup: false,
+      closedNotifications: []
+    };
+  },
+  async asyncData({ $axios }) {
+    const [{ items }, notifications] = await Promise.all([
+      $axios.$get("/api/profile/events"),
+      $axios.$get("/api/profileNotifications")
+    ]);
+    return { items, notifications };
+  },
+  methods: {
+    async closeNotification(notification) {
+      await this.$axios.$delete(`/api/profileNotifications/${notification.id}`);
+      this.closedNotifications.push(notification);
     }
+  },
+  computed: {
+    currentPage() {
+      return this.$route.path;
+    },
+    awards: get("awards/items"),
+    notification() {
+      return first(
+        this.notifications.filter(n => !this.closedNotifications.includes(n))
+      );
+    }
+  },
+  components: {
+    UserAchievments
+  }
 };
 </script>
 
@@ -123,11 +201,10 @@ export default {
 @import "@/styles/mixins.scss";
 
 .user-page {
-    overflow-x: hidden;
-
+  overflow-x: hidden;
+  /* 
     &__header {
         width: 100%;
-        min-height: 180px;
         background-size: cover;
         background-position: center;
         position: relative;
@@ -197,9 +274,9 @@ export default {
                 }
             }
         }
-    }
+    } */
 
-    &__row {
+  /* &__row {
         display: flex;
         justify-content: flex-start;
         align-items: flex-start;
@@ -207,48 +284,6 @@ export default {
         @media all and (max-width: 768px) {
             display: block;
         }
-    }
-
-    &__profile {
-        width: 390px;
-        position: relative;
-        top: -110px;
-        @media all and (max-width: 1280px) {
-            width: 330px;
-        }
-        @media all and (max-width: 1024px) {
-            width: 200px;
-        }
-        @media all and (max-width: 768px) {
-            top: 0;
-            width: 100%;
-        }
-
-        & > div {
-            margin-top: 10px;
-
-            &:first-child {
-                margin-top: 0;
-            }
-        }
-    }
-
-    &__tabs {
-        flex: 1 0 auto;
-        max-width: calc(100% - 450px);
-        margin-left: 60px;
-        @media all and (max-width: 1200px) {
-            margin-left: 20px;
-        }
-        @media all and (max-width: 1024px) {
-            max-width: calc(100% - 216px);
-        }
-        @media all and (max-width: 768px) {
-            max-width: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0 20px;
-        }
-    }
+    } */
 }
 </style>

@@ -1,19 +1,61 @@
 <template>
   <div class="user-achievment">
-    <template v-if="addNew===undefined">
+    <template v-if="addNew === undefined">
       <div class="user-achievment__icon">
-        <img src="~/assets/img/user/award-gold.svg" alt="" v-if="awardType === 'gold'"/>
-        <img src="~/assets/img/user/award-gold-white.svg" class="white" alt="" v-if="awardType === 'gold'"/>
-        <img src="~/assets/img/user/award-gold-black.svg" class="black" alt="" v-if="awardType === 'gold'"/>
-        <img src="~/assets/img/user/award-silver.svg" alt="" v-if="awardType === 'silver'"/>
-        <img src="~/assets/img/user/award-silver-white.svg" class="white" alt="" v-if="awardType === 'silver'"/>
-        <img src="~/assets/img/user/award-silver-black.svg" class="black" alt="" v-if="awardType === 'silver'"/>
-        <img src="~/assets/img/user/award-bronze.svg" alt="" v-if="awardType === 'bronze'"/>
-        <img src="~/assets/img/user/award-bronze-white.svg" class="white" alt="" v-if="awardType === 'bronze'"/>
-        <img src="~/assets/img/user/award-bronze-black.svg" class="black" alt="" v-if="awardType === 'bronze'"/>
+        <img
+          src="~/assets/img/user/award-gold.svg"
+          alt=""
+          v-if="awardType === 'gold'"
+        />
+        <img
+          src="~/assets/img/user/award-gold-white.svg"
+          class="white"
+          alt=""
+          v-if="awardType === 'gold'"
+        />
+        <img
+          src="~/assets/img/user/award-gold-black.svg"
+          class="black"
+          alt=""
+          v-if="awardType === 'gold'"
+        />
+        <img
+          src="~/assets/img/user/award-silver.svg"
+          alt=""
+          v-if="awardType === 'silver'"
+        />
+        <img
+          src="~/assets/img/user/award-silver-white.svg"
+          class="white"
+          alt=""
+          v-if="awardType === 'silver'"
+        />
+        <img
+          src="~/assets/img/user/award-silver-black.svg"
+          class="black"
+          alt=""
+          v-if="awardType === 'silver'"
+        />
+        <img
+          src="~/assets/img/user/award-bronze.svg"
+          alt=""
+          v-if="awardType === 'bronze'"
+        />
+        <img
+          src="~/assets/img/user/award-bronze-white.svg"
+          class="white"
+          alt=""
+          v-if="awardType === 'bronze'"
+        />
+        <img
+          src="~/assets/img/user/award-bronze-black.svg"
+          class="black"
+          alt=""
+          v-if="awardType === 'bronze'"
+        />
       </div>
       <div class="user-achievment__text">
-        <span>{{text}}</span>
+        <span>{{ text }}</span>
       </div>
     </template>
     <template v-else>
@@ -47,14 +89,15 @@ export default {
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    @media all and (max-width: 1023px){
+    @media all and (max-width: 1023px) {
       width: 50px;
       height: 50px;
     }
     img {
       width: 100%;
       height: auto;
-      &.black, &.white {
+      &.black,
+      &.white {
         display: none;
       }
     }
@@ -71,7 +114,7 @@ export default {
     font-size: 14px;
     line-height: 20px;
     color: #333333;
-    @media all and (max-width: 1023px){
+    @media all and (max-width: 1023px) {
       font-size: 12px;
     }
   }

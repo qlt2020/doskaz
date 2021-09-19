@@ -6,6 +6,8 @@ namespace App\Tasks\ProfileCompletion;
 use App\Infrastructure\Doctrine\Flusher;
 use App\Infrastructure\DomainEvents\EventListener;
 use App\Users\UserRegistered;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class CreateProfileCompletionTaskOnUserRegistered implements EventListener
 {
@@ -19,10 +21,13 @@ class CreateProfileCompletionTaskOnUserRegistered implements EventListener
      */
     private $flusher;
 
-    public function __construct(ProfileCompletionTaskRepository $profileCompletionTaskRepository, Flusher $flusher)
+    private $logger;
+
+    public function __construct(ProfileCompletionTaskRepository $profileCompletionTaskRepository, Flusher $flusher, LoggerInterface $logger)
     {
         $this->profileCompletionTaskRepository = $profileCompletionTaskRepository;
         $this->flusher = $flusher;
+        $this->logger = $logger;
     }
 
     /**

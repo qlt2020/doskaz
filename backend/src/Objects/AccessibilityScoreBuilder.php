@@ -12,6 +12,7 @@ class AccessibilityScoreBuilder
     private string $vision;
     private string $hearing;
     private string $intellectual;
+    private string $kids;
 
     public static function initPartialAccessible(): self
     {
@@ -20,7 +21,8 @@ class AccessibilityScoreBuilder
         $self->limb = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;
         $self->vision = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;
         $self->hearing = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;
-        $self->intellectual = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;
+        $self->intellectual = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;  
+        $self->kids = AccessibilityScore::SCORE_NOT_PROVIDED;
 
         return $self;
     }
@@ -33,10 +35,23 @@ class AccessibilityScoreBuilder
         $self->vision = AccessibilityScore::SCORE_UNKNOWN;
         $self->hearing = AccessibilityScore::SCORE_UNKNOWN;
         $self->intellectual = AccessibilityScore::SCORE_UNKNOWN;
+        $self->kids = AccessibilityScore::SCORE_NOT_PROVIDED;
 
         return $self;
     }
 
+    public static function initNotProvided(): self
+    {
+        $self = new self();
+        $self->movement = AccessibilityScore::SCORE_NOT_PROVIDED;
+        $self->limb = AccessibilityScore::SCORE_NOT_PROVIDED;
+        $self->vision = AccessibilityScore::SCORE_NOT_PROVIDED;
+        $self->hearing = AccessibilityScore::SCORE_NOT_PROVIDED;
+        $self->intellectual = AccessibilityScore::SCORE_NOT_PROVIDED;
+        $self->kids = AccessibilityScore::SCORE_NOT_PROVIDED;
+
+        return $self;
+    }
 
     public function withMovementFullAccessible(): self
     {
@@ -188,9 +203,39 @@ class AccessibilityScoreBuilder
         return $this;
     }
 
+    public function withKidsFullAccessible(): self
+    {
+        $this->kids = AccessibilityScore::SCORE_FULL_ACCESSIBLE;
+        return $this;
+    }
+
+    public function withKidsNotAccessible(): self
+    {
+        $this->kids = AccessibilityScore::SCORE_NOT_ACCESSIBLE;
+        return $this;
+    }
+
+    public function withKidsPartialAccessible(): self
+    {
+        $this->kids = AccessibilityScore::SCORE_PARTIAL_ACCESSIBLE;
+        return $this;
+    }
+
+    public function withKidsUnknown(): self
+    {
+        $this->kids = AccessibilityScore::SCORE_UNKNOWN;
+        return $this;
+    }
+
+    public function withKidsNotProvided(): self
+    {
+        $this->kids = AccessibilityScore::SCORE_NOT_PROVIDED;
+        return $this;
+    }
+
     public function build(): AccessibilityScore
     {
-        return AccessibilityScore::new($this->movement, $this->limb, $this->vision, $this->hearing, $this->intellectual);
+        return AccessibilityScore::new($this->movement, $this->limb, $this->vision, $this->hearing, $this->intellectual, $this->kids);
     }
 
     public function withCategoryNotAccessible(string $category): self

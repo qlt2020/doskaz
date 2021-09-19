@@ -12,4 +12,5 @@ use Ramsey\Uuid\Uuid;
  */
 class VerificationRejected implements EventData
 {
+    public string $type = 'verification_rejected';
 }

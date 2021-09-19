@@ -1,3 +1,31 @@
+@font-face {
+  font-family: "SFProDisplay";
+  src: url("./fonts/SFProDisplay-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SFProDisplay";
+  src: url("./fonts/SFProDisplay-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SFProDisplay";
+  src: url("./fonts/SFProDisplay-Semibold.ttf");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SFProDisplay";
+  src: url("./fonts/SFProDisplay-Bold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+
 .fa-fw,.fa-li,.wi-fw{text-align:center}.flag-icon,.flag-icon-background{background-repeat:no-repeat;background-position:50%}.fa-stack,.flag-icon,.mdi-set,.mdi:before,.wi{display:inline-block}pre,textarea{overflow:auto}button,hr,input{overflow:visible}.dropdown-menu,.nav,.navbar-nav{list-style:none}.waves-effect,html{-webkit-tap-highlight-color:transparent}@font-face{font-family:Poppins;font-style:normal;font-weight:300;src:local('Poppins Light'),local('Poppins-Light'),url(https://fonts.gstatic.com/s/poppins/v6/pxiByp8kv8JHgFVrLDz8Z1xlEA.ttf) format('truetype')}@font-face{font-family:Poppins;font-style:normal;font-weight:400;src:local('Poppins Regular'),local('Poppins-Regular'),url(https://fonts.gstatic.com/s/poppins/v6/pxiEyp8kv8JHgFVrJJfedw.ttf) format('truetype')}@font-face{font-family:Poppins;font-style:normal;font-weight:500;src:local('Poppins Medium'),local('Poppins-Medium'),url(https://fonts.gstatic.com/s/poppins/v6/pxiByp8kv8JHgFVrLGT9Z1xlEA.ttf) format('truetype')}@font-face{font-family:Poppins;font-style:normal;font-weight:600;src:local('Poppins SemiBold'),local('Poppins-SemiBold'),url(https://fonts.gstatic.com/s/poppins/v6/pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf) format('truetype')}@font-face{font-family:Poppins;font-style:normal;font-weight:700;src:local('Poppins Bold'),local('Poppins-Bold'),url(https://fonts.gstatic.com/s/poppins/v6/pxiByp8kv8JHgFVrLCz7Z1xlEA.ttf) format('truetype')}/*!
  * Font Awesome Free 5.0.9 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)

@@ -48,6 +48,11 @@ class CitiesController
             ->addSelect('ST_XMIN(c.bbox) as xmin')
             ->addSelect('ST_YMAX(c.bbox) as ymax')
             ->addSelect('ST_XMAX(c.bbox) as xmax')
+            ->addOrderBy('case when c.id = 106724 then 0 else 3 END', 'ASC')
+            ->addOrderBy('case when c.id = 158106 then 0 else 3 END', 'ASC')
+            ->addOrderBy('case when c.id = 178771 then 0 else 3 END', 'ASC')
+           ->addOrderBy('case when c.id in (110170,68402,26551,212922,155241,125193,165288,9103,33335,79497,168533,182036,
+            51071,31223,113407) then 1 ELSE 2 END, c.name', 'ASC')
             ->getQuery();
 
         $query->setHint(
@@ -65,9 +70,9 @@ class CitiesController
             1
         );
 
-        $citites = $query->getArrayResult();
+        $cities = $query->getArrayResult();
 
-        return array_map(fn ($city) => new City($city['id'], $city['name'], [[(float) $city['ymin'], (float) $city['xmin']], [(float) $city['ymax'], (float) $city['xmax']]]), $citites);
+        return array_map(fn ($city) => new City($city['id'], $city['name'], [[(float) $city['ymin'], (float) $city['xmin']], [(float) $city['ymax'], (float) $city['xmax']]]), $cities);
     }
 
     /**

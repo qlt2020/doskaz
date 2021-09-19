@@ -6,6 +6,10 @@ objects:
     resource: ../../src/Objects
     type: annotation
 
+notifications:
+    resource: ../../src/Notification
+    type: annotation
+
 blog:
     resource: ../../src/Blog
     type: annotation
@@ -52,4 +56,12 @@ awards:
 
 profileNotifications:
     resource: ../../src/ProfileNotifications
+    type: annotation
+
+userSubscribe:
+    resource: ../../src/Users/Subscribe
+    type: annotation
+
+helps:
+    resource: ../../src/Help
     type: annotation

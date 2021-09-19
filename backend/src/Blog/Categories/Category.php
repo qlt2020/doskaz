@@ -11,7 +11,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="blog_categories")
- * @Gedmo\TranslationEntity(class="App\Blog\Categories\CategoryTranslation")
  */
 class Category
 {
@@ -24,9 +23,18 @@ class Category
 
     /**
      * @ORM\Column(type="text")
-     * @Gedmo\Translatable()
      */
     private $title;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $title_kz;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $title_en;
 
     /**
      * @var Slug
@@ -51,7 +59,7 @@ class Category
 
     /**
      * @var Meta|null
-     * @ORM\Column(type=Meta::class, nullable=true, options={"jsonb" = true})
+     * @ORM\Column(type="json", nullable=true, options={"jsonb" = true})
      */
     private $meta;
 
@@ -60,9 +68,11 @@ class Category
      */
     private $locale;
 
-    public function __construct(string $title, Slug $slug, ?Meta $meta = null)
+    public function __construct(CategoryData $categoryData, Slug $slug, ?Meta $meta = null)
     {
-        $this->title = $title;
+        $this->title = $categoryData->title;
+        $this->title_kz = $categoryData->title_kz;
+        $this->title_en = $categoryData->title_en;
         $this->slug = $slug;
         $this->meta = $meta;
         $this->createdAt = new \DateTimeImmutable();
@@ -74,9 +84,11 @@ class Category
         return $this->id;
     }
 
-    public function update(string $title, Slug $slug, ?Meta $meta = null)
+    public function update(CategoryData $categoryData, Slug $slug, ?Meta $meta = null)
     {
-        $this->title = $title;
+        $this->title = $categoryData->title;
+        $this->title_kz = $categoryData->title_kz;
+        $this->title_en = $categoryData->title_en;
         $this->slug = $slug;
         $this->meta = $meta;
         $this->updatedAt = new \DateTimeImmutable();
@@ -95,6 +107,11 @@ class Category
         return $this->title;
     }
 
+    public function getTranslation($locale, $field): ?string
+    {
+        return $this->{$field . ($locale === 'ru' ? '' : '_' . $locale)};
+    }
+
     /**
      * @return Slug
      */
@@ -111,9 +128,41 @@ class Category
         $this->title = $title;
     }
 
-
     public function setTranslatableLocale($locale)
     {
         $this->locale = $locale;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getTitleKz(): ?string
+    {
+        return $this->title_kz;
+    }
+
+    /**
+     * @param string|null $title_kz
+     */
+    public function setTitleKz(?string $title_kz): void
+    {
+        $this->title_kz = $title_kz;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTitleEn(): ?string
+    {
+        return $this->title_en;
+    }
+
+    /**
+     * @param string|null $title_en
+     */
+    public function setTitleEn(?string $title_en): void
+    {
+        $this->title_en = $title_en;
+    }
+
 }

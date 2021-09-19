@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class FullFormRequestData implements DataObject, Form
 {
+    public string $form = 'full';
     /**
      * @var FirstStep|null
      * @Assert\Valid()

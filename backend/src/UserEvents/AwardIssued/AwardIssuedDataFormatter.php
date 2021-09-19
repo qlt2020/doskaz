@@ -31,7 +31,7 @@ class AwardIssuedDataFormatter implements DataFormatter
      */
     public function format(Data $data, Context $context): array
     {
-        return $this->connection->createQueryBuilder()
+        $query = $this->connection->createQueryBuilder()
             ->select([
                 'title',
                 'type'
@@ -40,5 +40,10 @@ class AwardIssuedDataFormatter implements DataFormatter
             ->setParameter('id', $data->awardId)
             ->execute()
             ->fetch();
+
+        if ($query && is_array($query)) {
+            return $query;
+        }
+        return [];
     }
 }

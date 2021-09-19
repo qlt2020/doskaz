@@ -1,0 +1,170 @@
+<?php
+
+namespace App\Objects\Command;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Doctrine\DBAL\Connection;
+
+class UpdateObjectCategory extends Command
+{
+    protected static $defaultName = 'app:objects:update-object-category';
+
+    public function __construct(Connection $connection)
+    {
+        parent::__construct();
+        $this->connection = $connection;
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $count = $this->connection->executeQuery('SELECT COUNT(*) FROM object_categories')->fetchColumn();
+        if ($count == 0) {
+            return;
+        }
+
+        $icons = [
+            '1' => 'static/icons/gosudarstvennye_uchrezhdeniya.svg',
+            '2' => 'static/icons/zdravoohranenie.svg',
+            '3' => 'static/icons/kultura_i_dosug.svg',
+            '4' => 'static/icons/obrazovanie.svg',
+            '5' => 'static/icons/torgovlya_i_uslugi.svg',
+            '6' => 'static/icons/pitanie.svg',
+            '7' => 'static/icons/transport.svg',
+            '8' => 'static/icons/sport.svg',
+            '9' => 'static/icons/finansy.svg',
+            '10' => 'static/icons/religiya.svg',
+            '11' => 'static/icons/prozhivanie.svg',
+            '12' => 'static/icons/drugoe.svg',
+            '13' => 'static/icons/1/akimat.svg',
+            '14' => 'static/icons/1/gosudarstvennoe_uchrezhdenie.svg',
+            '15' => 'static/icons/1/policiya.svg',
+            '16' => 'static/icons/1/sud_prokuratura_yusticiya.svg',
+            '17' => 'static/icons/1/c_o_n.svg',
+            '18' => 'static/icons/1/drugoe.svg',
+            '19' => 'static/icons/2/apteka.svg',
+            '20' => 'static/icons/2/bolnica.svg',
+            '21' => 'static/icons/2/veterinarnaya_klinika.svg',
+            '22' => 'static/icons/2/optika.svg',
+            '23' => 'static/icons/2/poliklinika.svg',
+            '24' => 'static/icons/2/sanatorii.svg',
+            '25' => 'static/icons/2/stomatologiya.svg',
+            '26' => 'static/icons/2/chastnaya_klinika.svg',
+            '27' => 'static/icons/2/drugoe.svg',
+            '28' => 'static/icons/3/biblioteka.svg',
+            '29' => 'static/icons/3/dvorec_dom_kultury.svg',
+            '30' => 'static/icons/3/dvorec_dom_shkolnikov.svg',
+            '31' => 'static/icons/3/dvorovyi_klub_sekcii_kruzhki.svg',
+            '32' => 'static/icons/3/detskaya_ploshadka.svg',
+            '33' => 'static/icons/3/dostoprimechatelnost.svg',
+            '34' => 'static/icons/3/karaoke.svg',
+            '35' => 'static/icons/3/kinoteatr.svg',
+            '36' => 'static/icons/3/koncertnyi_zal.svg',
+            '37' => 'static/icons/3/muzei.svg',
+            '38' => 'static/icons/3/nochnoi_klub.svg',
+            '39' => 'static/icons/3/park.svg',
+            '40' => 'static/icons/3/teatr.svg',
+            '41' => 'static/icons/3/drugoe.svg',
+            '135' => 'static/icons/3/kulturnyi_centr_razvlektelnyi_kopleks.svg',
+            '42' => 'static/icons/4/avtoshkola.svg',
+            '43' => 'static/icons/4/detski_sad.svg',
+            '44' => 'static/icons/4/institut_universitet.svg',
+            '45' => 'static/icons/4/kolledzh.svg',
+            '46' => 'static/icons/4/muzikalnaya_shkola.svg',
+            '47' => 'static/icons/4/uchebnyi_centr_kursy.svg',
+            '48' => 'static/icons/4/hudozhestvennaya_shkola.svg',
+            '49' => 'static/icons/4/shkola_licei_gimnaziya.svg',
+            '50' => 'static/icons/4/drugoe.svg',
+            '51' => 'static/icons/5/avtosalon_avtozapchasti.svg',
+            '52' => 'static/icons/5/advokat.svg',
+            '53' => 'static/icons/5/bazar_rynok.svg',
+            '54' => 'static/icons/5/banya.svg',
+            '55' => 'static/icons/5/biznes_centr.svg',
+            '56' => 'static/icons/5/bukmekerskaya_kontora.svg',
+            '57' => 'static/icons/5/internet_kafe.svg',
+            '58' => 'static/icons/5/kancelyarskie_tovary.svg',
+            '59' => 'static/icons/5/knizhnyi_magazin.svg',
+            '60' => 'static/icons/5/kurerskaya_dostavka.svg',
+            '61' => 'static/icons/5/magazin_bytovoi_tehniki_i_elektroniki.svg',
+            '62' => 'static/icons/5/magazin_igrushek.svg',
+            '63' => 'static/icons/5/magazin_odezhdi_obuvi.svg',
+            '64' => 'static/icons/5/magazin_stroitelnyh_tovarov.svg',
+            '65' => 'static/icons/5/magazin_hozyaistvennyh_tovarov.svg',
+            '66' => 'static/icons/5/mebelnyi_magazin.svg',
+            '67' => 'static/icons/5/magazin_drugoi.svg',
+            '68' => 'static/icons/5/notarius.svg',
+            '69' => 'static/icons/5/obshestvennyi_tualet.svg',
+            '70' => 'static/icons/5/parikmaherskaya_salon_krasoty.svg',
+            '71' => 'static/icons/5/poligraficheskie_uslugi.svg',
+            '72' => 'static/icons/5/pochtovoe_otdelenie.svg',
+            '73' => 'static/icons/5/produktovyi_magazin.svg',
+            '74' => 'static/icons/5/prokat_velosipedov.svg',
+            '75' => 'static/icons/5/remont_bytovoi_tehniki.svg',
+            '76' => 'static/icons/5/sotovaiya_svyaz.svg',
+            '77' => 'static/icons/5/magazin_sportivnyh_tovarov.svg',
+            '78' => 'static/icons/5/strahovaya_kompaniya.svg',
+            '79' => 'static/icons/5/supermarket.svg',
+            '80' => 'static/icons/5/telekommunikacii.svg',
+            '81' => 'static/icons/5/torgovo_razvlekatelnyi_centr.svg',
+            '82' => 'static/icons/5/torgovyi_centr_dom.svg',
+            '83' => 'static/icons/5/turisticheskoe_agenstvo.svg',
+            '84' => 'static/icons/5/fotosalon.svg',
+            '85' => 'static/icons/5/himchistka_remont_obuvi.svg',
+            '86' => 'static/icons/5/cvetochnyi_magazin.svg',
+            '87' => 'static/icons/5/shveinaya_masterskaya_atele.svg',
+            '88' => 'static/icons/5/yuvelirnye_izdelya.svg',
+            '89' => 'static/icons/5/drugoe.svg',
+            '136' => 'static/icons/5/perevodchestkoe_byuro.svg',
+            '90' => 'static/icons/6/bar.svg',
+            '91' => 'static/icons/6/kafe.svg',
+            '92' => 'static/icons/6/kofeinya.svg',
+            '93' => 'static/icons/6/restoran.svg',
+            '94' => 'static/icons/6/fastfud.svg',
+            '95' => 'static/icons/6/drugoe.svg',
+            '133' => 'static/icons/6/stolovaya.svg',
+            '106' => 'static/icons/7/avtovokzal.svg',
+            '107' => 'static/icons/7/avtoservis_tehnicheskii_osmotr.svg',
+            '108' => 'static/icons/7/azs.svg',
+            '109' => 'static/icons/7/aeroport.svg',
+            '110' => 'static/icons/7/gruzoperevozki.svg',
+            '111' => 'static/icons/7/zheleznodorozhnyi_vokzal.svg',
+            '112' => 'static/icons/7/ostanovka_obshestvennogo_transporta.svg',
+            '113' => 'static/icons/7/parkovka.svg',
+            '114' => 'static/icons/7/taksi.svg',
+            '115' => 'static/icons/7/shinomontazh.svg',
+            '116' => 'static/icons/7/drugoe.svg',
+            '134' => 'static/icons/7/aviakassa_zheleznodorozhnaya_kassa.svg',
+            '122' => 'static/icons/8/bassein.svg',
+            '123' => 'static/icons/8/dvorec_sporta.svg',
+            '124' => 'static/icons/8/ledovyi_dvorec_katok.svg',
+            '125' => 'static/icons/8/sportzal.svg',
+            '126' => 'static/icons/8/sportivnyi_klub_shkola.svg',
+            '127' => 'static/icons/8/sportivnyi_kompleks.svg',
+            '128' => 'static/icons/8/sportploshadka.svg',
+            '129' => 'static/icons/8/stadion.svg',
+            '130' => 'static/icons/8/fitnes_klub.svg',
+            '131' => 'static/icons/8/drugoe.svg',
+            '96' => 'static/icons/9/bank.svg',
+            '97' => 'static/icons/9/bankomat.svg',
+            '98' => 'static/icons/9/lombard.svg',
+            '99' => 'static/icons/9/obmennyi_punkt.svg',
+            '100' => 'static/icons/9/drugoe.svg',
+            '101' => 'static/icons/10/mechet.svg',
+            '102' => 'static/icons/10/sinagoga.svg',
+            '103' => 'static/icons/10/hram.svg',
+            '104' => 'static/icons/10/cerkov.svg',
+            '105' => 'static/icons/10/drugoe.svg',
+            '117' => 'static/icons/11/arenda_zhilya.svg',
+            '118' => 'static/icons/11/gostinica_otel.svg',
+            '119' => 'static/icons/11/zhiloi_dom.svg',
+            '120' => 'static/icons/11/obshezhitie.svg',
+            '121' => 'static/icons/11/drugoe.svg',
+            '132' => 'static/icons/12/drugoe.svg',
+            '137' => 'static/icons/12/nepravitelstvennaya_organizaciya.svg',
+        ];
+
+        foreach ($icons as $key => $val) {
+            $this->connection->update('object_categories', array('icon' => $val), array('id' => $key));
+        }
+    }
+}

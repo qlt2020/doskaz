@@ -110,6 +110,9 @@
                 ]
             },
             categories() {
+                if (this.type === 'kidsAccessibility_small' || this.type === 'kidsAccessibility_middle' || this.type === 'kidsAccessibility_full') {
+                    return [{ key: "kids"}]
+                }
                 return [
                     {key: 'movement', title: 'Люди, передвигающиеся на кресло-коляске'},
                     {key: 'limb', title: 'Люди с нарушением опорно-двигательного аппарата'},

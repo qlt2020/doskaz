@@ -36,34 +36,41 @@ class AccessibilityScore
         'vision',
         'hearing',
         'intellectual',
+        'kids'
     ];
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    public string $movement;
+    public string $movement = AccessibilityScore::SCORE_NOT_PROVIDED;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    public string $limb;
+    public string $limb = AccessibilityScore::SCORE_NOT_PROVIDED;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    public string $vision;
+    public string $vision = AccessibilityScore::SCORE_NOT_PROVIDED;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    public string $hearing;
+    public string $hearing = AccessibilityScore::SCORE_NOT_PROVIDED;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    public string $intellectual;
+    public string $intellectual = AccessibilityScore::SCORE_NOT_PROVIDED;
 
-    public static function new(string $movement, string $limb, string $vision, string $hearing, string $intellectual): self
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    public ?string $kids = AccessibilityScore::SCORE_NOT_PROVIDED;
+
+    public static function new(string $movement, string $limb, string $vision, string $hearing, string $intellectual,
+                               ?string $kids = AccessibilityScore::SCORE_NOT_PROVIDED): self
     {
         Assert::oneOf($movement, self::SCORE_VARIANTS);
         Assert::oneOf($limb, self::SCORE_VARIANTS);
@@ -76,6 +83,7 @@ class AccessibilityScore
         $self->vision = $vision;
         $self->hearing = $hearing;
         $self->intellectual = $intellectual;
+        $self->kids = $kids;
         return $self;
     }
 
@@ -87,6 +95,7 @@ class AccessibilityScore
         $self->vision = self::SCORE_NOT_PROVIDED;
         $self->hearing = self::SCORE_NOT_PROVIDED;
         $self->intellectual = self::SCORE_NOT_PROVIDED;
+        $self->kids = self::SCORE_NOT_PROVIDED;
         return $self;
     }
 
@@ -98,6 +107,8 @@ class AccessibilityScore
         $self->vision = self::SCORE_FULL_ACCESSIBLE;
         $self->hearing = self::SCORE_FULL_ACCESSIBLE;
         $self->intellectual = self::SCORE_FULL_ACCESSIBLE;
+        $self->kids = self::SCORE_NOT_PROVIDED;
+      
         return $self;
     }
 
@@ -109,6 +120,8 @@ class AccessibilityScore
         $self->vision = self::SCORE_PARTIAL_ACCESSIBLE;
         $self->hearing = self::SCORE_PARTIAL_ACCESSIBLE;
         $self->intellectual = self::SCORE_PARTIAL_ACCESSIBLE;
+        $self->kids = self::SCORE_NOT_PROVIDED;
+      
         return $self;
     }
 
@@ -120,6 +133,8 @@ class AccessibilityScore
         $self->vision = self::SCORE_NOT_ACCESSIBLE;
         $self->hearing = self::SCORE_NOT_ACCESSIBLE;
         $self->intellectual = self::SCORE_NOT_ACCESSIBLE;
+        $self->kids = self::SCORE_NOT_PROVIDED;
+      
         return $self;
     }
 
@@ -131,6 +146,8 @@ class AccessibilityScore
         $self->vision = self::SCORE_UNKNOWN;
         $self->hearing = self::SCORE_UNKNOWN;
         $self->intellectual = self::SCORE_UNKNOWN;
+        $self->kids = self::SCORE_NOT_PROVIDED;
+      
         return $self;
     }
 
@@ -142,7 +159,8 @@ class AccessibilityScore
                 && $other->limb === $this->limb
                 && $other->vision === $this->vision
                 && $other->hearing === $this->hearing
-                && $other->intellectual === $this->intellectual;
+                && $other->intellectual === $this->intellectual
+                && $other->kids === $this->kids;
         }
         return false;
     }

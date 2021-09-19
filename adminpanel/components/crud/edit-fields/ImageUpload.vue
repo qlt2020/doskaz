@@ -3,14 +3,18 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Изображение" v-model="fileName" :disabled="!value"/>
             <div class="input-group-append">
-                <button class="btn btn-info" type="button" @click.prevent="$refs.image.click" :disabled="isUploading"
+                <button class="btn btn-info" type="button" @click.prevent="clickImg" :disabled="isUploading"
                         v-if="!value">
                     <span v-if="!isUploading">Выбрать</span>
                     <span v-else>Загрузка ({{uploadProgress}}%)</span>
                 </button>
-                <b-button class="btn btn-success" type="button" v-if="value"
-                          @click.prevent="showCropModal">
-                    <i class="mdi mdi-crop"/>
+                <b-button
+                  class="btn btn-success"
+                  type="button"
+                  v-if="value"
+                  @click.prevent="showCropModal"
+                >
+                   <i class="mdi mdi-crop"/>
                 </b-button>
                 <button class="btn btn-danger" type="button" @click.prevent="removeImage" v-if="value">
                     <i class="mdi mdi-close"></i>
@@ -164,6 +168,9 @@
                 this.cropOptions.aspectRatio = value;
                 this.initCropper();
             },
+            clickImg() {
+                this.$refs.image.click()
+            }
         },
         computed: {
             previewLink() {

@@ -48,6 +48,14 @@ class ProfileData
 
     public ?string $status;
 
+    public $gender;
+
+    public $category;
+
+    public $city_id;
+
+    public $birthday;
+
     /**
      * ProfileData constructor.
      * @param $email
@@ -61,8 +69,14 @@ class ProfileData
      * @param $stats
      * @param array $abilities
      * @param string|null $status
+     * @param $gender
+     * @param $category
+     * @param $city_id
+     * @param $birthday
      */
-    public function __construct($id, $email, $phone, $avatar, $firstName, $lastName, $middleName, ?CurrentTaskData $currentTask, $level, $stats, array $abilities, ?string $status)
+    public function __construct($id, $email, $phone, $avatar, $firstName, $lastName, $middleName, 
+                                ?CurrentTaskData $currentTask, $level, $stats, array $abilities, ?string $status,
+                                $gender, $category, $city_id, $birthday)
     {
         $this->id = $id;
         $this->email = $email;
@@ -76,5 +90,9 @@ class ProfileData
         $this->stats = $stats;
         $this->abilities = $abilities;
         $this->status = $status;
+        $this->gender = $gender;
+        $this->category = $category;
+        $this->city_id = $city_id;
+        $this->birthday = $birthday;
     }
 }

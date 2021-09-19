@@ -20,6 +20,7 @@ use App\UserAbilities\UnlockedAbility;
 use App\UserEvents\UserEventsFinder;
 use App\Users\Security\PhoneAuth\Credentials;
 use App\Users\Security\PhoneAuth\CredentialsRepository;
+use App\Users\Services\ExportToExcelService;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Imgproxy\UrlBuilder;
@@ -35,8 +36,11 @@ use OpenApi\Annotations\Put;
 use OpenApi\Annotations\RequestBody;
 use OpenApi\Annotations\Response;
 use OpenApi\Annotations\Schema;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -45,6 +49,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Webmozart\Assert\Assert;
+use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route(path="/api")
@@ -60,7 +67,7 @@ final class UserController extends AbstractController
      *     tags={"Пользователи"},
      *     summary="Профиль пользователя",
      *     security={{"clientAuth": {}}},
-     *     @Parameter(in="query", name="cityId", @Schema(type="integer", nullable=true), description="id города"),
+     *     @Parameter(in="query", name="cityId", @Schema(type="integer", nullable=true), description="id города для Задач"),
      *     @Response(response=401, description=""),
      *     @\OpenApi\Annotations\Response(
      *         response="200",
@@ -96,7 +103,11 @@ final class UserController extends AbstractController
      *                 @Property(property="currentPoints", type="number", description="Текущее количество баллов"),
      *                 @Property(property="progressToNext", type="number", description="Количество баллов оставшееся до получения следующего уровня"),
      *                 @Property(property="nextLevelThreshold", type="number", description="Количество баллов необходимых для достижения следующего уровня"),
-     *             )
+     *             ),
+     *             @Property(property="gender", type="string", nullable=true),
+     *             @Property(property="category", type="string", nullable=true),
+     *             @Property(property="city_id", type="integer", nullable=true),
+     *             @Property(property="birthday", type="string", nullable=true),
      *         )
      *     ),
      * )
@@ -108,10 +119,12 @@ final class UserController extends AbstractController
      * @return ProfileData
      * @throws DBALException
      */
-    public function profile(TokenStorageInterface $tokenStorage, Connection $connection, Request $request, CurrentTaskDataProvider $currentTaskProvider, LevelRepository $levelRepository)
+    public function profile(TokenStorageInterface $tokenStorage, Connection $connection, Request $request,
+                            CurrentTaskDataProvider $currentTaskProvider, LevelRepository $levelRepository)
     {
         $user = $connection->createQueryBuilder()
-            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status')
+            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status', 
+                        'users.gender', 'users.category', 'users.city_id', 'users.birthday')
             ->from('users')
             ->leftJoin('users', 'phone_credentials', 'phone_credentials', 'users.id = phone_credentials.id')
             ->andWhere('users.id = :id')
@@ -125,9 +138,7 @@ final class UserController extends AbstractController
          */
         $fullName = $connection->convertToPHPValue($user['full_name'], FullName::class);
 
-
         $level = $levelRepository->find($user['id']);
-
 
         return new ProfileData(
             $user['id'],
@@ -139,17 +150,21 @@ final class UserController extends AbstractController
             $fullName->middle,
             $currentTaskProvider->forUser($user['id'], $request->query->getInt('cityId', 0)),
             [
-                'current' => $level->value(),
-                'currentPoints' => $level->points(),
-                'progressToNext' => $level->progressToNextLevel(),
-                'nextLevelThreshold' => $level->nextLevelThreshold()
+                'current' => $level->value() ?? 0,
+                'currentPoints' => $level->points() ?? 0,
+                'progressToNext' => $level->progressToNextLevel() ?? 0,
+                'nextLevelThreshold' => $level->nextLevelThreshold() ?? 0
             ],
             [
                 'objects' => $connection->createQueryBuilder()->select('COUNT(*) FROM objects WHERE created_by = :userId')->setParameter('userId', $user['id'])->execute()->fetchColumn(),
                 'complaints' => $connection->createQueryBuilder()->select('COUNT(*) FROM complaints WHERE complainant_id = :userId')->setParameter('userId', $user['id'])->execute()->fetchColumn(),
             ],
             $connection->executeQuery('SELECT key FROM unlocked_abilities WHERE user_id = :userId', ['userId' => $user['id']])->fetchAll(\PDO::FETCH_COLUMN),
-            $user['status']
+            $user['status'],
+            $user['gender'],
+            $user['category'],
+            $user['city_id'],
+            $user['birthday'],
         );
     }
 
@@ -176,6 +191,10 @@ final class UserController extends AbstractController
      *             @Property(property="email", type="string", nullable=true),
      *             @Property(property="status", type="string", nullable=true, description="Отображаемый статус"),
      *             @Property(property="phoneChangeToken", type="string", nullable=true, description="firebase IdToken для смены номера телефона"),
+     *             @Property(property="gender", type="string", nullable=true),
+     *             @Property(property="category", type="string", nullable=true),
+     *             @Property(property="city_id", type="integer", nullable=true),
+     *             @Property(property="birthday", type="string", nullable=true),
      *         )
      *     ),
      *     @Response(response=401, description=""),
@@ -239,7 +258,18 @@ final class UserController extends AbstractController
                     throw new ValidationException(new ConstraintViolationList([new ConstraintViolation('Неверный id токен', '', [], '', 'phoneChangeToken', '')]));
                 }
             }
-            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName), $profileData->email, $profileData->status);
+
+            $em = $this->getDoctrine()->getManager();
+            $city = $profileData->city_id ? $em->getRepository('App\Cities\Cities')->find($profileData->city_id) : null;
+
+            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName), 
+                                    $profileData->email, 
+                                    $profileData->status,
+                                    $profileData->gender,
+                                    $profileData->category,
+                                    $city,
+                                    $profileData->birthday,
+            );
         });
     }
 
@@ -295,6 +325,8 @@ final class UserController extends AbstractController
      * @Route(path="/profile/avatar", methods={"DELETE"})
      * @param UserRepository $repository
      * @param Flusher $flusher
+     * @param Storage $storage
+     * @throws \Doctrine\DBAL\ConnectionException
      * @Delete(
      *     path="/api/profile/avatar",
      *     tags={"Пользователи"},
@@ -304,11 +336,27 @@ final class UserController extends AbstractController
      *     @Response(response=204, description=""),
      * )
      */
-    public function removeAvatar(UserRepository $repository, Flusher $flusher)
+    public function removeAvatar(UserRepository $repository, Flusher $flusher, Storage $storage, EntityManagerInterface $em)
     {
-        $user = $repository->find($this->getUser()->id());
-        $user->removeAvatar();
-        $flusher->flush();
+        $em->getConnection()->beginTransaction();
+        try {
+            $user = $repository->find($this->getUser()->id());
+            $avatar = $user->getAvatar();
+            $result = $storage->deleteOldFile($avatar);
+            $user->removeAvatar();
+            $flusher->flush();
+            $em->getConnection()->commit();
+            return new JsonResponse([
+                'status' => true,
+                'message' => "Успешно"
+            ]);
+        } catch (\Exception $exception) {
+            $em->getConnection()->rollBack();
+            return new JsonResponse([
+                'status' => false,
+                'message' => $exception->getMessage()
+            ],400);
+        }
     }
 
     /**
@@ -356,42 +404,48 @@ final class UserController extends AbstractController
 
         $qb = $connection->createQueryBuilder()
             ->select([
-                'id',
-                'title',
-                'created_at as date',
-                'overall_score_movement as "overallScore"',
-                'photos',
+                'o.id',
+                'o.title',
+                'o.created_at as date',
+                'o.overall_score_movement as "overallScore"',
+                'o.photos',
+                'o.address',
+                'ocp.icon as category_icon',
+                'ocp.title as category_title',
+                'oc.title as sub_category_title',
             ])
-            ->from('objects')
-            ->andWhere('created_by = :userId')
-            ->andWhere('deleted_at IS NULL')
+            ->from('objects', 'o')
+            ->join('o','object_categories','oc','o.category_id = oc.id')
+            ->join('o','object_categories','ocp', 'oc.parent_id = ocp.id')
+            ->andWhere('o.created_by = :userId')
+            ->andWhere('o.deleted_at IS NULL')
             ->setParameter('userId', $this->getUser()->id());
 
 
         $overallScore = $request->query->get('overallScore', 'all');
         if ($overallScore !== 'all') {
-            $qb->andWhere('overall_score_movement = :score')
+            $qb->andWhere('o.overall_score_movement = :score')
                 ->setParameter('score', $overallScore);
         }
 
         $reviewsCountQuery = $connection->createQueryBuilder()
             ->select('count(*) AS "reviewsCount"')
             ->from('object_reviews')
-            ->andWhere('object_id = objects.id')
+            ->andWhere('object_id = o.id')
             ->getSQL();
 
         $complaintsCountQuery = $connection->createQueryBuilder()
             ->select('count(*) AS "complaintsCount"')
             ->from('complaints')
-            ->andWhere('object_id = objects.id')
+            ->andWhere('object_id = o.id')
             ->getSQL();
 
         [$field, $sort] = explode(' ', $request->query->get('sort', 'date desc'));
         $objects = (clone $qb)
             ->addSelect('reviews."reviewsCount"')
             ->addSelect('complaints."complaintsCount"')
-            ->join('objects', "LATERAL ($reviewsCountQuery)", 'reviews', 'true')
-            ->join('objects', "LATERAL ($complaintsCountQuery)", 'complaints', 'true')
+            ->join('o', "LATERAL ($reviewsCountQuery)", 'reviews', 'true')
+            ->join('o', "LATERAL ($complaintsCountQuery)", 'complaints', 'true')
             ->setMaxResults($perPage)
             ->setFirstResult(($request->query->getInt('page', 1) - 1) * $perPage)
             ->orderBy($field, $sort)
@@ -413,7 +467,11 @@ final class UserController extends AbstractController
                 return [
                     'id' => $object['id'],
                     'title' => $object['title'],
+                    'address' => $object['address'],
                     'date' => $connection->convertToPHPValue($object['date'], 'datetimetz_immutable'),
+                    'category_icon' => $object['category_icon'],
+                    'category_title' => $object['category_title'],
+                    'sub_category_title' => $object['sub_category_title'],
                     'overallScore' => $object['overallScore'],
                     'reviewsCount' => $object['reviewsCount'],
                     'complaintsCount' => $object['complaintsCount'],
@@ -625,7 +683,12 @@ final class UserController extends AbstractController
             'created_at as date',
             'content->>\'objectName\' as "title"',
             'content->>\'photos\' as photos',
-            'content->>\'type\' as type'
+            'content->>\'type\' as type',
+            'content->>\'cityId\' as city_id',
+            'content->>\'street\' as street',
+            'content->>\'building\' as building',
+            'content->>\'office\' as office',
+            'content->>\'visitPurpose\' as visit_purpose',
         ])
             ->orderBy($field, $sort)
             ->setMaxResults($perPage)
@@ -635,18 +698,28 @@ final class UserController extends AbstractController
         return [
             'pages' => $qb->select('CEIL(count(*)::FLOAT / :perPage)::INT')->setParameter('perPage', $perPage)->execute()->fetchColumn(),
             'items' => array_map(function ($item) use ($connection, $request, $urlBuilder) {
+
+                $em = $this->getDoctrine()->getManager();
+                $city = $item['city_id'] ? $em->getRepository('App\Cities\Cities')->find($item['city_id']) : null;
+                $city_name = $city ? $city->getName() : "";
+
                 $image = null;
                 $photos = $connection->convertToPHPValue($item['photos'], 'json');
                 if (count($photos)) {
                     $image = $urlBuilder->build('local://' . $photos[0], 220, 160)->toString();
                 }
-
+                
                 return [
                     'id' => $item['id'],
                     'type' => $item['type'],
                     'title' => $item['title'],
                     'date' => $connection->convertToPHPValue($item['created_at'], 'datetimetz_immutable'),
                     'image' => $image,
+                    'city_name' => $city_name,
+                    'street' => $item['street'],
+                    'building' => $item['building'],
+                    'office' => $item['office'],
+                    'visit_purpose' => $item['visit_purpose'],
                 ];
             }, $items)
         ];
@@ -769,7 +842,6 @@ final class UserController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @Route(path="/profile/avatar")
      * @param Request $request
-     * @param Connection $connection
      * @param UserRepository $userRepository
      * @param Storage $storage
      * @throws DBALException
@@ -789,19 +861,31 @@ final class UserController extends AbstractController
      *     ),
      * )
      */
-    public function avatar(Request $request, Connection $connection, UserRepository $userRepository, Storage $storage, Flusher $flusher)
+    public function avatar(Request $request, UserRepository $userRepository, Storage $storage, Flusher $flusher, EntityManagerInterface $em)
     {
-        $id = $this->getUser()->id();
-        $abilities = $connection->executeQuery('SELECT key FROM unlocked_abilities WHERE user_id = :userId', ['userId' => $id])->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (!in_array(UnlockedAbility::ABILITY_AVATAR_UPLOAD, $abilities)) {
-            throw new AccessDeniedHttpException('Access Denied');
+        $em->getConnection()->beginTransaction();
+        try {
+            $id = $this->getUser()->id();
+            $user = $userRepository->find($id);
+            $avatar = $user->getAvatar();
+            $result = $storage->deleteOldFile($avatar);
+            $avatarPath = $storage->uploadFile($request->getContent(true));
+            $user->changeAvatar('/storage/' . $avatarPath);
+            $flusher->flush();
+            $em->getConnection()->commit();
+            return new JsonResponse([
+                'status' => true,
+                'message' => "Успешно"
+            ]);
+        } catch (\Exception $exception) {
+            $em->getConnection()->rollBack();
+            return new JsonResponse([
+                'status' => false,
+                'message' => $exception->getMessage()
+            ],400);
         }
-        $user = $userRepository->find($id);
-        $avatarPath = $storage->uploadFile($request->getContent(true));
-        $user->changeAvatar('/storage/' . $avatarPath);
-        $flusher->flush();
     }
+    
 
     /**
      * @IsGranted("ROLE_USER")
@@ -836,4 +920,5 @@ final class UserController extends AbstractController
             ->execute()
             ->fetchAll();
     }
+
 }

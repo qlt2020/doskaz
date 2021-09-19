@@ -17,9 +17,20 @@ class FeedbackData implements DataObject
     /**
      * @var string|null
      * @Assert\NotBlank()
+     */
+    public $surname;
+
+    /**
+     * @var string|null
+     * @Assert\NotBlank()
      * @Assert\Email()
      */
     public $email;
+
+    /**
+     * @var integer|null
+     */
+    public $city_id;
 
     /**
      * @var string|null

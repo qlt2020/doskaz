@@ -1,13 +1,11 @@
 <template>
-	<mainPage/>
+  <mainPage />
 </template>
 
 <script>
-	export default {
-		name: "StartCategory"
-	}
+export default {
+  name: "StartCategory"
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

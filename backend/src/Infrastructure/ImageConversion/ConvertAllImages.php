@@ -25,13 +25,13 @@ class ConvertAllImages extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         ini_set('memory_limit', '512M');
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator('/var/www/html/storage'));
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator('/var/www/test/dosapi/storage'));
 
         foreach ($iterator as $value) {
             if (!$value->isFile()) {
                 continue;
             }
-            $path = str_replace('/var/www/html/storage/', '', $value->getPathname());
+            $path = str_replace('/var/www/test/dosapi/storage/', '', $value->getPathname());
             $mime = $this->defaultStorage->getMimetype($path);
             if (!str_starts_with($mime, 'image')) {
                 continue;

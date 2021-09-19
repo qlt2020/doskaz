@@ -81,7 +81,7 @@ class FullFormZones extends Zones
         Toilet $toilet,
         Navigation $navigation,
         ServiceAccessibility $serviceAccessibility,
-        KidsAccessibility $kidsAccessibility
+        KidsAccessibility $kidsAccessibility = null
     ) {
         $this->parking = $parking;
         $this->entrance1 = $entrance1;

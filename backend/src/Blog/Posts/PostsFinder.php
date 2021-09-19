@@ -7,6 +7,7 @@ use App\Blog\Image;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 
+
 final class PostsFinder
 {
     const ITEMS_PER_PAGE = 10;
@@ -20,17 +21,18 @@ final class PostsFinder
 
     private function initializeQuery(?string $lang): QueryBuilder
     {
+        $lang = $lang === 'ru' ? '' : '_' . $lang;
+
         $query = $this->connection->createQueryBuilder()
             ->addSelect('blog_posts.id')
-            ->addSelect('blog_posts.title')
-            ->addSelect('blog_posts.annotation')
-            ->addSelect('blog_posts.content')
+            ->addSelect('blog_posts.title' . $lang . ' as title')
+            ->addSelect('blog_posts.annotation' . $lang . ' as annotation')
+            ->addSelect('blog_posts.content' . $lang . ' as content')
             ->addSelect('blog_posts.slug_value as slug')
             ->addSelect('blog_categories.slug_value as "categorySlug"')
             ->addSelect('blog_categories.id as "categoryId"')
-            ->addSelect('blog_posts.content')
             ->addSelect('blog_posts.image')
-            ->addSelect('blog_categories.title as category_title')
+            ->addSelect('blog_categories.title' . $lang . ' as category_title')
             ->addSelect('blog_posts.published_at')
             ->addSelect('blog_posts.meta_title')
             ->addSelect('blog_posts.meta_description')
@@ -43,10 +45,6 @@ final class PostsFinder
             ->andWhere('blog_posts.published_at <= CURRENT_TIMESTAMP')
             ->join('blog_posts', 'blog_categories', 'blog_categories', 'blog_posts.category_id = blog_categories.id');
 
-        if ($lang && $lang != 'ru') {
-            $query->addSelect('coalesce(blog_category_translations.content, blog_categories.title) as category_title');
-            $query->leftJoin('blog_categories', 'blog_category_translations', 'blog_category_translations', 'blog_categories.id::text = blog_category_translations.foreign_key');
-        }
         return $query;
     }
 
@@ -55,7 +53,7 @@ final class PostsFinder
         $image = $this->connection->convertToPHPValue($data['image'], Image::class);
         $ogImage = $this->connection->convertToPHPValue($data['meta_og_image'], Image::class);
 
-        $annotation = strip_tags($data['annotation']);
+        $annotation = strip_tags($data['annotation'] ?? '');
 
         return [
             'id' => $data['id'],
@@ -83,6 +81,18 @@ final class PostsFinder
     public function find(array $filter = [], int $page = 1, int $perPage = self::ITEMS_PER_PAGE, ?string $lang = null): array
     {
         $queryBuilder = $this->initializeQuery($lang);
+
+        if (isset($filter['post_date_from']) && isset($filter['post_date_to']) && !is_null($filter['post_date_from']) && !is_null($filter['post_date_to'])) {
+            $post_date_from = $filter['post_date_from'];
+            $post_date_to = new \DateTime($filter['post_date_to']);
+            $post_date_to->add(new \DateInterval('P1D'));
+            $post_date_to = $post_date_to->format('Y-m-d');
+
+            $queryBuilder->where('blog_posts.published_at >= :post_date_from')
+                            ->andWhere('blog_posts.published_at <= :post_date_to')
+                            ->setParameter('post_date_from', $post_date_from)
+                            ->setParameter('post_date_to', $post_date_to);
+        }
 
         foreach ($filter as $property => $filterValue) {
             switch ($property) {

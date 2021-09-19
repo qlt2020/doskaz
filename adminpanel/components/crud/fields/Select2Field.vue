@@ -28,7 +28,6 @@
                     return this.path ? get(this.$store.get('crud/edit/item'), this.path) : this.value
                 },
                 set(v) {
-                    console.log(v)
                     if (this.path) {
                         this.$store.commit('crud/edit/SET_PROPERTY_BY_PATH', {value: v, path: this.path})
                     } else {

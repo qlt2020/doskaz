@@ -1,6 +1,6 @@
 <template>
     <crud-edit
-        title="Редактирование категории блога"
+        title="Редактирование категории медиатеки"
         api-path="/api/admin/blog/categories"
         :fields="fields"
     />
@@ -15,7 +15,9 @@
         computed: {
             fields() {
                 return [
-                    {key: 'title', label: 'Наименование', required: true},
+                    {key: 'title', label: 'Наименование на русском', required: true},
+                    {key: 'title_kz', label: 'Наименование на казахском', required: true},
+                    {key: 'title_en', label: 'Наименование на английском', required: true},
                     {key: 'slug', label: 'ЧПУ'},
                     {key: 'meta', type: MetaData, label: 'Мета-данные'},
                 ]

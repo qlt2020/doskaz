@@ -1,6 +1,6 @@
 <template>
     <crud-edit
-        title="Редактирование записи блога"
+        title="Редактирование записи медиатеки"
         api-path="/api/admin/blog/posts"
         :fields="fields"
     />
@@ -23,10 +23,16 @@
                 const self = this;
 
                 return [
-                    {key: 'title', label: 'Заголовок', required: true},
+                    {key: 'title', label: 'Заголовок на русском', required: true},
+                    {key: 'title_kz', label: 'Заголовок на казахском', required: true},
+                    {key: 'title_en', label: 'Заголовок на английском', required: true},
                     {key: 'slug', label: 'ЧПУ'},
-                    {key: 'annotation', label: 'Лид', type: TextareaInput},
-                    {key: 'content', label: 'Описание', type: TinyMCE},
+                    {key: 'annotation', label: 'Лид на русском', type: TextareaInput},
+                    {key: 'annotation_kz', label: 'Лид на казахском', type: TextareaInput},
+                    {key: 'annotation_en', label: 'Лид на английском', type: TextareaInput},
+                    {key: 'content', label: 'Описание на русском', type: TinyMCE},
+                    {key: 'content_kz', label: 'Описание на казахском', type: TinyMCE},
+                    {key: 'content_en', label: 'Описание на английском', type: TinyMCE},
                     {key: 'publishedAt', label: 'Дата публикации', type: DatePicker, required: true},
                     {key: 'isPublished', label: 'Опубликовано', type: Checkbox, defaultValue: true, initialValue: true},
                     {

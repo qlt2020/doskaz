@@ -77,11 +77,17 @@ class PostsAdminController extends AbstractController
         $data = $this->connection->createQueryBuilder()
             ->addSelect('id')
             ->addSelect('title')
+            ->addSelect('title_kz')
+            ->addSelect('title_en')
             ->addSelect('slug_value as slug')
             ->addSelect('published_at')
             ->addSelect('is_published')
             ->addSelect('annotation')
+            ->addSelect('annotation_kz')
+            ->addSelect('annotation_en')
             ->addSelect('content')
+            ->addSelect('content_kz')
+            ->addSelect('content_en')
             ->addSelect('category_id')
             ->addSelect('image')
             ->addSelect('meta_title')
@@ -105,11 +111,17 @@ class PostsAdminController extends AbstractController
         $postData = new PostData();
         $postData->id = $data['id'];
         $postData->title = $data['title'];
+        $postData->title_kz = $data['title_kz'];
+        $postData->title_en = $data['title_en'];
         $postData->slug = $data['slug'];
         $postData->publishedAt = $this->connection->convertToPHPValue($data['published_at'], 'datetimetz_immutable');
         $postData->isPublished = $data['is_published'];
         $postData->annotation = $data['annotation'];
+        $postData->annotation_kz = $data['annotation_kz'];
+        $postData->annotation_en = $data['annotation_en'];
         $postData->content = $data['content'];
+        $postData->content_kz = $data['content_kz'];
+        $postData->content_en = $data['content_en'];
         $postData->categoryId = $data['category_id'];
         $postData->image = $this->connection->convertToPHPValue($data['image'], Image::class);
 
@@ -158,11 +170,17 @@ class PostsAdminController extends AbstractController
             'items' => (clone $query)
                 ->addSelect('blog_posts.id')
                 ->addSelect('blog_posts.title')
+                ->addSelect('blog_posts.title_kz')
+                ->addSelect('blog_posts.title_en')
                 ->addSelect('blog_posts.slug_value as slug')
                 ->addSelect('blog_posts.published_at')
                 ->addSelect('blog_posts.is_published')
                 ->addSelect('blog_posts.annotation')
+                ->addSelect('blog_posts.annotation_kz')
+                ->addSelect('blog_posts.annotation_kz')
                 ->addSelect('blog_posts.content')
+                ->addSelect('blog_posts.content_kz')
+                ->addSelect('blog_posts.content_en')
                 ->addSelect('blog_posts.category_id')
                 ->addSelect('blog_posts.image')
                 ->addSelect('blog_posts.meta_title')

@@ -111,3 +111,13 @@ doctrine:
                 type: annotation
                 dir: '%kernel.project_dir%/src/ProfileNotifications'
                 prefix: 'App\ProfileNotifications'
+            Notifications:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Notification'
+                prefix: 'App\Notification'
+            Helps:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Help'
+                prefix: 'App\Help'

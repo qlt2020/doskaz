@@ -1,4 +1,1 @@
-export default [
-    'complaint1',
-    'complaint2'
-]
+export default ["complaint1", "complaint2"];

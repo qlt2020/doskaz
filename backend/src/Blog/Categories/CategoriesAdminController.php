@@ -31,7 +31,7 @@ class CategoriesAdminController extends AbstractController
      */
     public function create(Connection $connection, CategoryData $categoryData, CategoryRepository $categoryRepository, SlugFactory $slugFactory, Flusher $flusher)
     {
-        $category = new Category($categoryData->title, $slugFactory->make($categoryData->slug ?: $categoryData->title), Meta::fromMetaData($categoryData->meta));
+        $category = new Category($categoryData, $slugFactory->make($categoryData->slug ?: $categoryData->title), Meta::fromMetaData($categoryData->meta));
         $categoryRepository->add($category);
         $flusher->flush();
         return $this->retrieve($category->id(), $connection);
@@ -44,12 +44,13 @@ class CategoriesAdminController extends AbstractController
      * @param CategoryData $categoryData
      * @param SlugFactory $slugFactory
      * @param Flusher $flusher
-     * @return void
+     * @return CategoryData
      */
-    public function update(Category $category, CategoryData $categoryData, SlugFactory $slugFactory, Flusher $flusher)
+    public function update(Connection $connection, Category $category, CategoryData $categoryData, SlugFactory $slugFactory, Flusher $flusher)
     {
-        $category->update($categoryData->title, $slugFactory->make($categoryData->slug ?: $categoryData->title), Meta::fromMetaData($categoryData->meta));
+        $category->update($categoryData, $slugFactory->make($categoryData->slug ?: $categoryData->title), Meta::fromMetaData($categoryData->meta));
         $flusher->flush();
+        return $this->retrieve($category->id(), $connection);
     }
 
     /**
@@ -63,6 +64,8 @@ class CategoriesAdminController extends AbstractController
         $data = $connection->createQueryBuilder()
             ->addSelect('id')
             ->addSelect('title')
+            ->addSelect('title_kz')
+            ->addSelect('title_en')
             ->addSelect('slug_value as slug')
             ->addSelect('meta')
             ->from('blog_categories')
@@ -80,6 +83,8 @@ class CategoriesAdminController extends AbstractController
         $categoryData = new CategoryData();
         $categoryData->id = $data['id'];
         $categoryData->title = $data['title'];
+        $categoryData->title_kz = $data['title_kz'];
+        $categoryData->title_en = $data['title_en'];
         $categoryData->slug = $data['slug'];
         $categoryData->meta = MetaData::fromMeta($connection->convertToPHPValue($data['meta'], Meta::class));
         return $categoryData;
@@ -105,12 +110,14 @@ class CategoriesAdminController extends AbstractController
      */
     public function list(Request $request, Connection $connection): array
     {
-        $qb = $connection->createQueryBuilder()->from('blog_categories')
+        $qb = $connection->createQueryBuilder()->from('blog_categories as b')
             ->andWhere('deleted_at IS NULL');
 
         $items = (clone $qb)
             ->addSelect('id')
             ->addSelect('title')
+            ->addSelect('title_kz')
+            ->addSelect('title_en')
             ->addSelect('slug_value as slug')
             ->setMaxResults($request->query->getInt('limit', 20))
             ->setFirstResult($request->query->getInt('offset', 0))
@@ -123,6 +130,8 @@ class CategoriesAdminController extends AbstractController
                 $categoryData = new CategoryData();
                 $categoryData->id = $item['id'];
                 $categoryData->title = $item['title'];
+                $categoryData->title_kz = $item['title_kz'];
+                $categoryData->title_en = $item['title_en'];
                 $categoryData->slug = $item['slug'];
                 return $categoryData;
             }, $items),

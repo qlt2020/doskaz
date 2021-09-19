@@ -21,7 +21,7 @@
         <input type="file" class="hide" ref="fileInput" accept="image/*" multiple @change="filesSelected">
 
         <div class="form-group row no-gutters">
-            <button class="btn btn-secondary" @click.prevent="$refs.fileInput.click">Загрузить</button>
+            <button class="btn btn-secondary" @click.prevent="upload">Загрузить</button>
         </div>
     </field-wrapper>
 </template>
@@ -92,12 +92,9 @@
             deleteItem(index) {
                 this.value = this.value.filter((v, i) => i !== index)
             },
-            /*cancelItem(item) {
-                this.queue.remove(({data}) => {
-                    console.log(data)
-                    return data === item;
-                })
-            }*/
+            upload() {
+                this.$refs.fileInput.click()
+            }
         },
         computed: {
             ...connectField(),

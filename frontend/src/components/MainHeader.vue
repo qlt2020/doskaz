@@ -1,82 +1,136 @@
 <template>
   <div class="main-header">
-    <div class="main-header__content" :class="{ opened: mobileOpened }">
-      <nuxt-link :to="localePath({name: 'index'})" class="main-header__logo">
-        <img :src="require(`@/assets/logo_${$i18n.locale}.svg`)" alt />
-        <img :src="require('@/assets/logo-black.svg')" alt class="black"/>
-        <img :src="require('@/assets/logo-white.svg')" alt class="white"/>
-      </nuxt-link>
+    <div class="container">
+      <div class="main-header__content">
+        <nuxt-link
+          :to="localePath({ name: 'index' })"
+          class="main-header__logo"
+        >
+          <img :src="require(`@/assets/logo_doskaz.svg`)" alt="logo-doskaz" />
+          <img :src="require('@/assets/logo-black.svg')" alt class="black" />
+          <img :src="require('@/assets/logo-white.svg')" alt class="white" />
+        </nuxt-link>
 
-      <div class="main-header__content-in-wrapper">
-        <div class="main-header__content-in">
-          <div class="burger-close__wrapper">
-            <span class="burger-close" @click="mobileOpened = false"></span>
-          </div>
-          <div class="main-header__menu">
-            <a href="#">
-              <span>{{ $t('mainMenu.help') }}</span>
-            </a>
-            <nuxt-link :to="localePath({name: 'about'})">
-              <span>{{ $t('mainMenu.about') }}</span>
-            </nuxt-link>
-            <nuxt-link :to="localePath({name: 'blog-category'})">
-              <span>{{ $t('mainMenu.blog') }}</span>
-            </nuxt-link>
-            <nuxt-link :to="localePath({name: 'contacts'})">
-              <span>{{ $t('mainMenu.contacts') }}</span>
-            </nuxt-link>
-          </div>
+        <div class="main-header__content-in-wrapper">
+          <div class="main-header__content-in">
+            <div class="burger-close__wrapper">
+              <span class="burger-close" @click="mobileOpened = false"></span>
+            </div>
+            <div class="main-header__menu">
+              <nuxt-link exact :to="localePath({ name: 'index' })">
+                <span>{{ $t("mainMenu.map") }}</span>
+              </nuxt-link>
+              <nuxt-link exact :to="localePath({ name: 'help' })">
+                <span>{{ $t("mainMenu.help") }}</span>
+              </nuxt-link>
+              <nuxt-link :to="localePath({ name: 'about' })">
+                <span>{{ $t("mainMenu.about") }}</span>
+              </nuxt-link>
+              <nuxt-link :to="localePath({ name: 'blog-category' })">
+                <span>{{ $t("mainMenu.blog") }}</span>
+              </nuxt-link>
+              <nuxt-link :to="localePath({ name: 'contacts' })">
+                <span>{{ $t("mainMenu.contacts") }}</span>
+              </nuxt-link>
+            </div>
 
-          <div class="main-header__visual" @click="viToggle">
-            <svg
-                    width="30"
-                    height="16"
-                    viewBox="0 0 30 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                      d="M15.0243 0C9.141 0 3.84117 3.01459 0 7.8282C3.84117 12.6904 9.141 15.6564 15.0243 15.6564C20.9076 15.6564 26.2075 12.6418 30.0486 7.8282C26.1588 3.01459 20.859 0 15.0243 0ZM15.0243 14.0519C11.5721 14.0519 8.80065 11.2804 8.80065 7.8282C8.80065 4.37601 11.5721 1.60454 15.0243 1.60454C18.4765 1.60454 21.248 4.37601 21.248 7.8282C21.248 11.2804 18.4279 14.0519 15.0243 14.0519Z"
-                      fill="black"
-              />
-              <path
-                      d="M17.8445 7.58509C17.1151 7.58509 16.483 7.00162 16.483 6.22366C16.483 5.73744 16.7748 5.29984 17.1638 5.05673C16.5803 4.5705 15.8023 4.32739 15.0244 4.32739C13.0795 4.32739 11.5236 5.88331 11.5236 7.8282C11.5236 9.7731 13.0795 11.329 15.0244 11.329C16.9693 11.329 18.5252 9.7731 18.5252 7.8282C18.5252 7.68234 18.5252 7.53647 18.4766 7.3906C18.2821 7.48785 18.0876 7.58509 17.8445 7.58509Z"
-                      fill="black"
-              />
-            </svg>
-          </div>
+            <div class="main-header__visual" @click="viToggle">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M8.09756 12C8.09756 14.1333 9.8439 15.8691 12 15.8691C14.1463 15.8691 15.8927 14.1333 15.8927 12C15.8927 9.85697 14.1463 8.12121 12 8.12121C9.8439 8.12121 8.09756 9.85697 8.09756 12ZM17.7366 6.04606C19.4439 7.36485 20.8976 9.29455 21.9415 11.7091C22.0195 11.8933 22.0195 12.1067 21.9415 12.2812C19.8537 17.1103 16.1366 20 12 20H11.9902C7.86341 20 4.14634 17.1103 2.05854 12.2812C1.98049 12.1067 1.98049 11.8933 2.05854 11.7091C4.14634 6.88 7.86341 4 11.9902 4H12C14.0683 4 16.0293 4.71758 17.7366 6.04606ZM12.0012 14.4124C13.3378 14.4124 14.4304 13.3264 14.4304 11.9979C14.4304 10.6597 13.3378 9.57362 12.0012 9.57362C11.8841 9.57362 11.767 9.58332 11.6597 9.60272C11.6207 10.6694 10.7426 11.5227 9.65971 11.5227H9.61093C9.58166 11.6779 9.56215 11.833 9.56215 11.9979C9.56215 13.3264 10.6548 14.4124 12.0012 14.4124Z"
+                  fill="#3A3A3A"
+                />
+              </svg>
+            </div>
 
-          <div class="main-header__language">
-            <LangSelect />
+            <div class="main-header__language">
+              <LangSelect />
+            </div>
+            <div class="main-header__auth">
+              <nuxt-link
+                v-if="!user"
+                class="main-header__auth-link"
+                :to="localePath({ name: 'login' })"
+                >{{ $t("login.linkTitle") }}
+                <img src="@/assets/icons/auth_logo.svg" alt="" />
+              </nuxt-link>
+              <div v-else class="logout --logout">
+                <nuxt-link :to="localePath({ name: 'profile' })">
+                  <img :src="avatar" alt="avatar" class="logout_avatar" />
+                </nuxt-link>
+                <img
+                  @click="logout()"
+                  src="~/assets/icons/logout.svg"
+                  class="logout_exit"
+                  alt="logout"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="burger-wrapper" @click="mobileOpened = true">
-        <span class="burger">
-          <span class="burger-line"></span>
-        </span>
+        <!-- <div class="burger-wrapper" @click="mobileOpened = true">
+          <span class="burger">
+            <span class="burger-line"></span>
+          </span>
+        </div> -->
+        <mobile-menu></mobile-menu>
+        <div class="burger-wrapper">
+          <div v-if="!mobileMenu" @click="mainPageMobOpened">
+            <img :src="require(`@/assets/icons/menu.svg`)" alt />
+          </div>
+          <div v-else @click="mainPageMobOpened">
+            <img :src="require(`@/assets/icons/close_h.svg`)" alt />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {call} from 'vuex-pathify'
+import { call, get } from "vuex-pathify";
 import LangSelect from "~/components/LangSelect";
+import LoginForm from "../components/LoginForm";
+import { mapState } from "vuex";
+import MobileMenu from "@/components/MobileMenu";
+
 export default {
   data() {
     return {
       mobileOpened: false,
-      currentClassList: ''
-    }
+      currentClassList: "",
+      opened: false,
+    };
   },
   components: {
-    LangSelect
+    LangSelect,
+    LoginForm,
+    MobileMenu,
+  },
+  computed: {
+    avatar() {
+      return this.user.avatar || require("~/assets/img/user/default.svg");
+    },
+    ...mapState({
+      user: (state) => state.authentication.user,
+    }),
+    user: get("authentication/user"),
+    mobileMenu: get("settings/mobileMenu"),
   },
   methods: {
-    viToggle: call('visualImpairedModeSettings/toggle')
-  }
+    viToggle: call("visualImpairedModeSettings/toggle"),
+    logout: call("authentication/logout"),
+    mainPageMobOpened: call("settings/menuOpen"),
+  },
 };
 </script>
 
@@ -89,22 +143,24 @@ export default {
   &-line {
     display: block;
     width: 100%;
-    background: #7B95A7;
+    background: #000000;
     height: 3px;
     position: relative;
-    &:after, &:before {
-      content:'';
-      width: 100%;
+    &:after,
+    &:before {
+      content: "";
       position: absolute;
       height: 3px;
       left: 0;
-      background: #7B95A7;
+      background: #000000;
     }
     &:before {
+      width: 75%;
       top: -7px;
     }
     &:after {
       bottom: -7px;
+      width: 42%;
     }
   }
   &-wrapper {
@@ -119,12 +175,13 @@ export default {
     cursor: pointer;
     height: 25px;
     width: 25px;
-    background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEzIDFMMSAxMyIgc3Ryb2tlPSIjN0I5NUE3IiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTEgMUwxMyAxMyIgc3Ryb2tlPSIjN0I5NUE3IiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+Cg==') right center no-repeat;
+    background: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTQiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxNCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEzIDFMMSAxMyIgc3Ryb2tlPSIjN0I5NUE3IiBzdHJva2Utd2lkdGg9IjIiLz4KPHBhdGggZD0iTTEgMUwxMyAxMyIgc3Ryb2tlPSIjN0I5NUE3IiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+Cg==")
+      right center no-repeat;
     &__wrapper {
       padding: 0 20px 0 0;
       display: none;
       height: 58px;
-      border-bottom: 1px solid #7B95A7;
+      border-bottom: 1px solid #7b95a7;
     }
   }
 }
@@ -132,6 +189,34 @@ export default {
 .main-header {
   position: relative;
   width: 100%;
+  min-height: 70px;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Montserrat";
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  .logout {
+    display: flex;
+    &_avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      margin-right: 13px;
+      object-fit: cover;
+    }
+    &_exit {
+      cursor: pointer;
+    }
+  }
+  @media (max-width: 768px) {
+    position: fixed;
+    z-index: 123;
+    width: 100%;
+    min-height: 100%;
+    .container {
+      background: white;
+    }
+  }
   &.--light {
     .main-header__content {
       justify-content: space-between;
@@ -140,15 +225,12 @@ export default {
   }
 
   &__content {
-    padding: 17px 20px 14px;
-    max-width: 1800px;
+    padding: 17px 0 14px;
     margin: 0 auto;
     display: flex;
-    flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     position: relative;
-    border-bottom: 1px solid #7B95A7;
     .burger-wrapper {
       display: none;
       position: relative;
@@ -172,23 +254,24 @@ export default {
     &-in {
       width: 100%;
       display: flex;
+      align-items: center;
       @media all and (max-width: 768px) {
         width: 270px;
         background: #ffffff;
         flex-direction: column;
       }
       &-wrapper {
-          flex: 1 1 auto;
-          @media all and (max-width: 768px) {
-            position: fixed;
-            display: none;
-            z-index: 10;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0,0,0,0.5);
-          }
+        flex: 1 1 auto;
+        @media all and (max-width: 768px) {
+          position: fixed;
+          display: none;
+          z-index: 10;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background: rgba(0, 0, 0, 0.5);
+        }
       }
     }
 
@@ -207,10 +290,11 @@ export default {
 
   &__logo {
     display: block;
-    margin-right: 73px;
+    margin-right: 90px;
     font-size: 0;
     img {
-      &.black, &.white {
+      &.black,
+      &.white {
         display: none;
       }
     }
@@ -220,6 +304,18 @@ export default {
         width: 100px;
         height: auto;
       }
+    }
+  }
+
+  &__auth-link {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    img {
+      width: 20px;
+      height: 20px;
+      margin-left: 13px;
     }
   }
 
@@ -234,10 +330,9 @@ export default {
     }
 
     a {
-      font-size: 16px;
       line-height: 20px;
       color: #333333;
-      margin-left: 20px;
+      margin-left: 35px;
       position: relative;
       @media all and (max-width: 1023px) {
         font-size: 14px;
@@ -256,18 +351,43 @@ export default {
       }
 
       &:hover {
-        opacity: 0.7;
-      }
-      &.nuxt-link-active {
-        font-weight: 700;
+        color: #2d9cdb;
+        span {
+          color: #2d9cdb;
+        }
         &:before {
-          content: '';
+          content: "";
           position: absolute;
-          bottom: -33px;
+          bottom: -24px;
           left: -8px;
           right: -8px;
-          height: 4px;
-          background: $blue;
+          height: 3px;
+          background: #2d9cdb;
+          @media all and (max-width: 1023px) {
+            bottom: -17px;
+            left: -5px;
+            right: -5px;
+            height: 3px;
+          }
+          @media all and (max-width: 768px) {
+            display: none;
+          }
+        }
+      }
+      &.nuxt-link-active {
+        font-weight: 600;
+        color: #2d9cdb;
+        span {
+          color: #2d9cdb;
+        }
+        &:before {
+          content: "";
+          position: absolute;
+          bottom: -24px;
+          left: -8px;
+          right: -8px;
+          height: 3px;
+          background: #2d9cdb;
           @media all and (max-width: 1023px) {
             bottom: -17px;
             left: -5px;
@@ -297,8 +417,9 @@ export default {
   }
 
   &__language {
+    margin-right: 40px;
     @media all and (max-width: 768px) {
-      border-top: 1px solid #7B95A7;
+      border-top: 1px solid #7b95a7;
       padding: 14px 0 22px;
     }
   }

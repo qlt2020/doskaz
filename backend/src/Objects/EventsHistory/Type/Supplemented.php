@@ -11,4 +11,5 @@ use Goodwix\DoctrineJsonOdm\Annotation\ODM;
  */
 class Supplemented implements EventData
 {
+    public string $type = 'supplemented';
 }
