@@ -13,6 +13,7 @@ RUN apt-get update \
         webp \
         libgmp-dev \
     && rm -rf /var/lib/apt/lists/* \
+    && docker-php-ext-configure gd --enable-gd --with-jpeg \
     && pecl install amqp \
     && pecl install imagick \
     && echo extension=amqp.so > /usr/local/etc/php/conf.d/amqp.ini \
@@ -22,7 +23,8 @@ RUN docker-php-ext-install -j$(nproc) \
         pdo_pgsql \
         zip \
         opcache \
-        gmp
+        gmp \
+        gd
 
 FROM base as build
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
