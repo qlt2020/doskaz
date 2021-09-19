@@ -335,7 +335,7 @@ class AdminController extends AbstractController
 
             return $this->file($file, 'Статистика по пользователям.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), $exception->getCode());
+            return new JsonResponse($exception->getMessage(), 400);
         }
     }
 
