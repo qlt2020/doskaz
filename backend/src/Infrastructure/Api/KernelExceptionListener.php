@@ -22,7 +22,7 @@ final class KernelExceptionListener
 
     public function onKernelException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $normalizedData = $this->serializer->normalize($exception);
         if ($this->isDebug) {
             $normalizedData['exception'] = get_class($exception);
