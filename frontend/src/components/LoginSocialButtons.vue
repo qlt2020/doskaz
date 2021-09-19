@@ -48,7 +48,7 @@ export default {
   methods: {
     openPopup(provider) {
       open(
-        `https://dosapi.qlt.kz/api/oauth/${provider}/redirect`,
+        `/api/oauth/${provider}/redirect`,
         this.providers[provider],
         (err, code) => {
           if (err) {

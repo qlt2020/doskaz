@@ -161,7 +161,7 @@
             });
           },
           async exportList() {
-              window.open('https://doskaz.qlt.kz/api/user/statistics/export/excel', '_blank')
+              window.open('/api/user/statistics/export/excel', '_blank')
           }
         }
     }
