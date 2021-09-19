@@ -12,7 +12,7 @@
     <div class="user-notifications__description">
       <div class="user-notifications__category">
         <div class="cat-img">
-          <img :src="`https://dosapi.qlt.kz/${item.category_icon}`" style="margin: auto" />
+          <img :src="`/${item.category_icon}`" style="margin: auto" />
         </div>
         <span>{{ item.category_name }}</span>
         <span>{{ item.sub_category_name }}</span>
