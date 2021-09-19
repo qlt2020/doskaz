@@ -1,6 +1,6 @@
 ## Минимальные требования
 - Postgresql 12 with postgis extension
-- gotenberg docker container on ```localhost:3003```
+- gotenberg docker container on ```localhost:3000```
 
 ## Pdf импорт
 - Установить на сервере docker ci
