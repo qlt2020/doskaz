@@ -634,6 +634,10 @@ export default {
     }
     .search-input {
       border-radius: 10px;
+      font-family: "Montserrat", sans-serif;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 14px;
     }
     .input {
       /* margin-right: 10px; */
