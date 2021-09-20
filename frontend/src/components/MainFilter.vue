@@ -458,11 +458,9 @@ export default {
 
   &__logo {
     display: block;
-    @media all and (max-width: 1366px) {
-      img {
-        width: 110px;
-        height: auto;
-      }
+    img {
+      width: 110px;
+      height: auto;
     }
     &.--mob {
       display: none;
