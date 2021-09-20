@@ -482,7 +482,7 @@ select::-ms-expand {
   }
 
   &__inside {
-    padding: 40px 0 80px;
+    padding: 120px 0 80px;
   }
 
   &__sidebar {
