@@ -8,7 +8,17 @@
         {{ $t("mainMenu.help") }}
       </div>
       <div class="content">
-        <div class="item" v-for="article in articles.items" :key="article.id">
+        <nuxt-link
+          :to="
+            localePath({
+              name: 'help-id',
+              params: { id: article.id },
+            })
+          "
+          class="item"
+          v-for="article in articles.items"
+          :key="article.id"
+        >
           <div class="item-img">
             <img :src="article.image" alt="" />
             <div class="item-category">{{ article.category_name }}</div>
@@ -30,7 +40,7 @@
               {{ $t("blog.postLinkTitle") }}
             </nuxt-link>
           </div>
-        </div>
+        </nuxt-link>
       </div>
       <!-- <Pagination :pages="999"></Pagination> -->
     </div>

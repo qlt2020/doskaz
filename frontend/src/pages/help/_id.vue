@@ -141,7 +141,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* Custom dropdown */
 .custom-dropdown {
   position: relative;
@@ -301,7 +301,7 @@ select::-ms-expand {
         height: 392px;
         overflow: hidden;
         img {
-          /* opacity: 0; */
+          opacity: 1;
           width: 100%;
         }
       }
