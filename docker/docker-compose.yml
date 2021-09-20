@@ -125,6 +125,7 @@ services:
     image: adminer:latest
     restart: always
     networks:
+      - default
       - web
     ports:
       - 4444:8080
