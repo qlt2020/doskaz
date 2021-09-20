@@ -303,7 +303,7 @@ class AdminController extends AbstractController
 
         try {
             $fileName = $export->writeFile();
-            $file = new File($fileName);
+            $file = new File('storage/'.$fileName);
 
             return $this->file($file, 'Статистика по доступности объектов.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {

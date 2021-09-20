@@ -418,7 +418,7 @@ final class ComplaintController extends AbstractController
 
         try {
             $fileName = $export->writeFile();
-            $file = new File($fileName);
+            $file = new File('storage/'.$fileName);
             return $this->file($file, 'Статистика_по_жалобам_и_обращениям.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 400);
