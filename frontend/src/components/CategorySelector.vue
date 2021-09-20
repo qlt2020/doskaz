@@ -75,7 +75,7 @@ export default {
 
 <style lang="scss">
 .checked_subcategory {
-  background: #f1f8fc !important;
+  background: #008dde29 !important;
   font-weight: bold !important;
 }
 
@@ -356,7 +356,7 @@ export default {
       }
 
       &:hover {
-        background: #f1f8fc;
+        background: #008dde29;
 
         i {
           opacity: 0.7;
