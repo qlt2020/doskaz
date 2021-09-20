@@ -3,7 +3,7 @@
     <div class="user-notifications__info">
       <div class="user-notifications__title">
         <span class="name">{{ $t('newObjectAdded') }}</span>
-        <span class="category">(категория, указанная в анкете)</span>
+        <!-- <span class="category">(категория, указанная в анкете)</span> -->
       </div>
       <div class="user-notifications__date">
         {{ $dateFns.format(new Date(item.created_at), "dd.MM.yyyy") }}
