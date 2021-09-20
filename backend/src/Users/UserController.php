@@ -123,8 +123,8 @@ final class UserController extends AbstractController
                             CurrentTaskDataProvider $currentTaskProvider, LevelRepository $levelRepository)
     {
         $user = $connection->createQueryBuilder()
-            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status', 
-                        'users.gender', 'users.category', 'users.city_id', 'users.birthday')
+            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status',
+                'users.gender', 'users.category', 'users.city_id', 'users.birthday')
             ->from('users')
             ->leftJoin('users', 'phone_credentials', 'phone_credentials', 'users.id = phone_credentials.id')
             ->andWhere('users.id = :id')
@@ -262,13 +262,13 @@ final class UserController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $city = $profileData->city_id ? $em->getRepository('App\Cities\Cities')->find($profileData->city_id) : null;
 
-            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName), 
-                                    $profileData->email, 
-                                    $profileData->status,
-                                    $profileData->gender,
-                                    $profileData->category,
-                                    $city,
-                                    $profileData->birthday,
+            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName),
+                $profileData->email,
+                $profileData->status,
+                $profileData->gender,
+                $profileData->category,
+                $city,
+                $profileData->birthday,
             );
         });
     }
@@ -708,7 +708,7 @@ final class UserController extends AbstractController
                 if (count($photos)) {
                     $image = $urlBuilder->build('local://' . $photos[0], 220, 160)->toString();
                 }
-                
+
                 return [
                     'id' => $item['id'],
                     'type' => $item['type'],
@@ -885,7 +885,7 @@ final class UserController extends AbstractController
             ],400);
         }
     }
-    
+
 
     /**
      * @IsGranted("ROLE_USER")

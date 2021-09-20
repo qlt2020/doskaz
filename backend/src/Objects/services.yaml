@@ -48,9 +48,12 @@ services:
     App\Objects\Command\UpdateCategoryTranslations:
         tags: [ 'console.command' ]
 
+<<<<<<< HEAD
     App\Objects\Command\UpdateCategoryEnTranslations:
         tags: [ 'console.command' ]
 
+=======
+>>>>>>> 95860615685788715590778700b3d5db05b71547
     App\Objects\Command\UpdateObjectCategory:
         tags: [ 'console.command' ]
 
