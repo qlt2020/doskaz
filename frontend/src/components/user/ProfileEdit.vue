@@ -49,7 +49,7 @@
             xmlns="http://www.w3.org/2000/svg"
             :style="
               showCategoriesList
-                ? 'transform: translate(0, -50%) rotate(-180deg);'
+                ? 'transform: translate(0, -50%) rotate(-180deg) scale(2);'
                 : ''
             "
           >
@@ -496,8 +496,8 @@ export default {
           bounds: c.bounds,
         };
       });
-      let ind = list.findIndex(l => l.value === 1)
-      list.splice(ind, 1)
+      let ind = list.findIndex((l) => l.value === 1);
+      list.splice(ind, 1);
       return list;
     },
     categories: get("disabilitiesCategorySettings/categories"),
@@ -550,7 +550,7 @@ export default {
   svg {
     position: absolute;
     top: 50%;
-    transform: translate(0, -50%);
+    transform: translate(0, -50%) scale(2);
     right: 20px;
     transition: 0.1s ease;
   }
@@ -580,7 +580,7 @@ export default {
     transition: 0.3s ease;
     background: #fff;
     &:hover {
-      background: #f1f8fc;
+      background: #cbe4f3;
     }
     &__text {
       color: #000;

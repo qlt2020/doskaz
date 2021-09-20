@@ -53,7 +53,7 @@ export default {
     },
     top: {
       type: String,
-      default: "unset",
+      default: "calc(100% + 1px);",
     },
     bottom: {
       type: String,
@@ -103,8 +103,6 @@ export default {
 .dropdown__block {
   position: relative;
   width: 100%;
-  box-shadow: 0px 16px 24px 0px #0000000f;
-  border-radius: 6px;
   background: #fff;
   &__item {
     position: relative;
@@ -130,10 +128,14 @@ export default {
     background: #ffffff;
     display: none;
     z-index: 10;
-    border-radius: 14px;
+    border-radius: 0 0 14px 14px;
     overflow: auto;
+    border: 1px solid #2d9cdb;
+    border-top: none;
     .dropdown__block__item {
+      transition: 0.1s ease;
       &:hover {
+        background: #cbe4f3;
         span {
           color: #2d9cdb;
         }
@@ -156,13 +158,17 @@ export default {
   }
   &__selected {
     cursor: pointer;
+    box-shadow: 0px 4px 24px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    border: 1px solid transparent;
+    border-bottom: none;
     &.opened + .dropdown__block__list {
       display: block;
     }
     svg {
       position: absolute;
       top: 50%;
-      transform: translate(0, -50%);
+      transform: translate(0, -50%) scale(2);
       right: 20px;
       transition: 0.1s ease;
     }
@@ -171,25 +177,13 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      color: #3a3a3a;
     }
     &.opened {
+      border-radius: 6px 6px 0 0;
+      border-color: #2d9cdb;
       svg {
-        transform: translate(0, -50%) rotate(-180deg);
-      }
-    }
-  }
-}
-.contacts {
-  .dropdown__block {
-    box-shadow: 0px 4px 24px 4px rgba(0, 0, 0, 0.1);
-    &__selected {
-      svg {
-        transform: translate(0, -50%) scale(2);
-      }
-      &.opened {
-        svg {
-          transform: translate(0, -50%) scale(2) rotate(-180deg);
-        }
+        transform: translate(0, -50%) scale(2) rotate(-180deg);
       }
     }
   }
