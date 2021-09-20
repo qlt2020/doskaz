@@ -23,6 +23,7 @@ services:
       - EMAIL_TO
       - IMGPROXY_HOST
       - GOTENBERG_HOST
+      - MAILER_DSN
       - EMAIL_FROM
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f/messages
       - APP_SECRET
