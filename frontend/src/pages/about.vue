@@ -156,9 +156,8 @@
         :duration="600"
         :highlight-first-item="true"
         :always-track="true"
-        :offset="700"
+        :scroll-offset="20"
         class="about__sidebar"
-        @itemchanged="scrollInSlide"
       >
         <a class="scrollactive-item" href="#what_it_is">{{ $t('about.section1') }}</a>
         <a class="scrollactive-item" href="#for_whom">{{ $t('about.section2') }}</a>
@@ -201,9 +200,6 @@ export default {
     },
   },
   methods: {
-    scrollInSlide(e, currentItem) {
-      document.getElementById('slide_scroll').scroll(currentItem.offsetLeft - 20, 0)
-    },
     share(network) {
       window.open(this.shareLinks[network]);
     },
