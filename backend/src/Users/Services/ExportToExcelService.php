@@ -70,7 +70,7 @@ class ExportToExcelService {
         try {
             $writer = new Xlsx($this->spreadsheet);
             $fileName = bin2hex(random_bytes(8)) . '.xlsx';
-            $writer->save($fileName);
+            $writer->save('storage/'.$fileName);
             return $fileName;
 
         } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $exception) {

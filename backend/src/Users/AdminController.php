@@ -331,8 +331,7 @@ class AdminController extends AbstractController
 
         try {
             $fileName = $export->writeFile();
-            $file = new File($fileName);
-
+            $file = new File('storage/'.$fileName);
             return $this->file($file, 'Статистика по пользователям.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 400);
