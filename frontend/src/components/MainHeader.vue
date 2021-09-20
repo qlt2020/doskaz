@@ -6,7 +6,7 @@
           :to="localePath({ name: 'index' })"
           class="main-header__logo"
         >
-          <img :src="require(`@/assets/logo_doskaz.svg`)" alt="logo-doskaz" />
+          <img :src="require(`@/assets/img/logo-new-white.png`)" alt="logo-doskaz" />
           <img :src="require('@/assets/logo-black.svg')" alt class="black" />
           <img :src="require('@/assets/logo-white.svg')" alt class="white" />
         </nuxt-link>
@@ -293,6 +293,8 @@ export default {
     margin-right: 90px;
     font-size: 0;
     img {
+      width: 100px;
+      height: auto;
       &.black,
       &.white {
         display: none;

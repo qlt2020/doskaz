@@ -15,7 +15,7 @@
           :to="localePath({ name: 'index' })"
           class="main-filter__logo"
         >
-          <img :src="require(`@/assets/logo_doskaz.svg`)" alt />
+          <img :src="require(`@/assets/img/logo-new-white.png`)" alt />
         </nuxt-link>
         <button
           class="button button_white"

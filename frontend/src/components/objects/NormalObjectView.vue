@@ -2,7 +2,7 @@
   <div class="sidebar-wrapper" :class="{ opened: mobileOpened }">
     <div class="mob-menu">
       <nuxt-link :to="localePath({ name: 'index' })" class="main-filter__logo">
-        <img src="@/assets/logo_doskaz.svg" alt="logo" />
+        <img src="@/assets/img/logo-new-white.png" alt="logo" />
       </nuxt-link>
       <div class="burger-wrapper" @click="mainPageMobOpened()">
         <span class="burger">
@@ -316,14 +316,15 @@
               <div class="object-side__close"></div>
             </div>
             <div class="more-detail__top">
-              Подробная информация
+              {{ $t('objects.detailedInfo') }}
               <a
                 :href="`/api/objects/${$route.params.id}/pdf`"
                 target="_blank"
                 class="more-detail__download"
                 download
-                >{{ $t("objects.download") }}</a
-              >
+                >
+                {{ $t("objects.download") }}
+              </a>
             </div>
             <div class="more-detail__content" id="more-detail__content">
               <div
