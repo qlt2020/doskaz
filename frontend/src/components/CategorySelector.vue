@@ -75,8 +75,11 @@ export default {
 
 <style lang="scss">
 .checked_subcategory {
-  background: #008dde29 !important;
+  background: #2d9cdb !important;
   font-weight: bold !important;
+  .category__text {
+    color: #ffffff !important;
+  }
 }
 
 @import "./../styles/mixins.scss";
