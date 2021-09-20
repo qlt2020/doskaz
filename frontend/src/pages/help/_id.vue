@@ -141,7 +141,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* Custom dropdown */
 .custom-dropdown {
   position: relative;
