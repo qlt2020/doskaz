@@ -27,7 +27,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
+<<<<<<< HEAD
     - 5482:5432
+=======
+      - 5482:5432
+>>>>>>> main
     networks:
       - doc
   adminer:
