@@ -33,6 +33,9 @@ export const actions = {
       );
     }
   },
+  clearCategories({ commit }) {
+    commit("SET_SELECTED_CATEGORIES", []);
+  },
   toggleAccessibilityLevel({ state, commit }, accessibilityLevel) {
     if (!state.accessibilityLevels.includes(accessibilityLevel)) {
       commit("SET_ACCESSIBILITY_LEVELS", [
