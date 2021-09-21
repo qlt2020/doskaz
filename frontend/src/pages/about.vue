@@ -185,6 +185,11 @@ import BackBtn from "@/components/BackBtn";
 
 export default {
   components: { MainHeader, ViTop, MainFooter, BackBtn },
+  head() {
+    return {
+      title: this.$t("mainMenu.about"),
+    };
+  },
   computed: {
     shareLinks() {
       const path = encodeURIComponent(
