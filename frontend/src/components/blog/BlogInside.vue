@@ -1,6 +1,6 @@
 <template>
   <div class="blog__inside">
-    <BackBtn />
+    <!-- <BackBtn /> -->
     <div class="breadcrumbs">
       <nuxt-link
         :to="localePath({ name: 'blog-category' })"
