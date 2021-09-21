@@ -22,7 +22,7 @@ class Service extends Zone
             return AccessibilityScore::fullAccessible();
         }
         if ($this->isMatchesAll(Attribute::unknown())) {
-            return AccessibilityScore::notAccessible();
+            return AccessibilityScore::unknown();
         }
         if ($this->isMatchesAll(Attribute::notProvided())) {
             return AccessibilityScore::notProvided();
