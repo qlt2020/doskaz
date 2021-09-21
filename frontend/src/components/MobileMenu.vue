@@ -3,7 +3,7 @@
     <div class="main-page__mobile-left" :class="{ opened: mobileMenu }">
       <div class="main-page__mobile-in">
         <div class="main-page__mobile-item">
-          <city-selector class="mobile-city-selector" />
+          <city-selector v-if="$route.path === '/'" class="mobile-city-selector" />
           <LangSelect />
         </div>
 
@@ -16,7 +16,10 @@
           </nuxt-link>
         </div>
 
-        <div class="main-page__mobile-item">
+        <div
+            v-if="$route.path === '/'"
+            class="main-page__mobile-item"
+        >
           <button
             class="btn btn_white"
             type="button"

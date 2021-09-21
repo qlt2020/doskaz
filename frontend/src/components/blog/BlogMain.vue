@@ -1039,7 +1039,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 1023px) {
   .blog__item-img {
     height: 176px;
   }
