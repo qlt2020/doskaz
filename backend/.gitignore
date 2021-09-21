@@ -10,3 +10,4 @@
 /storage
 docker-compose/dump/*
 .idea
+.env
