@@ -133,6 +133,10 @@ export default {
         cursor: pointer;
         font-weight: 500;
       }
+      &:nth-child(19) {
+        border-bottom: 2px #a5a5a5 solid;
+        padding-bottom: 20px;
+      }
     }
   }
 }
