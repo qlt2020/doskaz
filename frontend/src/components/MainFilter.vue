@@ -257,7 +257,7 @@ export default {
   width: 500px;
   padding: 8px 0;
   z-index: 3;
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     top: 50px;
     width: calc(100% + 1px);
     border-color: rgba(123, 149, 167, 0.3);
@@ -469,7 +469,7 @@ export default {
       top: 100%;
       background: #ffffff;
       display: none;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: flex;
         position: fixed;
         top: auto;
@@ -489,7 +489,7 @@ export default {
       max-height: 480px;
       overflow-x: hidden;
       overflow-y: auto;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 8px 0;
         width: 100%;
       }
@@ -562,7 +562,7 @@ export default {
       }
     }
     .modal-bd {
-      @media all and (max-width: 991px) {
+      @media all and (max-width: 1023px) {
         position: fixed;
         bottom: 0;
         top: 0;
@@ -601,7 +601,7 @@ export default {
       }
       .mobile-filter {
         display: none;
-        @media all and (max-width: 991px) {
+        @media all and (max-width: 1023px) {
           display: block;
         }
       }
@@ -642,7 +642,7 @@ export default {
     }
   }
   .action_buttons {
-    @media screen and (max-width: 991px) {
+    @media screen and (max-width: 1023px) {
       display: none;
     }
     display: flex;
@@ -672,7 +672,7 @@ export default {
     }
   }
   .city-selector {
-    @media screen and (max-width: 991px) {
+    @media screen and (max-width: 1023px) {
       display: none;
     }
   }
