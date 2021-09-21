@@ -666,7 +666,7 @@ export default {
 
     @media screen and (max-width: 1023px) {
       display: grid;
-      margin-top: 30px;
+      margin-top: 45px;
       grid-row-gap: 20px;
     }
 
@@ -700,11 +700,10 @@ export default {
       position: absolute;
       right: 0;
       top: 100%;
-      padding-top: 10px 0 16px;
       color: $red;
       line-height: 20px;
       font-size: 14px;
-      white-space: nowrap;
+      /* white-space: nowrap; */
       z-index: 2;
     }
 

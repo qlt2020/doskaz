@@ -10,3 +10,6 @@
 /storage
 docker-compose/dump/*
 .idea
+docker-compose/
+docker-compose.yml
+.env

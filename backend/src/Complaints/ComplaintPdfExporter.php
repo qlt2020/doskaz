@@ -13,10 +13,10 @@ class ComplaintPdfExporter implements ComplaintExporter
 
     private Client $client;
 
-    public function __construct(ComplaintDocExporter $complaintDocExporter)
+    public function __construct(ComplaintDocExporter $complaintDocExporter, Client $client)
     {
         $this->complaintDocExporter = $complaintDocExporter;
-        $this->client = new Client('http://localhost:3003');
+        $this->client = $client;
     }
 
     public function execute(int $id, string $locale): \SplFileObject

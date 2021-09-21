@@ -19,7 +19,7 @@
               :value="selectedCity"
               :options="cityList"
               @input="changeCity(arguments[0])"
-            />
+            />            
             <Select
               :allOptions="true"
               :optionsTypeObj="true"
@@ -31,7 +31,6 @@
             <i class="fas fa-times"></i>
               Сбросить
           </button>
-
         </div>
         <b-table-simple hover small caption-top responsive sticky-header="70vh">
           <b-thead head-variant="light" sticky-header>
@@ -77,7 +76,6 @@
                 <b-td :key="key + index+ 3" class="--gray">{{categoria.unknown}}</b-td>
               </template>
             </b-tr>
-
           </b-tbody>
         </b-table-simple>
       </div>
@@ -161,7 +159,7 @@
             });
           },
           async exportList() {
-              window.open('/api/user/statistics/export/excel', '_blank')
+              window.open('https://doskaz.qlt.kz/api/user/statistics/export/excel', '_blank')
           }
         }
     }

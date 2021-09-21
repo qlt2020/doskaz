@@ -7,6 +7,7 @@ use Goodwix\DoctrineJsonOdm\Annotation\ODM;
 use OpenApi\Annotations\Property;
 use OpenApi\Annotations\Schema;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
 
 /**
  * @ODM()
@@ -55,6 +56,7 @@ final class Complainant
     /**
      * @var string|int|null
      * @Assert\NotBlank()
+     * @AcmeAssert\ContainsExistsInDB(table="cities")
      * @Property(nullable=false, description="id города")
      */
     public $cityId;
