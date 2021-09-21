@@ -17,8 +17,15 @@
         <div class="statisticks__filter d-flex">
             <Select
               :value="selectedCity"
-              :options="cityList"
+              :options="cities"
               @input="changeCity(arguments[0])"
+            />
+            <Select
+              @input="changeGroup" 
+              :options="usersTitleList"
+              :value="selectedGroup"
+              :allOptions="true"
+              :optionsTypeObj="true"
             />
             <SelectCategory
               :options="categories"
@@ -31,35 +38,30 @@
                 v-if="subCategoriesVisible"
                 :options="subCategoriesOptions.subCategories"
                 :value="selectedSubCategory"
+                :allOptions="true"
                 @input="changeSubcategory(arguments[0])"
               />
             </div>
-
+           
           <button class="btn btn-danger d-lg-block mr2" @click="resetFilter">
             <i class="fas fa-times"></i>
-              Сбросить
+            Сбросить
           </button>
-
         </div>
-        <b-table-simple hover small caption-top responsive sticky-header="70vh">
-          <b-thead head-variant="light" >
-            <b-tr v-if="usersTitleList.options" sticky-header>
+        <b-table-simple hover small caption-top responsive sticky-header="70vh" :no-border-collapse="true" class="table">
+          <b-thead head-variant="light" class="table_header">
+            <b-tr v-if="groupsTable">
               <b-th colspan="1">№</b-th>
-              <b-th colspan="1">Объект</b-th>
-              <b-th colspan="1">Общее</b-th>
-              <b-th colspan="3">Для всех групп</b-th>
-              <b-th colspan="3" v-for="categories in usersTitleList.options" :key="categories" class="text-nowrap">
+              <b-th colspan="1" :stickyColumn=true>Объект</b-th>
+              <b-th colspan="4" v-for="categories in groupsTable" :key="categories" class="text-nowrap" stackedHeading="true">
                 {{categories}}
               </b-th>
             </b-tr>
             <b-tr v-if="objectsStat">
-              <b-th></b-th>
-              <b-th></b-th>
-              <b-th></b-th>
-              <b-th class="statisticks__table-subtitle --green">Доступно</b-th>
-              <b-th class="statisticks__table-subtitle --orange text-nowrap">Частично доступно</b-th>
-              <b-th class="statisticks__table-subtitle --red">Недоступно</b-th>
-              <template v-for="(categories, key, index) in usersTitleList.options">
+              <b-th :stickyColumn=true></b-th>
+              <b-th :stickyColumn=true></b-th>
+              <template v-for="(categories, key, index) in groupsTable">
+                <b-th class="statisticks__table-subtitle --green" :key="categories + key + index + 17">Общее</b-th>
                 <b-th class="statisticks__table-subtitle --green" :key="categories + key + index + 1">Доступно</b-th>
                 <b-th class="statisticks__table-subtitle --orange text-nowrap" :key="categories + key + index + 4">Частично доступно</b-th>
                 <b-th class="statisticks__table-subtitle --red" :key="categories + key + index + 25">Недоступно</b-th>
@@ -71,29 +73,23 @@
           <b-tbody head-variant="light" sticky-header v-if="objectsStat.length > 1">
             <template  v-for="(item, index) in objectsStat" >
               <b-tr :key="item.category_title + index">
-                <b-th :key="item.category_title + index +6" class="statistics_table_stroke">{{index}}</b-th>
-                <b-th :key="item.category_title + index + 5" class="statistics_table_stroke">{{item.category_title}}</b-th>
-                <b-th :key="item.category_title + index + 4" class="statistics_table_stroke">{{item.objects_total_count}}</b-th>
-                <b-th :key="item.category_title + index + 3" class="statistics_table_stroke">{{item.objects_total_full_accessible}}</b-th>
-                <b-th :key="item.category_title + index + 2" class="statistics_table_stroke">{{item.objects_total_partial_accessible}}</b-th>
-                <b-th :key="item.category_title + index + 1" class="statistics_table_stroke">{{item.objects_total_not_accessible}}</b-th>
+                <b-th :key="item.category_title + index + 6" class="statistics_table_stroke" :stickyColumn=true>{{index}}</b-th>
+                <b-th :key="item.category_title + index + 5" class="statistics_table_stroke" :stickyColumn=true>{{item.category_title}}</b-th>
 
-                <template v-for="(group, groupName, index) in usersTitleList.options">
-                  <b-td class="--green" :key="groupName + index + item.category_id+1">{{item[`${groupName}_full_accessible`] }}</b-td>
-                  <b-td class="--orange" :key="groupName + index + item.category_id+2">{{item[`${groupName}_partial_accessible`] }}</b-td>
-                  <b-td class="--red" :key="groupName + index + item.category_id+4">{{item[`${groupName}_not_accessible`] }}</b-td>
+                <template v-for="(group, groupName, index) in groupsTable">
+                  <b-td :key="groupName + index + item.category_id+1" class="statistics_table_stroke">{{item[`${groupName}Total`] }}</b-td>
+                  <b-td class="--green statistics_table_stroke" :key="groupName + index + item.category_id+2" >{{item[`${groupName}_full_accessible`] }}</b-td>
+                  <b-td class="--orange statistics_table_stroke" :key="groupName + index + item.category_id+3" >{{item[`${groupName}_partial_accessible`] }}</b-td>
+                  <b-td class="--red statistics_table_stroke" :key="groupName + index + item.category_id+4" >{{item[`${groupName}_not_accessible`] }}</b-td>
                 </template>
               </b-tr>
 
               <template  v-for="(subcategory, subcategoryIndex) in item.subcategory" >
                 <b-tr :key="item.category_title + (subcategoryIndex + index * subcategoryIndex* subcategoryIndex) ">
                   <b-th :key="subcategory.sub_category_id + 17 *4" class="statistics_table_stroke-subcategoria">{{index}}.{{subcategoryIndex + 1}}</b-th>
-                  <b-th :key="subcategory.sub_category_id + 19 *5" class="statistics_table_stroke-subcategoria">{{subcategory.sub_category_title}}</b-th>
-                  <b-th :key="subcategory.sub_category_id + 19 *15" class="statistics_table_stroke-subcategoria">{{subcategory.objects_total_count}}</b-th>
-                  <b-th :key="subcategory.sub_category_id + 19 *16" class="statistics_table_stroke-subcategoria">{{subcategory.objects_total_full_accessible}}</b-th>
-                  <b-th :key="subcategory.sub_category_id + 19 *17" class="statistics_table_stroke-subcategoria">{{subcategory.objects_total_partial_accessible}}</b-th>
-                  <b-th :key="subcategory.sub_category_id + 19 *18" class="statistics_table_stroke-subcategoria">{{subcategory.objects_total_not_accessible}}</b-th>
-                  <template v-for="(group, groupName, index) in usersTitleList.options">
+                  <b-th :key="subcategory.sub_category_id + 19 *5" class="statistics_table_stroke-subcategoria" :stickyColumn=true>{{subcategory.sub_category_title}}</b-th>
+                  <template v-for="(group, groupName, index) in groupsTable">
+                    <b-td :key="groupName + index + item.category_id+1">{{subcategory[`${groupName}Total`] }}</b-td>
                     <b-td class="--green" :key="group + index + groupName + (subcategory.sub_category_id+11)">{{subcategory[`${groupName}_full_accessible`] }}</b-td>
                     <b-td class="--orange" :key="group + index + groupName + (subcategory.sub_category_id+13)">{{subcategory[`${groupName}_partial_accessible`] }}</b-td>
                     <b-td class="--red" :key="group + index + groupName + (subcategory.sub_category_id+15)">{{subcategory[`${groupName}_not_accessible`] }}</b-td>
@@ -134,11 +130,10 @@
                   kids: 'Семьи с детьми до семи лет',
                 }
               },
-              cityList: {options:[{value: 'all', title: 'Весь Казахстан'}]},
-              countryData: true,
-              selectedCity: 'all',
-              selectedCategory: 'all',
-              selectedSubCategory: 'all',
+              selectedCity: 0,
+              selectedCategory: 0,
+              selectedSubCategory: 0,
+              selectedGroup: 0,
               subCategoriesOptions: {},
               subCategoriesVisible: false
             }
@@ -146,77 +141,70 @@
         async mounted() {
           await this.$store.dispatch('statisticks/getObjectsStatTable');
           await this.$store.dispatch('cities/load');
-          this.$store.dispatch('objectCategories/load'),
-
-          await this.getCityList();
+          this.$store.dispatch('objectCategories/load');
         },
         computed: {
           objectsStat: get('statisticks/getObjectsStatTable'),
           city: get('cities/items'),
-
+          groupPopulation:get('statisticks/group'),
+          groupsTable() {
+            if (this.selectedGroup == 0) {
+              return this.usersTitleList.options
+            } else {
+              const changeGroup = {} 
+              changeGroup[this.selectedGroup] = this.usersTitleList.options[this.selectedGroup]
+              return changeGroup
+            }
+          },
+          cities() {
+            let self = {options:[{value: '0', title: 'Весь Казахстан'}]};
+            this.city.forEach(c => {
+              self.options.push({'value': c.id, 'title': c.name})
+            });
+            return self
+          },
           categories: get('objectCategories/items'),
         },
         methods: {
           changeCategory(value) {
-            if (value === 'all' || value === null) {
+            if (value == 0 || value === null) {
               this.subCategoriesVisible = false;
-              this.$store.commit('statisticks/filterObjectsReset');
-              this.selectedCity = 'all';
-              this.selectedSubCategory = 'all';
             } else {
-              this.$store.commit('statisticks/filterObjectsReset');
-              this.selectedCity = 'all';
-              this.$store.commit('statisticks/filterObjectsStat', {'field': 'main_category_id', 'value': value});
               this.getSubCategories(value);
             }
+            this.$store.commit('statisticks/filterObjectsStat', {'field': 'main_category_id', 'value': value});
+            this.$store.commit('statisticks/filterObjectsStat', {'field': 'category_id', 'value': 0});
             this.selectedCategory = value;
             this.$store.dispatch('statisticks/getObjectsStatTable');
           },
           changeSubcategory(value) {
-            if (value === 'all' || value === null) {
-              this.$store.commit('statisticks/filterObjectsReset');
-              this.selectedCity = 'all';
-              this.selectedCategory = 'all';
-              this.subCategoriesVisible = false
-
-            } else {
-              this.$store.commit('statisticks/filterObjectsStat', {'field': 'category_id', 'value': value});
-            }
+            this.$store.commit('statisticks/filterObjectsStat', {'field': 'category_id', 'value': value});
+            this.selectedSubCategory = value
             this.$store.dispatch('statisticks/getObjectsStatTable');
+          },
+          changeGroup(value) {
+            this.selectedGroup = value
           },
           async getSubCategories(value) {
             this.subCategoriesOptions = await this.categories.find(cat => cat.id == value);
             this.subCategoriesVisible = true;
           },
           changeCity(value) {
-            if (value === 'all') {
-              this.subCategoriesVisible = false
-              this.selectedCategory = 'all';
-              this.$store.commit('statisticks/filterObjectsReset');
-
-            } else {
-              this.$store.commit('statisticks/filterObjectsStat', {'field': 'city_id', 'value': value});
-              this.subCategoriesVisible = false
-            }
+            this.$store.commit('statisticks/filterObjectsStat', {'field': 'city_id', 'value': value});
             this.selectedCity = value
             this.$store.dispatch('statisticks/getObjectsStatTable');
           },
           resetFilter() {
+            this.selectedCity = 0;
+            this.selectedCategory = 0;
+            this.selectedSubCategory = 0;
+            this.selectedGroup = 0;
             this.$store.commit('statisticks/filterObjectsReset');
             this.$store.dispatch('statisticks/getObjectsStatTable');
             this.subCategoriesVisible = false
-            this.selectedCity = 'all'
-            this.selectedCategory = 'all',
-            this.selectedSubCategory = 'all';
-          },
-          async getCityList() {
-            let cities = await this.city
-            cities.forEach(city => {
-              this.cityList.options.push({'value': city.id, 'title': city.name})
-            });
           },
           async exportList() {
-              window.open('/api/admin/objects/statistic/export/excel', '_blank')
+            window.open(`https://doskaz.qlt.kz/api/admin/objects/statistic/export/excel?city_id=${this.selectedCity}&main_category_id=${this.selectedCategory}&category_id=${this.selectedSubCategory}&group=${this.selectedGroup == 0 ? '' : this.selectedGroup}`, '_blank')
           }
         }
     }
@@ -224,17 +212,27 @@
 
 <style>
 
+.statisticks .table {
+  position: relative;
+}
+
+.statisticks .table .table_header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
 .statisticks .statisticks__filter {
   margin-bottom: 43px;
 }
 .statisticks .statisticks__filter .select2 {
   position: inherit;
   margin-right: 20px;
-
+  width: 200px !important;
 }
 
 .statisticks .statisticks__filter .select-stat {
-  width: 320px;
+  width: 200px;
 
 }
 
@@ -260,6 +258,7 @@
 
 .statisticks .statistics_table_stroke {
   padding: 1rem;
+  font-weight: 600;
 }
 
 .statisticks .statistics_table_stroke-subcategoria {
