@@ -667,7 +667,7 @@ export default {
   selectObjectType: "Нысан типін таңдау",
   detectedLocation: {
     modalText:
-      "Біз сіздің орналасқан орныңызды {span} ретінде анықтадық, Сіз осындасыз ба?",
+      "Біз сіздің орналасқан {break} орныңызды {span} ретінде анықтадық,{break} Сіз осындасыз ба?",
     buttonYes: "Иә",
     buttonNo: "Қаланы өзгерту",
   },
