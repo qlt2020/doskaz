@@ -84,6 +84,9 @@ services:
         arguments:
             - '%env(GOTENBERG_HOST)%'
 
+    App\Validator\ContainsExistsInDBValidator:
+        tags: ['validator.constraint_validator']
+
     App\Infrastructure\Firebase\ProfileFetcher:
         arguments:
             - '%env(FIREBASE_API_KEY)%'
