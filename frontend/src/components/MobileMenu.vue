@@ -1,5 +1,5 @@
 <template>
-  <div class="main-page__mobile" :class="{ opened: mobileMenu }">
+  <div v-if="mobileMenu" class="main-page__mobile" :class="{ opened: mobileMenu }">
     <div class="main-page__mobile-left" :class="{ opened: mobileMenu }">
       <div class="main-page__mobile-in">
         <div class="main-page__mobile-item">
@@ -280,7 +280,7 @@
             </div>
           </div>
         </div>
-        <div class="action">
+        <div class="action" @click="mainPageMobOpened">
           <nuxt-link
             :to="localePath({ name: 'objects-add' })"
             class="btn btn_green button"
@@ -414,7 +414,7 @@ export default {
     bottom: 0;
     right: 0;
     /* background: rgba(0,0,0,.5); */
-    @media all and (max-width: 991px) {
+    @media all and (max-width: 1023px) {
       display: block;
     }
     &.opened {
@@ -460,7 +460,7 @@ export default {
       right: 0;
       bottom: 0;
       cursor: pointer;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         left: 0;
         right: auto;
         width: calc(100% - 270px);
@@ -475,7 +475,7 @@ export default {
       background: #ffffff;
       overflow-y: auto;
       right: -400px;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 270px;
         left: auto;
         top: 0;

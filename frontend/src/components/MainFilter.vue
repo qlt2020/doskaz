@@ -128,50 +128,11 @@
             </g>
           </svg>
         </form>
-        <!--  <div class="voice-input">
-                    <button>
-                        <svg
-                                width="18"
-                                height="24"
-                                viewBox="0 0 18 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <g clip-path="url(#clip0)">
-                                <path
-                                        d="M8.90137 18.0282V22.5352"
-                                        stroke="#5B6067"
-                                        stroke-width="2.5"
-                                        stroke-miterlimit="10"
-                                />
-                                <path
-                                        d="M5.40845 22.5352H12.3944"
-                                        stroke="#5B6067"
-                                        stroke-width="2.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                />
-                                <path
-                                        d="M16.3381 10.9296C16.3381 14.9859 12.9578 18.3662 8.90146 18.3662C4.84513 18.3662 1.46484 14.9859 1.46484 10.9296"
-                                        stroke="#5B6067"
-                                        stroke-width="2.5"
-                                        stroke-miterlimit="10"
-                                        stroke-linecap="round"
-                                />
-                                <path
-                                        d="M8.90143 14.9859C6.64791 14.9859 4.84509 13.1831 4.84509 10.9296V4.16901C4.84509 1.91549 6.64791 0.112671 8.90143 0.112671C11.155 0.112671 12.9578 1.91549 12.9578 4.16901V10.9296C12.9578 13.1831 11.155 14.9859 8.90143 14.9859Z"
-                                        fill="#5B6067"
-                                />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0">
-                                    <rect width="17.6901" height="24" fill="white"/>
-                                </clipPath>
-                            </defs>
-                        </svg>
-                    </button>
-                </div> -->
-        <div class="search-sub" v-if="searchHighlights.length && searchFocused">
+        <div
+            class="search-sub"
+            v-if="searchHighlights.length && searchFocused"
+            @click="clearCategories"
+        >
           <nuxt-link
             :to="
               localePath({
@@ -266,6 +227,7 @@ export default {
     mobileMenu: get("settings/mobileMenu"),
   },
   methods: {
+    ...call("map", ["clearCategories"]),
     mainPageMobOpened: call("settings/menuOpen"),
     emitCities(event) {
       this.$emit("open-list", event);
@@ -274,11 +236,6 @@ export default {
       this.searchFocused = false;
     },
     search: throttle(call("map/search"), 1000),
-    /* mainPageMobOpened() {
-      this.filterOpen = false;
-      this.$nuxt.$emit("mainPageMobOpened");
-      this.opened = !this.opened;
-    }, */
     openAvailabilityFilter() {
       this.filterOpen = !this.filterOpen;
     },
@@ -300,7 +257,7 @@ export default {
   width: 500px;
   padding: 8px 0;
   z-index: 3;
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     top: 50px;
     width: calc(100% + 1px);
     border-color: rgba(123, 149, 167, 0.3);
@@ -512,7 +469,7 @@ export default {
       top: 100%;
       background: #ffffff;
       display: none;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: flex;
         position: fixed;
         top: auto;
@@ -532,7 +489,7 @@ export default {
       max-height: 480px;
       overflow-x: hidden;
       overflow-y: auto;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 8px 0;
         width: 100%;
       }
@@ -605,7 +562,7 @@ export default {
       }
     }
     .modal-bd {
-      @media all and (max-width: 991px) {
+      @media all and (max-width: 1023px) {
         position: fixed;
         bottom: 0;
         top: 0;
@@ -644,7 +601,7 @@ export default {
       }
       .mobile-filter {
         display: none;
-        @media all and (max-width: 991px) {
+        @media all and (max-width: 1023px) {
           display: block;
         }
       }
@@ -685,7 +642,7 @@ export default {
     }
   }
   .action_buttons {
-    @media screen and (max-width: 991px) {
+    @media screen and (max-width: 1023px) {
       display: none;
     }
     display: flex;
@@ -715,7 +672,7 @@ export default {
     }
   }
   .city-selector {
-    @media screen and (max-width: 991px) {
+    @media screen and (max-width: 1023px) {
       display: none;
     }
   }

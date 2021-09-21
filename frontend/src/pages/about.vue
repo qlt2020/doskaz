@@ -6,7 +6,6 @@
       <div
         class="about__top-bg"
       >
-        <BackBtn class="about__top-bg__back" />
         <div class="wrapper" style="text-align: start">
           <span class="title">
           {{ $t('mainMenu.about') }}
@@ -87,11 +86,7 @@
             </div>
             <div class="step">
               <img :src="require('@/assets/img/about/step2.png')">
-              <div>{{ $t('about.section7Text2') }}
-                <a style="color: #1534EC; font-weight: bold" href="https://doskaz.kz/objects/164485" target="_blank">{{$t('placeYouVisit')}}</a>
-                <nuxt-link :to="localePath({ name: 'login' })"
-                ><span style="color: #1534EC; font-weight: bold">{{ $t("becomeVolunteer") }}</span></nuxt-link> {{$t("about.section7Text2_2")}}
-              </div>
+              <div style="width: 100%;" v-html="$t('about.section7Text2')" />
             </div>
             <div class="step">
               <img :src="require('@/assets/img/about/step3.png')">
@@ -185,6 +180,11 @@ import BackBtn from "@/components/BackBtn";
 
 export default {
   components: { MainHeader, ViTop, MainFooter, BackBtn },
+  head() {
+    return {
+      title: this.$t("mainMenu.about"),
+    };
+  },
   computed: {
     shareLinks() {
       const path = encodeURIComponent(
@@ -218,7 +218,7 @@ export default {
     margin-top: 45px;
     margin-bottom: 50px;
     display: flex;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1023px) {
       display: grid;
       margin-top: unset;
       margin-bottom: unset;
@@ -228,7 +228,7 @@ export default {
       flex: 1;
       display: grid;
       grid-row-gap: 45px;
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         flex: unset;
         grid-row-gap: unset;
       }
@@ -254,7 +254,7 @@ export default {
       top: 0;
       a {
         position: relative;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           white-space: nowrap;
           margin-right: 35px;
         }
@@ -269,7 +269,7 @@ export default {
           position: absolute;
           top: 5px;
           left: -26px;
-          @media screen and (max-width: 768px) {
+          @media screen and (max-width: 1023px) {
             bottom: -15px;
             top: unset;
             left: unset;
@@ -278,7 +278,7 @@ export default {
           }
         }
       }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         grid-row: 1;
         height: unset;
         display: flex;
@@ -298,11 +298,11 @@ export default {
       border-radius: 10px;
       padding: 25px;
       .for-whom__img {
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           display: none;
         }
       }
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         border-radius: unset;
         padding: 15px;
       }
@@ -315,7 +315,7 @@ export default {
         line-height: 33px;
         color: #000000;
         position: relative;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           font-size: 25px;
         }
         &::before {
@@ -326,7 +326,7 @@ export default {
           position: absolute;
           top: 5px;
           left: -26px;
-          @media screen and (max-width: 768px) {
+          @media screen and (max-width: 1023px) {
             display: none;
           }
         }
@@ -348,7 +348,7 @@ export default {
         grid-column-gap: 20px;
         justify-content: space-between;
         margin-top: 25px;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           grid-template-columns: unset;
           grid-row-gap: 15px;
         }
@@ -414,7 +414,7 @@ export default {
         font-size: 18px;
         line-height: 24px;
         color: #000000;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           grid-template-columns: unset;
         }
         .step {
@@ -435,7 +435,7 @@ export default {
         justify-content: space-between;
         margin-top: 40px;
         margin-bottom: 30px;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           flex-wrap: wrap;
         }
       }
@@ -471,7 +471,7 @@ export default {
         display: block;
         text-align: center;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 100%;
         min-width: 100%;
       }
@@ -479,7 +479,7 @@ export default {
     &-text {
       font-size: 16px;
       line-height: 30px;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         font-size: 14px;
         line-height: 20px;
       }
@@ -497,7 +497,7 @@ export default {
         margin: 24px 0 20px;
         justify-content: center;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         flex-wrap: wrap;
         margin: 0 0 20px;
       }
@@ -509,11 +509,11 @@ export default {
         }
         &:first-child {
           margin: 0;
-          @media all and (max-width: 768px) {
+          @media all and (max-width: 1023px) {
             margin: 24px 30px 0;
           }
         }
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           margin: 24px 14px 0;
         }
       }
@@ -529,7 +529,7 @@ export default {
       font-size: 32px;
       line-height: 36px;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       font-size: 20px;
       line-height: 28px;
     }
@@ -542,7 +542,7 @@ export default {
     @media all and (max-width: 1023px) {
       align-items: flex-start;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       margin: 42px 0 0;
       display: block;
     }
@@ -556,7 +556,7 @@ export default {
         width: calc(100% - 190px);
         min-width: calc(100% - 190px);
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         text-align: center;
         width: 100%;
         margin: 18px 0 0;
@@ -569,7 +569,7 @@ export default {
       min-width: 260px;
       &.--right {
         order: 1;
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           order: 0;
         }
       }
@@ -577,7 +577,7 @@ export default {
         width: 160px;
         min-width: 160px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         margin: 0 auto;
         display: block;
       }
@@ -605,7 +605,7 @@ export default {
     @media all and (max-width: 1023px) {
       padding: 53px 20px 50px;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       padding: 30px 0;
     }
     &-content {
@@ -631,7 +631,7 @@ export default {
         min-width: 300px;
         margin: 37px auto 24px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 240px;
         min-width: 240px;
       }
@@ -654,7 +654,7 @@ export default {
       line-height: 30px;
       z-index: 1;
       position: relative;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         font-size: 14px;
         line-height: 20px;
       }
@@ -667,7 +667,7 @@ export default {
     @media all and (max-width: 1200px) {
       margin: 27px 0 0;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       font-size: 14px;
       line-height: 20px;
       margin: 14px 0 0;
@@ -678,7 +678,7 @@ export default {
       @media all and (max-width: 1200px) {
         padding: 53px 40px 11px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 20px 20px 11px;
       }
       & + .about__top-text-b {
@@ -700,7 +700,7 @@ export default {
         width: 105px;
         margin-left: 15px;
         margin-top: 25px;
-        @media all and (min-width: 768px) {
+        @media all and (min-width: 1023px) {
           display: none !important;
         }
         .text {
@@ -713,7 +713,7 @@ export default {
         max-width: 1200px;
         display: grid;
         grid-row-gap: 20px;
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           padding: 0 15px;
         }
       }
@@ -733,17 +733,16 @@ export default {
         line-height: 24px;
         color: #FFFFFF;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         height: 547px;
         background-image: url('@/assets/img/about/header_mobile.png');
-        grid-template-rows: fit-content(1%) auto;
       }
     }
     &-list {
       display: flex;
       justify-content: space-between;
       margin: 20px 0 0;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: block;
       }
     }
@@ -759,7 +758,7 @@ export default {
       @media all and (max-width: 1023px) {
         width: calc((100% - 60px) / 3);
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 100%;
         margin: 24px 0 0;
       }

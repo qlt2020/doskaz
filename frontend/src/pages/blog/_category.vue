@@ -15,8 +15,10 @@ export default {
   name: "category",
   head() {
     return {
-      title: "Блог",
-      meta: [{ property: "og:title", content: "Блог" }],
+      title: this.$t("mainMenu.blog"),
+      meta: [
+          { property: "og:title", content: this.$t("mainMenu.blog") }
+      ],
     };
   },
   watchQuery: ["page", "search", "period", "post_date_from", "post_date_to"],

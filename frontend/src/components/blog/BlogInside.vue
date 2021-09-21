@@ -282,7 +282,7 @@ select::-ms-expand {
 .blog {
   &__inside {
     .back-btn {
-      @media screen and (min-width: 768px) {
+      @media screen and (min-width: 1023px) {
         display: none;
       }
       margin-bottom: 15px;
