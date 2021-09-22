@@ -26,12 +26,19 @@ class TranslateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $citiesData = array_combine(array_column(Cities::list(), 'id'), array_column(Cities::list(), 'nameKz'));
+        $citiesDataEn = array_combine(array_column(Cities::list(), 'id'),
+            array_column(Cities::list(), 'nameEn'));
         /**
          * @var $city Cities
          */
         foreach ($this->entityManager->getRepository(Cities::class)->findAll() as $city) {
             $city->setTranslatableLocale('kz');
             $city->setName($citiesData[$city->getId()]);
+        }
+
+        foreach ($this->entityManager->getRepository(Cities::class)->findAll() as $city) {
+            $city->setTranslatableLocale('en');
+            $city->setName($citiesDataEn[$city->getId()]);
         }
 
         $this->entityManager->flush();

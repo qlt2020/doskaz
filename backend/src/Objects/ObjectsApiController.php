@@ -477,6 +477,7 @@ final class ObjectsApiController extends AbstractController
             ->from('object_reviews')
             ->leftJoin('object_reviews', 'users', 'authors', 'authors.id = object_reviews.author_id')
             ->andWhere('object_reviews.deleted_at IS NULL')
+            ->andWhere('object_reviews.is_published = true')
             ->orderBy('object_reviews.created_at', 'desc')
             ->andWhere('object_reviews.object_id = :objectId')
             ->setParameter('objectId', $id)

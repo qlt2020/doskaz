@@ -36,4 +36,9 @@ class CommentRepository
     {
         return $this->repository->findOneBy($criteria, $orderBy);
     }
+
+    public function delete(Comment $comment)
+    {
+        $this->entityManager->remove($comment);
+    }
 }
