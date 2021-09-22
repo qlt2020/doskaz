@@ -36,6 +36,9 @@ use TheCodingMachine\Gotenberg\ClientException;
 use TheCodingMachine\Gotenberg\RequestException;
 use TheCodingMachine\Gotenberg\URLRequest;
 use Webmozart\Assert\Assert;
+use App\Users\User;
+use App\Objects\Services\ExportToExcelService;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * @Route(path="/api/objects")
@@ -1005,5 +1008,228 @@ final class ObjectsApiController extends AbstractController
             'name' => (clone $qb)->andWhere('title = :title')->setParameter('title', $presenceRequestData->name)->execute()->fetchColumn(),
             'otherNames' => (clone $qb)->andWhere('other_names = :otherNames')->setParameter('otherNames', $presenceRequestData->otherNames)->execute()->fetchColumn(),
         ];
+    }
+
+/**
+     * @Route(path="/statistic", methods={"GET"})
+     * @param Request $request
+     * @param Connection $connection
+     * @return array
+     */
+    public function statistic(Request $request, Connection $connection): array
+    {
+        $query = $connection->createQueryBuilder()
+            ->select('COUNT(objects.id) as objects_count')
+            ->addSelect('object_categories_parent.title as main_category_title')
+            ->addSelect('object_categories_parent.id as main_category_id')
+            ->addSelect('object_categories.title as category_title')
+            ->addSelect('object_categories.id as category_id')
+            ->addSelect('cities.id as city_id')
+            ->addSelect('cities.name as city_name')
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'partial_accessible' THEN 1 ELSE 0 END) AS movement_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'not_accessible' THEN 1 ELSE 0 END) AS movement_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'full_accessible' THEN 1 ELSE 0 END) AS movement_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'partial_accessible' THEN 1 ELSE 0 END) AS limb_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'not_accessible' THEN 1 ELSE 0 END) AS limb_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'full_accessible' THEN 1 ELSE 0 END) AS limb_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'partial_accessible' THEN 1 ELSE 0 END) AS vision_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'not_accessible' THEN 1 ELSE 0 END) AS vision_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'full_accessible' THEN 1 ELSE 0 END) AS vision_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'partial_accessible' THEN 1 ELSE 0 END) AS hearing_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'not_accessible' THEN 1 ELSE 0 END) AS hearing_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'full_accessible' THEN 1 ELSE 0 END) AS hearing_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'partial_accessible' THEN 1 ELSE 0 END) AS intellectual_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'not_accessible' THEN 1 ELSE 0 END) AS intellectual_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'full_accessible' THEN 1 ELSE 0 END) AS intellectual_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'partial_accessible' THEN 1 ELSE 0 END) AS kids_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'not_accessible' THEN 1 ELSE 0 END) AS kids_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'full_accessible' THEN 1 ELSE 0 END) AS kids_full_accessible")
+            ->from('objects', 'objects')
+            ->join('objects', 'object_categories', 'object_categories', 'objects.category_id = object_categories.id')
+            ->join('object_categories', 'object_categories', 'object_categories_parent', 'object_categories.parent_id = object_categories_parent.id')
+            ->leftJoin('objects', 'cities_geometry', 'cities_geometry', 'ST_Contains(cities_geometry.geometry, objects.point_value::geometry)')
+            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id');
+
+        if ($request->query->getInt('main_category_id') != 0) {
+            $query = $query
+                ->andWhere('object_categories_parent.id = :mainCategoryId')
+                ->setParameter('mainCategoryId', $request->query->getInt('main_category_id'));
+        }
+
+        if ($request->query->getInt('category_id') != 0) {
+            $query = $query
+                ->andWhere('object_categories.id = :categoryId')
+                ->setParameter('categoryId', $request->query->getInt('category_id'));
+        }
+
+        if ($request->query->getInt('city_id') != 0){
+            $query = $query
+                ->andWhere('cities.id = :cityId')
+                ->setParameter('cityId', $request->query->getInt('city_id'));
+        }
+
+        $query = $query
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id')
+            ->execute()
+            ->fetchAll();
+
+        if (count($query) == 0) {
+            return [];
+        }
+
+        return $query;
+    }
+
+
+    /**
+     * @Route(path="/statistic/export/excel", methods={"GET"})
+     * @Get(
+     *     path="/api/objects/statistic/export/excel",
+     *     summary="Экспорт статистики по объектам",
+     *     tags={"Объекты"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="main_category_id", in="query", description="Id основной категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="category_id", in="query", description="Id категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
+     */
+    public function exportToExcel(Connection $connection, Request $request)
+    {
+        $data = $this->statistic($request, $connection);
+
+        if ($request->query->has('group') && $request->query->get('group') != 'all') {
+            $groups = [$request->query->getAlpha('group')];
+        } else {
+            $groups = User::USER_CATEGORIES;
+        }
+
+        $newData = array();
+        $mfa = 0;
+        $mpa = 0;
+        $mna = 0;
+        $lfa = 0;
+        $lpa = 0;
+        $lna = 0;
+        $vfa = 0;
+        $vpa = 0;
+        $vna = 0;
+        $hfa = 0;
+        $hpa = 0;
+        $hna = 0;
+        $ifa = 0;
+        $ipa = 0;
+        $ina = 0;
+        $kfa = 0;
+        $kpa = 0;
+        $kna = 0;
+        $old_main_cat = '';
+        $old_cat = '';
+
+        foreach($data as $val) {
+            if ($val['main_category_title'] != $old_main_cat || $val['category_title'] != $old_cat) {
+                $mfa = 0;
+                $mpa = 0;
+                $mna = 0;
+                $lfa = 0;
+                $lpa = 0;
+                $lna = 0;
+                $vfa = 0;
+                $vpa = 0;
+                $vna = 0;
+                $hfa = 0;
+                $hpa = 0;
+                $hna = 0;
+                $ifa = 0;
+                $ipa = 0;
+                $ina = 0;
+                $kfa = 0;
+                $kpa = 0;
+                $kna = 0;
+            }
+            $old_main_cat = $val['main_category_title'];
+            $old_cat = $val['category_title'];
+            $newData[$val['main_category_title']][$val['category_title']] = [];
+            $mfa += $val['movement_full_accessible'];
+            $mpa += $val['movement_partial_accessible'];
+            $mna += $val['movement_not_accessible'];
+            $lfa += $val['limb_full_accessible'];
+            $lpa += $val['limb_partial_accessible'];
+            $lna += $val['limb_not_accessible'];
+            $vfa += $val['vision_full_accessible'];
+            $vpa += $val['vision_partial_accessible'];
+            $vna += $val['vision_not_accessible'];
+            $hfa += $val['hearing_full_accessible'];
+            $hpa += $val['hearing_partial_accessible'];
+            $hna += $val['hearing_not_accessible'];
+            $ifa += $val['intellectual_full_accessible'];
+            $ipa += $val['intellectual_partial_accessible'];
+            $ina += $val['intellectual_not_accessible'];
+            $kfa += $val['kids_full_accessible'];
+            $kpa += $val['kids_partial_accessible'];
+            $kna += $val['kids_not_accessible'];
+            foreach($groups as $group) {
+                if ($group == 'movement' || $group == 'babyCarriage') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $mfa + $mpa + $mna,
+                        'full_access' => $mfa,
+                        'partial_access' => $mpa,
+                        'no_access' => $mna,
+                    ];
+                }
+                elseif ($group == 'vision') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $vfa + $vpa + $vna,
+                        'full_access' => $vfa,
+                        'partial_access' => $vpa,
+                        'no_access' => $vna,
+                    ];
+                }
+                elseif ($group == 'limb' || $group == 'temporal' || $group == 'missingLimbs' || $group == 'pregnant' || $group == 'agedPeople') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $lfa + $lpa + $lna,
+                        'full_access' => $lfa,
+                        'partial_access' => $lpa,
+                        'no_access' => $lna,
+                    ];
+                }
+                elseif ($group == 'hearing') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $hfa + $hpa + $hna,
+                        'full_access' => $hfa,
+                        'partial_access' => $hpa,
+                        'no_access' => $hna,
+                    ];
+                }
+                elseif ($group == 'intellectual') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $ifa + $ipa + $ina,
+                        'full_access' => $ifa,
+                        'partial_access' => $ipa,
+                        'no_access' => $ina,
+                    ];
+                }
+                elseif ($group == 'withChild') {
+                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
+                        'total_access' => $kfa + $kpa + $kna,
+                        'full_access' => $kfa,
+                        'partial_access' => $kpa,
+                        'no_access' => $kna,
+                    ];
+                }
+            }
+        }
+
+        $export = new ExportToExcelService();
+        $export->fillData($newData);
+
+        try {
+            $filePath = $export->writeFile();
+            $file = new File($filePath);
+
+            return $this->file($file, 'Статистика по доступности объектов.xlsx');
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), 400);
+        }
     }
 }
