@@ -1,7 +1,7 @@
 <template>
   <div class="contacts">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="container">
       <div class="contacts__top">
         <h2 class="title">{{ $t("contacts.title") }}</h2>
@@ -222,6 +222,7 @@
 </template>
 
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "@/components/MainHeader";
 import ViTop from "@/components/ViTop";
 import mapValidationErrors from "../mapValidationErrors";
@@ -274,6 +275,7 @@ export default {
     this.city = this.cities[0].id;
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     citiesForSelect() {
       var citiesList = this.cities.map((c) => {
         return {

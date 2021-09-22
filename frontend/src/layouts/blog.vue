@@ -1,8 +1,6 @@
 <template>
   <div class="blog">
     <ViTop />
-    <!-- <vi-header v-if="viModeEnabled" /> -->
-    <!-- <vi-footer v-if="viModeEnabled" /> -->
     <div v-if="!viModeEnabled" class="blog__header">
       <MainHeader />
     </div>
