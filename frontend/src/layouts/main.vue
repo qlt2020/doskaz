@@ -482,7 +482,7 @@ export default {
     right: 20px;
     z-index: 10;
     &.--desktop {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: none;
       }
     }
@@ -647,7 +647,7 @@ export default {
       flex-direction: column;
     }
     &.--desktop {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: none;
       }
     }
@@ -693,7 +693,7 @@ export default {
   .btn-change-type {
     display: none;
   }
-  @media screen and (max-width: 991px) {
+  @media screen and (max-width: 1023px) {
     .btn-change-type {
       position: absolute;
       width: 100%;

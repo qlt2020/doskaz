@@ -425,6 +425,15 @@ export default {
 
 ymaps {
   border-radius: 10px;
+  .ymaps-2-1-79-balloon__content {
+    display: none !important;
+  }
+  .ymaps-2-1-79-balloon__tail {
+    display: none !important;
+  }
+  .ymaps-2-1-79-balloon-overlay {
+    display: none !important;
+  }
 }
 
 .select:after {

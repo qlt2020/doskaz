@@ -6,7 +6,7 @@
           :to="localePath({ name: 'index' })"
           class="main-header__logo"
         >
-          <img :src="require(`@/assets/logo_doskaz.svg`)" alt="logo-doskaz" />
+          <img :src="require(`@/assets/img/logo-new-white.png`)" alt="logo-doskaz" />
           <img :src="require('@/assets/logo-black.svg')" alt class="black" />
           <img :src="require('@/assets/logo-white.svg')" alt class="white" />
         </nuxt-link>
@@ -208,11 +208,10 @@ export default {
       cursor: pointer;
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     position: fixed;
     z-index: 123;
     width: 100%;
-    min-height: 100%;
     .container {
       background: white;
     }
@@ -235,7 +234,7 @@ export default {
       display: none;
       position: relative;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       justify-content: space-between;
       .burger-wrapper {
         display: block;
@@ -255,14 +254,14 @@ export default {
       width: 100%;
       display: flex;
       align-items: center;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 270px;
         background: #ffffff;
         flex-direction: column;
       }
       &-wrapper {
         flex: 1 1 auto;
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           position: fixed;
           display: none;
           z-index: 10;
@@ -293,6 +292,8 @@ export default {
     margin-right: 90px;
     font-size: 0;
     img {
+      width: 100px;
+      height: auto;
       &.black,
       &.white {
         display: none;
@@ -324,7 +325,7 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       flex-direction: column;
       padding: 20px;
     }
@@ -337,7 +338,7 @@ export default {
       @media all and (max-width: 1023px) {
         font-size: 14px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: 100%;
         display: block;
         margin: 20px 0 0;
@@ -369,7 +370,7 @@ export default {
             right: -5px;
             height: 3px;
           }
-          @media all and (max-width: 768px) {
+          @media all and (max-width: 1023px) {
             display: none;
           }
         }
@@ -394,7 +395,7 @@ export default {
             right: -5px;
             height: 3px;
           }
-          @media all and (max-width: 768px) {
+          @media all and (max-width: 1023px) {
             display: none;
           }
         }
@@ -407,7 +408,7 @@ export default {
     cursor: pointer;
     transition: opacity 0.3s;
     padding: 2px 0 0;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       display: none;
     }
 
@@ -418,7 +419,7 @@ export default {
 
   &__language {
     margin-right: 40px;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       border-top: 1px solid #7b95a7;
       padding: 14px 0 22px;
     }

@@ -71,17 +71,23 @@ class CategoriesController extends AbstractController
                         $category->getIcon(),
                         []
                     );
-                }, array_values(array_filter($categories, function (Category $subCategory) use ($category) {
+                }, $this->sortingArray(array_values(array_filter($categories, function (Category $subCategory) use ($category) {
                     return $subCategory->getParentId() === $category->getId();
-                })))
+                }))) )
             );
         }, array_filter($categories, function ($category) {
             return is_null($category->getParentId());
         }));
+
         $data = [];
         foreach ($map as $item) {
             $data[] = (array)$item;
         }
         return $data;
+    }
+
+    private function sortingArray( ...$params ) {
+        array_multisort( ...$params );
+        return $params[0];
     }
 }

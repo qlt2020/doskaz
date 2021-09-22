@@ -86,13 +86,13 @@
             :class="{ error: violations['complainant.user_cityId'] }"
           >
             <label for="u21" class="label">{{ $t("complaint.city") }}</label>
-            <div class="select">
+            <div id="u21" class="select">
               <!-- <select id="u21" v-model="complaint.complainant.cityId">
                 <option v-for="city in cities" :value="city.id" :key="city.id"
                   >{{ city.name }}
                 </option>
               </select> -->
-              <DropdownBlock :options="citiesForSelect" v-model="city" />
+              <DropdownBlock :options="citiesForSelect" v-model="complaint.complainant.cityId" />
             </div>
             <span class="violations_error" v-if="user_focus.cityId">{{
               $t("complaint.validation.emptyField")

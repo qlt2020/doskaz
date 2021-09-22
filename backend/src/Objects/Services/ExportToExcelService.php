@@ -2,23 +2,15 @@
 
 namespace App\Objects\Services;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Infrastructure\Exports\BaseExportToExcelService;
 
-class ExportToExcelService {
+class ExportToExcelService extends BaseExportToExcelService {
 
-    private $data;
-
-    public function __construct($data) {
-        $this->data = $data;
-    }
-
-    public function writeFile() {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+    public function fillData(array $data) {
+        $sheet = $this->spreadsheet->getActiveSheet();
 
         $sheet->getStyle('A2:BF5')->getFont()->setBold(true);
-        $sheet->setCellValueByColumnAndRow(2, 2, 'Дата: ' . date('d.m.Y'));
+        $sheet->setCellValueByColumnAndRow(2, 2, 'Дата: ' . $this->date);
         $sheet->setCellValueByColumnAndRow(1, 3, '#');
         $sheet->setCellValueByColumnAndRow(2, 3, 'Объект');
         $sheet->setCellValueByColumnAndRow(2, 5, 'Общее');
@@ -57,15 +49,15 @@ class ExportToExcelService {
         $knc_total_sum = 0;
 
         $this->excelHeader($sheet, 4, $headerRow, 'Для всех групп');
-        $names = array('Люди, передвигающиеся на кресло-коляске', 'Люди с детскими колясками', 'Люди с с инвалидностью по зрению', 
-        'Люди с нарушениями опорно-двигательного аппарата', 'Временно травмированные люди', 'Люди с отсутствующими конечностями', 'Беременные женщины', 'Пожилые люди',
-        'Люди с инвалидностью по слуху', 'Люди с интеллектуальной инвалидностью', 'Люди с детьми до семи лет');
+        $names = array('Люди, передвигающиеся на кресло-коляске', 'Люди с детскими колясками', 'Люди с с инвалидностью по зрению',
+            'Люди с нарушениями опорно-двигательного аппарата', 'Временно травмированные люди', 'Люди с отсутствующими конечностями', 'Беременные женщины', 'Пожилые люди',
+            'Люди с инвалидностью по слуху', 'Люди с интеллектуальной инвалидностью', 'Люди с детьми до семи лет');
         foreach ($names as $name) {
             $this->excelHeader($sheet, $col_head, $headerRow, $name);
             $col_head = $col_head + 3;
         }
 
-        foreach ($this->data as $key=>$main_category) {
+        foreach ($data as $key=>$main_category) {
             $sheet->setCellValueByColumnAndRow($col++, $row, $id);
             $sheet->setCellValueByColumnAndRow($col, $row, $key);
             $cat_col = $col+1;
@@ -100,7 +92,7 @@ class ExportToExcelService {
             foreach ($main_category as $name=>$category) {
                 $sheet->setCellValueByColumnAndRow(1, $row, $id . ". " . $sub_id);
                 $sheet->setCellValueByColumnAndRow($col++, $row, $name);
-                
+
                 $col = $col + 4;
 
                 $subcat_mfc_total_sum = 0;
@@ -188,18 +180,18 @@ class ExportToExcelService {
                 $cat_kpc_total_sum += $subcat_kpc_total_sum;
                 $cat_knc_total_sum += $subcat_knc_total_sum;
 
-                $subcat_full_access_sum = 2*$subcat_mfc_total_sum + $subcat_vfc_total_sum + 5*$subcat_lfc_total_sum + 
-                $subcat_hfc_total_sum + $subcat_ifc_total_sum + $subcat_kfc_total_sum;
+                $subcat_full_access_sum = 2*$subcat_mfc_total_sum + $subcat_vfc_total_sum + 5*$subcat_lfc_total_sum +
+                    $subcat_hfc_total_sum + $subcat_ifc_total_sum + $subcat_kfc_total_sum;
                 $sheet->setCellValueByColumnAndRow(4, $row, $subcat_full_access_sum);
                 $cat_full_acess_total_sum += $subcat_full_access_sum;
 
-                $subcat_part_access_sum = 2*$subcat_mpc_total_sum + $subcat_vpc_total_sum + 5*$subcat_lpc_total_sum + 
-                $subcat_hpc_total_sum + $subcat_ipc_total_sum + $subcat_kpc_total_sum;
+                $subcat_part_access_sum = 2*$subcat_mpc_total_sum + $subcat_vpc_total_sum + 5*$subcat_lpc_total_sum +
+                    $subcat_hpc_total_sum + $subcat_ipc_total_sum + $subcat_kpc_total_sum;
                 $sheet->setCellValueByColumnAndRow(5, $row, $subcat_part_access_sum);
                 $cat_part_acess_total_sum += $subcat_part_access_sum;
 
-                $subcat_no_access_sum = 2*$subcat_mnc_total_sum + $subcat_vnc_total_sum + 5*$subcat_lnc_total_sum + 
-                $subcat_hnc_total_sum + $subcat_inc_total_sum + $subcat_knc_total_sum;
+                $subcat_no_access_sum = 2*$subcat_mnc_total_sum + $subcat_vnc_total_sum + 5*$subcat_lnc_total_sum +
+                    $subcat_hnc_total_sum + $subcat_inc_total_sum + $subcat_knc_total_sum;
                 $sheet->setCellValueByColumnAndRow(6, $row, $subcat_no_access_sum);
                 $cat_no_access_total_sum += $subcat_no_access_sum;
 
@@ -305,16 +297,6 @@ class ExportToExcelService {
         $sheet->setCellValueByColumnAndRow($col++, $row, $kfc_total_sum);
         $sheet->setCellValueByColumnAndRow($col++, $row, $kpc_total_sum);
         $sheet->setCellValueByColumnAndRow($col++, $row, $knc_total_sum);
-
-        try {
-            $writer = new Xlsx($spreadsheet);
-            $fileName = bin2hex(random_bytes(8)) . '.xlsx';
-            $writer->save('storage/'.$fileName);
-            return $fileName;
-
-        } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $exception) {
-            throw $exception;
-        }
     }
 
     private function excelHeader($sheet, $col, $headerRow, $name) {

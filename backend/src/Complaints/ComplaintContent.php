@@ -9,6 +9,7 @@ use OpenApi\Annotations\Property;
 use OpenApi\Annotations\Schema;
 use Symfony\Component\Serializer\Annotation\DiscriminatorMap;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
 
 /**
  * @ODM()
@@ -60,6 +61,7 @@ class ComplaintContent
     /**
      * @var string|int
      * @Assert\NotBlank()
+     * @AcmeAssert\ContainsExistsInDB(table="cities")
      * @Property(nullable=false, description="Id города")
      */
     public $cityId;

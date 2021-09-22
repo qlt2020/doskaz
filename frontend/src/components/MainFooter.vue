@@ -17,7 +17,7 @@
           </div>
           <a href="https://qlt.kz/" class="main-footer__qlt" target="_blank">
             <div class="main-footer__qlt-text">
-              {{ $t('siteDeveloped') }}
+              {{ $t("siteDeveloped") }}
             </div>
             <img
               class="main-footer__qlt-logo"
@@ -31,6 +31,9 @@
             </nuxt-link>
             <nuxt-link :to="'/community_guidelines.pdf'" target="_blank">
               {{ $t("communityGuidelines") }}
+            </nuxt-link>
+            <nuxt-link :to="'/privacy_agreement.pdf'" target="_blank">
+              {{ $t("privacyAgreement") }}
             </nuxt-link>
             <nuxt-link :to="'/terms-of-service.pdf'" target="_blank">
               {{ $t("termsOfUse") }}
@@ -134,7 +137,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 767px) {
   .main-footer__bottom {
     flex-direction: column;
     align-items: center;

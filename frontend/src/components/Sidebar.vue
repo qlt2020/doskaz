@@ -97,7 +97,7 @@ export default {
     width: 670px;
     padding-left: 0;
   }
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     width: 100%;
     top: 0;
     left: 0;
@@ -132,7 +132,7 @@ export default {
     cursor: pointer;
     border-radius: 0px 10px 10px 0px;
 
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       display: none;
     }
 
@@ -169,7 +169,7 @@ export default {
       /* padding: 15px 0 15px 30px; */
     }
 
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       width: 100%;
       margin: 0;
       height: 50px;
@@ -178,7 +178,7 @@ export default {
       border-radius: 0;
     }
     &__header {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 0;
         width: 60px;
         height: 50px;
@@ -193,14 +193,14 @@ export default {
       }
     }
     &__mobile-top {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         height: 50px;
         display: flex;
         flex-direction: row-reverse;
       }
     }
     &__search {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 10px 0px 10px 10px;
         width: calc(100% - 60px);
         /* border-right: 1px solid rgba(123, 149, 167, 0.3); */

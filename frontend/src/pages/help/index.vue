@@ -66,7 +66,7 @@ export default {
   components: { MainHeader, ViTop, MainFooter, Pagination },
   head() {
     return {
-      title: this.$t("meta.title"),
+      title: this.$t("mainMenu.help"),
       meta: [
         {
           hid: "description",

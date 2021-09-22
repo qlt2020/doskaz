@@ -16,6 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use App\Objects\Services\ExportToExcelService;
 use Symfony\Component\HttpFoundation\File\File;
+use OpenApi\Annotations\Get;
+use OpenApi\Annotations\Parameter;
+use OpenApi\Annotations\Schema;
+use OpenApi\Annotations\Response;
 
 /**
  * @Route(path="/api/admin/objects")
@@ -288,26 +292,37 @@ class AdminController extends AbstractController
 
     /**
      * @Route(path="/statistic/export/excel", methods={"GET"})
+     * @Get(
+     *     path="/api/admin/objects/statistic/export/excel",
+     *     summary="Экспорт статистики по объектам",
+     *     tags={"Объекты"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="main_category_id", in="query", description="Id основной категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="category_id", in="query", description="Id категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
      */
     public function exportToExcel(Connection $connection, Request $request)
     {
         $data = $this->statistic($request, $connection);
-        
+
         $newData = array();
 
         foreach($data as $val) {
             $newData[$val['main_category_title']][$val['category_title']][] = $val;
         }
-    
-        $export = new ExportToExcelService($newData);
+
+        $export = new ExportToExcelService();
+        $export->fillData($newData);
 
         try {
-            $fileName = $export->writeFile();
-            $file = new File('storage/'.$fileName);
+            $filePath = $export->writeFile();
+            $file = new File($filePath);
 
             return $this->file($file, 'Статистика по доступности объектов.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
-            return new JsonResponse($exception->getMessage(), $exception->getCode());
+            return new JsonResponse($exception->getMessage(), 400);
         }
     }
 }
