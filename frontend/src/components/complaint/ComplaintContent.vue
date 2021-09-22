@@ -540,6 +540,9 @@
               v-model="photos"
               @is-uploading="$emit('is-photos-uploading', $event)"
             />
+            <div class="violations_error" style="text-align: end;">
+              {{ violations["content.photos"] }}
+            </div>
             <div class="complaint__line">
               <button class="button" @click="submit">
                 {{ $t("complaint.submit") }}
@@ -1191,6 +1194,7 @@ select {
 
 .violations_error {
   color: red;
+
   @media all and (max-width: 1023px) {
     font-size: 12px;
     line-height: 1.25;
