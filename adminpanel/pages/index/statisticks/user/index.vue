@@ -111,8 +111,8 @@
                 }
               },
               countryData: true,
-              selectedCity: 'all',
-              selectedCategory: 'all'
+              selectedCity: 0,
+              selectedCategory: 0
             }
         },
         async mounted() {
@@ -123,7 +123,7 @@
           usersList: get('statisticks/usersList'),
           city: get('cities/items'),
           cities() {
-            let self = {options:[{value: 'all', title: 'Весь Казахстан'}]};
+            let self = {options:[{value: 0, title: 'Весь Казахстан'}]};
             this.city.forEach(c => {
               self.options.push({'value': c.id, 'title': c.name})
             });
@@ -132,9 +132,8 @@
         },
         methods: {
           changeCategory(value) {
-            if (value === 'all') {
-              this.$store.commit('statisticks/filterUsersListReset');
-              this.selectedCity = 'all'
+            if (value == 0) {
+              this.$store.commit('statisticks/filterUsersList', {'field': 'category', 'value': 'all'});
             } else {
               this.$store.commit('statisticks/filterUsersList', {'field': 'category', 'value': value});
             }
@@ -142,23 +141,18 @@
             this.selectedCategory = value
           },
           changeCity(value) {
-            if (value === 'all') {
-              this.$store.commit('statisticks/filterUsersListReset');
-              this.selectedCategory = 'all'
-            } else {
-              this.$store.commit('statisticks/filterUsersList', {'field': 'city_id', 'value': value});
-            }
+            this.$store.commit('statisticks/filterUsersList', {'field': 'city_id', 'value': value});
             this.selectedCity = value
             this.$store.dispatch('statisticks/usersList');
           },
           resetFilter() {
             this.$store.commit('statisticks/filterUsersListReset');
             this.$store.dispatch('statisticks/usersList');
-            this.selectedCity = 'all'
-            this.selectedCategory = 'all'
+            this.selectedCity = 0
+            this.selectedCategory = 0
           },
           async exportList() {
-              window.open('https://doskaz.qlt.kz/api/user/statistics/export/excel', '_blank')
+            window.open(`https://doskaz.qlt.kz/api/user/statistics/export/excel?city_id=${this.selectedCity}&category=${this.selectedCategory == 0 ? 'all' : this.selectedCategory}`, '_blank')
           }
         }
     }
