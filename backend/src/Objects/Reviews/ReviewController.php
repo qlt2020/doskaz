@@ -209,6 +209,10 @@ class ReviewController extends AbstractController
             $query->andWhere("object_reviews.is_published = {$request->query->getAlpha('is_published')}");
         }
 
-        return $query->execute()->fetchAllAssociative();
+        $results = $query->execute()->fetchAllAssociative();
+        return [
+            'items' => $results,
+            'count' => count($results)
+        ];
     }
 }

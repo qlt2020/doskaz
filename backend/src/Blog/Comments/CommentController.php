@@ -295,6 +295,10 @@ class CommentController extends AbstractController
             $query->andWhere("blog_comments.is_published = {$request->query->getAlpha('is_published')}");
         }
 
-        return $query->execute()->fetchAllAssociative();
+        $results = $query->execute()->fetchAllAssociative();
+        return [
+            'items' => $results,
+            'count' => count($results)
+        ];
     }
 }
