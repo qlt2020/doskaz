@@ -24,75 +24,69 @@ class ExportToExcelService extends BaseExportToExcelService {
         $sheet->mergeCellsByColumnAndRow(1, 3, 1, 4);
         $sheet->mergeCellsByColumnAndRow(2, 3, 2, 4);
         $sheet->getColumnDimension('B')->setWidth(45);
-
         $row = 6;
         $headerRow = 3;
         $col = 1;
         $id = 1;
         $start = true;
-        $total_sum = 0;
 
-        foreach ($data as $main_category_name=>$main_category) {
+        foreach ($data as $mainCategoryName=>$mainCategory) {
             $sheet->setCellValueByColumnAndRow($col++, $row, $id);
-            $sheet->setCellValueByColumnAndRow($col, $row, $main_category_name);
-            $cat_col = $col+1;
-            $cat_row = $row;
+            $sheet->setCellValueByColumnAndRow($col, $row, $mainCategoryName);
+            $catCol = $col+1;
+            $catRow = $row;
             $sheet->getStyle($row)->getFont()->setBold(true);
-            $sub_id = 1;
+            $subId = 1;
             $row++;
-            $main_cat_sum_total = 0;
-            $main_cat_sum_full = 0;
-            $main_cat_sum_partial = 0;
-            $main_cat_sum_no = 0;
-            $previous_category_name = '';
+            $previousCategoryName = '';
 
-            foreach ($main_category as $category_name=>$category) {
-                $sheet->setCellValueByColumnAndRow(1, $row, $id . ". " . $sub_id);
-                $sheet->setCellValueByColumnAndRow($col++, $row, $category_name);
-                $cat_col=3;
-                $total_col = 3;
+            foreach ($mainCategory as $categoryName=>$category) {
+                $sheet->setCellValueByColumnAndRow(1, $row, $id . ". " . $subId);
+                $sheet->setCellValueByColumnAndRow($col++, $row, $categoryName);
+                $catCol=3;
+                $totalCol = 3;
 
-                foreach ($category as $group_name=>$group) {
+                foreach ($category as $groupName=>$group) {
                     if ($start) {
-                        $this->excelHeader($sheet, $col, $headerRow, $this->names[$group_name]);
+                        $this->excelHeader($sheet, $col, $headerRow, $this->names[$groupName]);
                     }
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['total_access']);
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['full_access']);
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['partial_access']);
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['no_access']);
 
-                    if ($category_name != $previous_category_name) {
-                        $main_cat_sum_total = $sheet->getCellByColumnAndRow($cat_col, $cat_row)->getValue() ?? 0;
-                        $main_cat_sum_full = $sheet->getCellByColumnAndRow($cat_col+1, $cat_row)->getValue() ?? 0;
-                        $main_cat_sum_partial = $sheet->getCellByColumnAndRow($cat_col+2, $cat_row)->getValue() ?? 0;
-                        $main_cat_sum_no = $sheet->getCellByColumnAndRow($cat_col+3, $cat_row)->getValue() ?? 0;
-                        $main_cat_sum_total += $group['total_access'];
-                        $main_cat_sum_full += $group['full_access'];
-                        $main_cat_sum_partial += $group['partial_access'];
-                        $main_cat_sum_no += $group['no_access'];
-                        $sheet->setCellValueByColumnAndRow($cat_col++, $cat_row, $main_cat_sum_total);
-                        $sheet->setCellValueByColumnAndRow($cat_col++, $cat_row, $main_cat_sum_full);
-                        $sheet->setCellValueByColumnAndRow($cat_col++, $cat_row, $main_cat_sum_partial);
-                        $sheet->setCellValueByColumnAndRow($cat_col++, $cat_row, $main_cat_sum_no);
+                    if ($categoryName != $previousCategoryName) {
+                        $mainCatTotalSum = $sheet->getCellByColumnAndRow($catCol, $catRow)->getValue() ?? 0;
+                        $mainCatFullSum = $sheet->getCellByColumnAndRow($catCol+1, $catRow)->getValue() ?? 0;
+                        $mainCatPartialSum = $sheet->getCellByColumnAndRow($catCol+2, $catRow)->getValue() ?? 0;
+                        $mainCatNotSum = $sheet->getCellByColumnAndRow($catCol+3, $catRow)->getValue() ?? 0;
+                        $mainCatTotalSum += $group['total_access'];
+                        $mainCatFullSum += $group['full_access'];
+                        $mainCatPartialSum += $group['partial_access'];
+                        $mainCatNotSum += $group['no_access'];
+                        $sheet->setCellValueByColumnAndRow($catCol++, $catRow, $mainCatTotalSum);
+                        $sheet->setCellValueByColumnAndRow($catCol++, $catRow, $mainCatFullSum);
+                        $sheet->setCellValueByColumnAndRow($catCol++, $catRow, $mainCatPartialSum);
+                        $sheet->setCellValueByColumnAndRow($catCol++, $catRow, $mainCatNotSum);
 
-                        $total_sum = $sheet->getCellByColumnAndRow($total_col, 5)->getValue() ?? 0;
-                        $total_full = $sheet->getCellByColumnAndRow($total_col+1, 5)->getValue() ?? 0;
-                        $total_partial = $sheet->getCellByColumnAndRow($total_col+2, 5)->getValue() ?? 0;
-                        $total_no = $sheet->getCellByColumnAndRow($total_col+3, 5)->getValue() ?? 0;
-                        $total_sum += $group['total_access'];
-                        $total_full += $group['full_access'];
-                        $total_partial += $group['partial_access'];
-                        $total_no += $group['no_access'];
-                        $sheet->setCellValueByColumnAndRow($total_col++, 5, $total_sum);
-                        $sheet->setCellValueByColumnAndRow($total_col++, 5, $total_full);
-                        $sheet->setCellValueByColumnAndRow($total_col++, 5, $total_partial);
-                        $sheet->setCellValueByColumnAndRow($total_col++, 5, $total_no);   
+                        $totalSum = $sheet->getCellByColumnAndRow($totalCol, 5)->getValue() ?? 0;
+                        $totalFullSum = $sheet->getCellByColumnAndRow($totalCol+1, 5)->getValue() ?? 0;
+                        $totalPartialSum = $sheet->getCellByColumnAndRow($totalCol+2, 5)->getValue() ?? 0;
+                        $totalNotSum = $sheet->getCellByColumnAndRow($totalCol+3, 5)->getValue() ?? 0;
+                        $totalSum += $group['total_access'];
+                        $totalFullSum += $group['full_access'];
+                        $totalPartialSum += $group['partial_access'];
+                        $totalNotSum += $group['no_access'];
+                        $sheet->setCellValueByColumnAndRow($totalCol++, 5, $totalSum);
+                        $sheet->setCellValueByColumnAndRow($totalCol++, 5, $totalFullSum);
+                        $sheet->setCellValueByColumnAndRow($totalCol++, 5, $totalPartialSum);
+                        $sheet->setCellValueByColumnAndRow($totalCol++, 5, $totalNotSum);   
                     }
                 }
-                $previous_category_name = $category_name;
+                $previousCategoryName = $categoryName;
                 $start = false;
                 $row++;
-                $sub_id++;
+                $subId++;
                 $col = 2;
             }
             $col = 1;
