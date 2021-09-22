@@ -414,11 +414,12 @@ final class ComplaintController extends AbstractController
     public function exportToExcel(Connection $connection, Request $request)
     {
         $data = $this->statisticAll($connection, $request);
-        $export = new ExportToExcelService($data, $request);
+        $export = new ExportToExcelService($request);
+        $export->fillData($data);
 
         try {
-            $fileName = $export->writeFile();
-            $file = new File('storage/'.$fileName);
+            $filePath = $export->writeFile();
+            $file = new File($filePath);
             return $this->file($file, 'Статистика_по_жалобам_и_обращениям.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 400);

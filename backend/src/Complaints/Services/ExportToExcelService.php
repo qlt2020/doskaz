@@ -2,28 +2,24 @@
 
 namespace App\Complaints\Services;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use App\Infrastructure\Exports\BaseExportToExcelService;
 use Symfony\Component\HttpFoundation\Request;
-use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
-class ExportToExcelService
+class ExportToExcelService extends BaseExportToExcelService
 {
 
-    private array $data;
     private string $period;
 
-    public function __construct($data, Request $request)
+    public function __construct(Request $request)
     {
-        $this->data = $data;
+        parent::__construct();
         $this->period = sprintf("Дата( %s - %s )", date('Y-m-d',strtotime($request->query->getAlnum('dateFrom'))),
             date('Y-m-d',strtotime($request->query->getAlnum('dateTo'))));
     }
 
-    public function writeFile()
+    public function fillData(array $data)
     {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        $sheet = $this->spreadsheet->getActiveSheet();
 
         $sheet->getStyle('A2:D1')->getFont()->setBold(true);
         $sheet->setCellValueByColumnAndRow(2, 1, 'Весь РК / ГРЗ / ГОЗ / Города');
@@ -38,23 +34,13 @@ class ExportToExcelService
         $row = 4;
         $id = 0;
 
-        foreach ($this->data as $datum) {
+        foreach ($data as $datum) {
             $sheet->setCellValueByColumnAndRow($col++, $row, $id++);
             $sheet->setCellValueByColumnAndRow($col++, $row, $datum['city_name']);
             $sheet->setCellValueByColumnAndRow($col++, $row, $datum['complaint_count']);
             $sheet->setCellValueByColumnAndRow($col++, $row, $datum['feedback_count']);
             $row++;
             $col = 1;
-        }
-
-        try {
-            $writer = new Xlsx($spreadsheet);
-            $fileName = bin2hex(random_bytes(8)) . '.xlsx';
-            $writer->save('storage/'.$fileName);
-            return $fileName;
-
-        } catch (Exception $exception) {
-            throw new $exception;
         }
     }
 

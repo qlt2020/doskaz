@@ -135,7 +135,7 @@ export default {
     border-radius: 14px;
     box-shadow: 0px 16px 24px 0px #0000000f;
     width: 345px;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       position: fixed;
       top: unset;
       border: none;
@@ -223,7 +223,7 @@ export default {
     }
   }
   .modal-bd {
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       position: fixed;
       bottom: 0;
       top: 0;

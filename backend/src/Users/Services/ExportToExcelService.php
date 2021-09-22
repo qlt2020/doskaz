@@ -2,21 +2,16 @@
 
 namespace App\Users\Services;
 
+use App\Infrastructure\Exports\BaseExportToExcelService;
 use App\Users\User;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+class ExportToExcelService extends BaseExportToExcelService {
 
-class ExportToExcelService {
-
-    private array $names;
-    private Spreadsheet $spreadsheet;
-    private $date;
+    protected array $names;
 
     public function __construct() {
+        parent::__construct();
         $this->names = User::USER_CATEGORIES_NAMES;
-        $this->spreadsheet =  new Spreadsheet();
-        $this->date = date('d.m.Y');
     }
 
     public function fillData(array $data) {
@@ -62,19 +57,6 @@ class ExportToExcelService {
             $start = false;
             $row++;
             $col = 1;
-        }
-    }
-
-    public function writeFile(): string
-    {
-        try {
-            $writer = new Xlsx($this->spreadsheet);
-            $fileName = bin2hex(random_bytes(8)) . '.xlsx';
-            $writer->save('storage/'.$fileName);
-            return $fileName;
-
-        } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $exception) {
-            throw $exception;
         }
     }
 

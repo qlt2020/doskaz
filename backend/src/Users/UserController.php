@@ -123,8 +123,8 @@ final class UserController extends AbstractController
                             CurrentTaskDataProvider $currentTaskProvider, LevelRepository $levelRepository)
     {
         $user = $connection->createQueryBuilder()
-            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status', 
-                        'users.gender', 'users.category', 'users.city_id', 'users.birthday')
+            ->select('users.id', 'name', 'email', 'phone_credentials.number as phone', 'roles', 'avatar', 'full_name', 'status',
+                'users.gender', 'users.category', 'users.city_id', 'users.birthday')
             ->from('users')
             ->leftJoin('users', 'phone_credentials', 'phone_credentials', 'users.id = phone_credentials.id')
             ->andWhere('users.id = :id')
@@ -262,13 +262,13 @@ final class UserController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $city = $profileData->city_id ? $em->getRepository('App\Cities\Cities')->find($profileData->city_id) : null;
 
-            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName), 
-                                    $profileData->email, 
-                                    $profileData->status,
-                                    $profileData->gender,
-                                    $profileData->category,
-                                    $city,
-                                    $profileData->birthday,
+            $user->updateProfile(new FullName($profileData->firstName, $profileData->lastName, $profileData->middleName),
+                $profileData->email,
+                $profileData->status,
+                $profileData->gender,
+                $profileData->category,
+                $city,
+                $profileData->birthday,
             );
         });
     }
@@ -557,6 +557,7 @@ final class UserController extends AbstractController
             ->from('blog_comments')
             ->leftJoin('blog_comments', 'blog_posts', 'blog_posts', 'blog_posts.id = blog_comments.post_id')
             ->leftJoin('blog_posts', 'blog_categories', 'blog_categories', 'blog_posts.category_id = blog_categories.id')
+            ->andWhere('blog_posts.deleted_at IS NULL')
             ->andWhere('blog_comments.id in (:ids)')
             ->setParameter('ids', array_column($items, 'id'), Connection::PARAM_STR_ARRAY)
             ->execute()
@@ -572,6 +573,7 @@ final class UserController extends AbstractController
             ])
             ->from('object_reviews')
             ->leftJoin('object_reviews', 'objects', 'objects', 'objects.id = object_reviews.object_id')
+            ->andWhere('objects.deleted_at IS NULL')
             ->andWhere('object_reviews.id in (:ids)')
             ->setParameter('ids', array_column($items, 'id'), Connection::PARAM_STR_ARRAY)
             ->execute()
@@ -708,7 +710,7 @@ final class UserController extends AbstractController
                 if (count($photos)) {
                     $image = $urlBuilder->build('local://' . $photos[0], 220, 160)->toString();
                 }
-                
+
                 return [
                     'id' => $item['id'],
                     'type' => $item['type'],
@@ -885,7 +887,7 @@ final class UserController extends AbstractController
             ],400);
         }
     }
-    
+
 
     /**
      * @IsGranted("ROLE_USER")

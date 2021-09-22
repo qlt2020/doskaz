@@ -2,9 +2,9 @@
   <div class="sidebar-wrapper" :class="{ opened: mobileOpened }">
     <div class="mob-menu">
       <nuxt-link :to="localePath({ name: 'index' })" class="main-filter__logo">
-        <img src="@/assets/logo_doskaz.svg" alt="logo" />
+        <img src="@/assets/img/logo-new-white.png" alt="logo" />
       </nuxt-link>
-      <div class="burger-wrapper" @click="mainPageMobOpened()">
+      <div v-if="!$route.name.includes('objects-id__')" class="burger-wrapper" @click="mainPageMobOpened()">
         <span class="burger">
           <span class="burger-line"></span>
         </span>
@@ -316,14 +316,15 @@
               <div class="object-side__close"></div>
             </div>
             <div class="more-detail__top">
-              Подробная информация
+              {{ $t('objects.detailedInfo') }}
               <a
                 :href="`/api/objects/${$route.params.id}/pdf`"
                 target="_blank"
                 class="more-detail__download"
                 download
-                >{{ $t("objects.download") }}</a
-              >
+                >
+                {{ $t("objects.download") }}
+              </a>
             </div>
             <div class="more-detail__content" id="more-detail__content">
               <div
@@ -736,7 +737,7 @@ export default {
       width: 100px;
     }
   }
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     display: flex;
   }
 }
@@ -931,7 +932,7 @@ export default {
   }
   &-wrapper {
     .sidebar {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         position: absolute;
         height: 100%;
         top: auto;
@@ -946,7 +947,7 @@ export default {
         width: 550px;
       }
       &-show {
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
           transition: bottom 1s;
           bottom: -50px;
         }
@@ -998,7 +999,7 @@ export default {
     0px 0px 1px rgba(0, 0, 0, 0.04);
   background: #ffffff;
   position: relative;
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     border-radius: 10px 10px 0 0;
     box-shadow: none;
   }
@@ -1045,7 +1046,7 @@ export default {
       @media all and (max-width: 960px) {
         width: 280px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         width: auto;
         left: 0;
         top: -50px;
@@ -1087,7 +1088,7 @@ export default {
       cursor: pointer;
       box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
         0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         box-shadow: none;
         top: 0;
         right: 0;
@@ -1338,7 +1339,7 @@ export default {
       @media (max-width: 1024px) {
         width: 70%;
       }
-      @media (max-width: 768px) {
+      @media (max-width: 1023px) {
         width: fit-content;
       }
     }
@@ -1346,7 +1347,7 @@ export default {
     &-b {
       font-size: 0;
       display: flex;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         margin-top: 25px;
         align-items: center;
       }
@@ -1397,7 +1398,7 @@ export default {
       opacity: 0.7;
     }
   }
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     &__close-mobile {
       position: relative;
       display: block;
@@ -1462,7 +1463,7 @@ export default {
       justify-content: space-between;
       font-weight: 500;
       margin-top: 6px;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
@@ -1497,7 +1498,7 @@ export default {
           border-radius: 10px;
           margin-right: 10px;
         }
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           display: flex;
           align-items: center;
           padding: 7px 9px;
@@ -1548,7 +1549,7 @@ export default {
       rgba(218, 218, 218, 0.0904167) 99.99%,
       rgba(255, 255, 255, 0) 100%
     );
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       height: fit-content;
       min-height: 148px;
       padding: 25px 15px 15px;
@@ -1572,7 +1573,7 @@ export default {
       @media all and (max-width: 1024px) {
         margin: 0 0 0 18px;
       }
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         padding: 16px 3px;
         line-height: 16px;
         .object-side__tab-num {
@@ -1590,7 +1591,7 @@ export default {
         font-size: 13px;
       }
       &-wrapper {
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           overflow-x: auto;
           white-space: nowrap;
           position: relative;
@@ -1632,7 +1633,7 @@ export default {
           right: 0;
           bottom: 0;
           background: #7b95a7;
-          @media all and (max-width: 768px) {
+          @media all and (max-width: 1023px) {
             display: none;
           }
         }
@@ -1685,7 +1686,7 @@ export default {
           border-top: none;
           border-width: 0.5px;
           margin: 26px 0 29px;
-          @media (max-width: 768px) {
+          @media (max-width: 1023px) {
             display: none;
           }
         }
@@ -1719,7 +1720,7 @@ export default {
               0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
             border-radius: 12px;
             width: fit-content;
-            @media all and (max-width: 768px) {
+            @media all and (max-width: 1023px) {
               display: block;
             }
           }
@@ -1819,12 +1820,12 @@ export default {
       border-radius: 10px;
       width: fit-content;
       padding: 11px;
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: none;
       }
       &-mobile {
         display: none;
-        @media all and (max-width: 768px) {
+        @media all and (max-width: 1023px) {
           display: flex !important;
           margin-bottom: 15px;
           font-size: 13px;
@@ -2043,11 +2044,11 @@ export default {
               width: 170px;
               height: 110px;
             }
-            @media (max-width: 768px) {
+            @media (max-width: 1023px) {
               width: 100%;
               height: 150px;
             }
-            @media (max-width: 768px) {
+            @media (max-width: 1023px) {
               height: 110px;
             }
           }
@@ -2073,7 +2074,7 @@ export default {
         height: 110px;
         margin: auto;
       }
-      @media (max-width: 768px) {
+      @media (max-width: 1023px) {
         width: 200px;
         height: 200px;
       }
@@ -2095,7 +2096,7 @@ export default {
           width: 110px;
           height: 110px;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
           width: 100%;
           height: 100%;
         }

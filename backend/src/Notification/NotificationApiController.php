@@ -69,6 +69,7 @@ ST_Y(ST_CENTROID(ST_COLLECT(o.point_value::GEOMETRY)))), 4326)))) as city')
                 ->join('n', 'object_categories', 'oc', 'oc.id = o.category_id')
                 ->join('oc', 'object_categories', 'ocp', 'oc.parent_id = ocp.id')
                 ->where('n.user_id = :user_id')
+                ->andWhere('o.deleted_at IS NULL')
                 ->setParameters([
                     'user_id' => $this->getUser()->id(),
                 ])

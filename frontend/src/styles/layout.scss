@@ -1017,6 +1017,9 @@ a {
 .title-back {
   display: flex;
   align-items: center;
+  @media screen and (max-width: 1023px) {
+    margin-top: 70px;
+  }
 
   &_arrow {
     margin-right: 22px;

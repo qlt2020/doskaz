@@ -65,7 +65,7 @@ export default {
 <style lang="scss" scoped>
 .availability {
   display: none;
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     display: flex;
     grid-gap: 10px;
     gap: 10px;

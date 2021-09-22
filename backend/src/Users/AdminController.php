@@ -323,6 +323,15 @@ class AdminController extends AbstractController
     /**
      * @Route(path="/user/statistics/export/excel", methods={"GET"})
      * @IsGranted("ROLE_ADMIN")
+     * @Get(
+     *     path="/api/user/statistics/export/excel",
+     *     summary="Экспорт статистики по пользователям",
+     *     tags={"Пользователи"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="category", in="query", description="Категория пользователя", @Schema(type="string", nullable=true)),
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
      */
     public function exportToExcel(Connection $connection, Request $request) {
         $data = $this->statistics($connection, $request);
@@ -330,8 +339,8 @@ class AdminController extends AbstractController
         $export->fillData($data);
 
         try {
-            $fileName = $export->writeFile();
-            $file = new File('storage/'.$fileName);
+            $filePath = $export->writeFile();
+            $file = new File($filePath);
             return $this->file($file, 'Статистика по пользователям.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 400);

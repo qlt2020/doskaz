@@ -1,6 +1,5 @@
 <template>
   <div class="blog__inside">
-    <BackBtn />
     <div class="breadcrumbs">
       <nuxt-link
         :to="localePath({ name: 'blog-category' })"
@@ -58,25 +57,6 @@
             v-html="post.content"
             class="blog__content__inside-content"
           ></div>
-          <div class="blog__content__inside-bottom">
-            <div class="blog__content__inside-bottom-text">
-              {{ $t("blog.share") }}:
-            </div>
-            <div class="social --md">
-              <a class="social__link --fcb" @click="share('fb')">
-                <img src="~/assets/img/social/fcb.svg" />
-              </a>
-              <a class="social__link --vk" @click="share('vk')">
-                <img src="~/assets/img/social/vk.svg" />
-              </a>
-              <a class="social__link --my" @click="share('twitter')">
-                <img src="~/assets/img/social/twitter.svg" />
-              </a>
-              <a class="social__link --my" @click="share('telegram')">
-                <img src="~/assets/img/social/telegram.svg" />
-              </a>
-            </div>
-          </div>
         </div>
       </div>
       <div class="blog__sidebar">
@@ -282,7 +262,7 @@ select::-ms-expand {
 .blog {
   &__inside {
     .back-btn {
-      @media screen and (min-width: 768px) {
+      @media screen and (min-width: 1023px) {
         display: none;
       }
       margin-bottom: 15px;
@@ -474,7 +454,7 @@ select::-ms-expand {
   }
 
   &__inside {
-    padding: 40px 0 80px;
+    padding: 120px 0 80px;
   }
 
   &__sidebar {
@@ -573,7 +553,7 @@ select::-ms-expand {
   }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 1023px) {
   .blog {
     &__content__inside-img {
       height: 176px;

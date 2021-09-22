@@ -2,7 +2,7 @@
   <div class="pdf">
     <div class="pdf__top">
       <div class="pdf__fixed-logo">
-        <img :src="require('@/assets/logo-black.svg')" />
+        <img :src="require('@/assets/img/logo-new-white.png')" />
       </div>
       <div class="pdf__qr">
         <span class="pdf__qr-text">
@@ -185,6 +185,14 @@ export default {
 @import "@/styles/mixins.scss";
 
 .pdf__fixed {
+  &-logo {
+    img {
+      width: 100px;
+      height: auto;
+      filter: grayscale(1);
+    }
+  }
+
   &-left {
     position: fixed;
     left: 50%;

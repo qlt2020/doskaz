@@ -870,7 +870,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 1023px) {
   .blog {
     &__search__btn {
       display: none;
@@ -897,7 +897,7 @@ a.blog__item-link {
   }
   .blog__side {
     position: fixed;
-    top: 0;
+    top: 70px;
     right: -20%;
     left: 100%;
     bottom: 0;
@@ -979,7 +979,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1023px) {
   .blog__side {
     &.show {
       left: 0;
@@ -997,7 +997,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 1023px) {
   .blog__item-img {
     height: 176px;
   }

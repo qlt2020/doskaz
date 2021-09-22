@@ -102,6 +102,11 @@ import BackBtn from "~/components/BackBtn";
 export default {
   components: { FormattedDate, CommentsBlock, Comments, BackBtn },
   layout: "blog",
+  head() {
+    return {
+      title: this.$t("mainMenu.help"),
+    };
+  },
   async asyncData({ $axios, params }) {
     const article = await $axios.$get(`/api/help/${params.id}`);
     return { article };
@@ -141,7 +146,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 /* Custom dropdown */
 .custom-dropdown {
   position: relative;
@@ -301,7 +306,7 @@ select::-ms-expand {
         height: 392px;
         overflow: hidden;
         img {
-          /* opacity: 0; */
+          opacity: 1;
           width: 100%;
         }
       }

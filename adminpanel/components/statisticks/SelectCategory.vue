@@ -1,7 +1,7 @@
 <template>
     <select :multiple="options.multiple" ref="select" class="select-stat" >
         <template>
-            <option v-if="allOptions" value="all">Все</option>
+            <option v-if="allOptions" value=0>Все</option>
             <option v-for="option in selectOptions" :key="option.title" :value="option.id">{{option.title}}</option>
         </template>
     </select>

@@ -413,6 +413,7 @@ export default {
     },
     async confirmSmsCode() {
       if (!this.smsCode) {
+        this.smsErrorCode = true;
         return;
       }
       try {
@@ -437,9 +438,7 @@ export default {
       this.smsErrorCode = null;
       this.errors = [];
       const loader = this.$loading.show();
-      if (this.codeSent && this.smsCode) {
-        await this.confirmSmsCode();
-      }
+      await this.confirmSmsCode();
       if (this.smsErrorCode) {
         loader.hide();
         return;
@@ -455,6 +454,10 @@ export default {
         );
         if (status === 400) {
           this.errors = data.errors.violations;
+          return;
+        }
+        if (status === 422) {
+          loader.hide();
           return;
         }
         this.smsErrorCode = null;

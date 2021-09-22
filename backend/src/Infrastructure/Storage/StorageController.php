@@ -89,7 +89,7 @@ final class StorageController extends AbstractController
         $img = new Image();
         $img->image = $imagePath;
 
-        if ($request->query->has('x')) {
+        if ($request->query->has('x') || $request->query->has('y')) {
             $img->cropData = [
                 'x' => $request->query->getInt('x'),
                 'y' => $request->query->getInt('y'),
