@@ -1228,7 +1228,7 @@ final class ObjectsApiController extends AbstractController
             $filePath = $export->writeFile();
             $file = new File($filePath);
 
-            return $this->file($file, 'Статистика по доступности объектов.xlsx');
+            return $this->file($file, 'Статистика по доступности объектов.xlsx')->deleteFileAfterSend();
         } catch (\Exception $exception) {
             return new JsonResponse($exception->getMessage(), 400);
         }
