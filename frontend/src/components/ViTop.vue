@@ -2266,6 +2266,19 @@ body {
       background: #000;
       border-top: 2px solid #fff;
     }
+    .blog {
+      &__material-item {
+        background: #000;
+        &__body {
+          border: 1px solid #fff;
+          border-top: none;
+        }
+      }
+    }
+    .blog__content__inside {
+      background: #000;
+      border-color: #fff;
+    }
   }
   &.white {
     background: #ffffff;
@@ -2929,6 +2942,17 @@ body {
       &__item {
         border-radius: 0;
         border: 1px solid #000;
+      }
+      &__material-item {
+        border-radius: 0;
+      }
+    }
+    .blog__content__inside {
+      border-radius: 0;
+      box-shadow: none;
+      &-content {
+        padding-left: 0;
+        padding-right: 0;
       }
     }
   }
