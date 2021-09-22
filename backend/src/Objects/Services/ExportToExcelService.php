@@ -44,7 +44,7 @@ class ExportToExcelService extends BaseExportToExcelService {
             $main_cat_sum_full = 0;
             $main_cat_sum_partial = 0;
             $main_cat_sum_no = 0;
-            $old_category_name = '';
+            $previous_category_name = '';
 
             foreach ($main_category as $category_name=>$category) {
                 $sheet->setCellValueByColumnAndRow(1, $row, $id . ". " . $sub_id);
@@ -61,7 +61,7 @@ class ExportToExcelService extends BaseExportToExcelService {
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['partial_access']);
                     $sheet->setCellValueByColumnAndRow($col++, $row, $group['no_access']);
 
-                    if ($category_name != $old_category_name) {
+                    if ($category_name != $previous_category_name) {
                         $main_cat_sum_total = $sheet->getCellByColumnAndRow($cat_col, $cat_row)->getValue() ?? 0;
                         $main_cat_sum_full = $sheet->getCellByColumnAndRow($cat_col+1, $cat_row)->getValue() ?? 0;
                         $main_cat_sum_partial = $sheet->getCellByColumnAndRow($cat_col+2, $cat_row)->getValue() ?? 0;
@@ -89,7 +89,7 @@ class ExportToExcelService extends BaseExportToExcelService {
                         $sheet->setCellValueByColumnAndRow($total_col++, 5, $total_no);   
                     }
                 }
-                $old_category_name = $category_name;
+                $previous_category_name = $category_name;
                 $start = false;
                 $row++;
                 $sub_id++;

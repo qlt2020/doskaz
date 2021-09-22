@@ -39,6 +39,7 @@ use Webmozart\Assert\Assert;
 use App\Users\User;
 use App\Objects\Services\ExportToExcelService;
 use Symfony\Component\HttpFoundation\File\File;
+use App\Objects\AccessibleObjectExportDecorator;
 
 /**
  * @Route(path="/api/objects")
@@ -1103,127 +1104,28 @@ final class ObjectsApiController extends AbstractController
             $groups = [$request->query->getAlpha('group')];
         } else {
             $groups = User::USER_CATEGORIES;
+            unset($groups[array_search("undefined", $groups)], $groups[array_search("justView", $groups)]);
         }
 
         $newData = array();
-        $mfa = 0;
-        $mpa = 0;
-        $mna = 0;
-        $lfa = 0;
-        $lpa = 0;
-        $lna = 0;
-        $vfa = 0;
-        $vpa = 0;
-        $vna = 0;
-        $hfa = 0;
-        $hpa = 0;
-        $hna = 0;
-        $ifa = 0;
-        $ipa = 0;
-        $ina = 0;
-        $kfa = 0;
-        $kpa = 0;
-        $kna = 0;
-        $old_main_cat = '';
-        $old_cat = '';
-
-        foreach($data as $val) {
-            if ($val['main_category_title'] != $old_main_cat || $val['category_title'] != $old_cat) {
-                $mfa = 0;
-                $mpa = 0;
-                $mna = 0;
-                $lfa = 0;
-                $lpa = 0;
-                $lna = 0;
-                $vfa = 0;
-                $vpa = 0;
-                $vna = 0;
-                $hfa = 0;
-                $hpa = 0;
-                $hna = 0;
-                $ifa = 0;
-                $ipa = 0;
-                $ina = 0;
-                $kfa = 0;
-                $kpa = 0;
-                $kna = 0;
+        $previouseMainCat = '';
+        $previousSubCat = '';
+        $accessibleObjectExportDecorator = new AccessibleObjectExportDecorator();
+        foreach($data as $mainCategory) {
+            if ($mainCategory['main_category_title'] != $previouseMainCat || $mainCategory['category_title'] != $previousSubCat) {
+                $accessibleObjectExportDecorator->resetGroupFields();
             }
-            $old_main_cat = $val['main_category_title'];
-            $old_cat = $val['category_title'];
-            $newData[$val['main_category_title']][$val['category_title']] = [];
-            $mfa += $val['movement_full_accessible'];
-            $mpa += $val['movement_partial_accessible'];
-            $mna += $val['movement_not_accessible'];
-            $lfa += $val['limb_full_accessible'];
-            $lpa += $val['limb_partial_accessible'];
-            $lna += $val['limb_not_accessible'];
-            $vfa += $val['vision_full_accessible'];
-            $vpa += $val['vision_partial_accessible'];
-            $vna += $val['vision_not_accessible'];
-            $hfa += $val['hearing_full_accessible'];
-            $hpa += $val['hearing_partial_accessible'];
-            $hna += $val['hearing_not_accessible'];
-            $ifa += $val['intellectual_full_accessible'];
-            $ipa += $val['intellectual_partial_accessible'];
-            $ina += $val['intellectual_not_accessible'];
-            $kfa += $val['kids_full_accessible'];
-            $kpa += $val['kids_partial_accessible'];
-            $kna += $val['kids_not_accessible'];
+            $previouseMainCat = $mainCategory['main_category_title'];
+            $previousSubCat = $mainCategory['category_title'];
+            $newData[$mainCategory['main_category_title']][$mainCategory['category_title']] = [];
+            $accessibleObjectExportDecorator->setGroupFields($mainCategory);
             foreach($groups as $group) {
-                if ($group == 'movement' || $group == 'babyCarriage') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $mfa + $mpa + $mna,
-                        'full_access' => $mfa,
-                        'partial_access' => $mpa,
-                        'no_access' => $mna,
-                    ];
-                }
-                elseif ($group == 'vision') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $vfa + $vpa + $vna,
-                        'full_access' => $vfa,
-                        'partial_access' => $vpa,
-                        'no_access' => $vna,
-                    ];
-                }
-                elseif ($group == 'limb' || $group == 'temporal' || $group == 'missingLimbs' || $group == 'pregnant' || $group == 'agedPeople') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $lfa + $lpa + $lna,
-                        'full_access' => $lfa,
-                        'partial_access' => $lpa,
-                        'no_access' => $lna,
-                    ];
-                }
-                elseif ($group == 'hearing') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $hfa + $hpa + $hna,
-                        'full_access' => $hfa,
-                        'partial_access' => $hpa,
-                        'no_access' => $hna,
-                    ];
-                }
-                elseif ($group == 'intellectual') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $ifa + $ipa + $ina,
-                        'full_access' => $ifa,
-                        'partial_access' => $ipa,
-                        'no_access' => $ina,
-                    ];
-                }
-                elseif ($group == 'withChild') {
-                    $newData[$val['main_category_title']][$val['category_title']][$group] = [
-                        'total_access' => $kfa + $kpa + $kna,
-                        'full_access' => $kfa,
-                        'partial_access' => $kpa,
-                        'no_access' => $kna,
-                    ];
-                }
+                $newData[$mainCategory['main_category_title']][$mainCategory['category_title']][$group] = $accessibleObjectExportDecorator->sumGroupCategory($group);
             }
         }
 
         $export = new ExportToExcelService();
         $export->fillData($newData);
-
         try {
             $filePath = $export->writeFile();
             $file = new File($filePath);
