@@ -1063,7 +1063,7 @@ select {
       font-family: SFProDisplay;
       line-height: 20px;
       margin: 0 0 3px 0;
-      width: 110px;
+      width: 130px;
     }
 
     &-title {

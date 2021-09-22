@@ -665,7 +665,7 @@ Anonymous requests are not considered.
   },
   selectObjectType: "Select facility type",
   detectedLocation: {
-    modalText: "We have determined your location as {span}, are you here?",
+    modalText: "We have determined your {break} location as {span},{break} are you here?",
     buttonYes: "Yes",
     buttonNo: "Change city",
   },

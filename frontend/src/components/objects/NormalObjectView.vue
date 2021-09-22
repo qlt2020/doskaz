@@ -4,7 +4,7 @@
       <nuxt-link :to="localePath({ name: 'index' })" class="main-filter__logo">
         <img src="@/assets/img/logo-new-white.png" alt="logo" />
       </nuxt-link>
-      <div class="burger-wrapper" @click="mainPageMobOpened()">
+      <div v-if="!$route.name.includes('objects-id__')" class="burger-wrapper" @click="mainPageMobOpened()">
         <span class="burger">
           <span class="burger-line"></span>
         </span>

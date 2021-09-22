@@ -104,8 +104,8 @@ export default {
         margin-right: 20px;
         cursor: pointer;
       }
-      @media screen and (max-width: 768px) {
-        line-height: 33px;
+      @media screen and (max-width: 1023px) {
+        margin-top: 70px;
       }
     }
   }

@@ -86,7 +86,9 @@ export default {
 
 .category-selector .category .category__scroll .subcategory-title {
   display: flex;
-  width: fit-content;
+  /* width: fit-content; */
+  max-width: min-content;
+  white-space: nowrap;
   cursor: pointer;
   background: $white;
   border-radius: 10px;

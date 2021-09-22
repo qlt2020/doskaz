@@ -26,7 +26,7 @@ export const state = () => ({
   feedbackFilteredStat: [],
   usersStat: [],
   usersAge: [],
-  usersAgeFilter: 'withChild',
+  usersAgeFilter: null,
   usersList: [],
   usersFilter: {
     params: {
@@ -42,17 +42,17 @@ export const state = () => ({
   complaintsList: [],
   group: {
     options:[
-      {value: 'kids_full_accessible', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
-      {value: 'movement_full_accessible', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
-      {value: 'movement_full_accessible', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
-      {value: 'hearing_full_accessible', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
-      {value: 'limb_full_accessible', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
-      {value: 'limb_full_accessible', title: 'Временно травмированные люди', usersValue: 'temporal'},
-      {value: 'limb_full_accessible', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
-      {value: 'limb_full_accessible', title: 'Беременные женщины', usersValue: 'pregnant'},
-      {value: 'limb_full_accessible', title: 'Пожилые люди', usersValue: 'agedPeople'},
-      {value: 'hearing_full_accessible', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
-      {value: 'intellectual_full_accessible', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
+      {value: 'kidsTotal', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
+      {value: 'movementTotal', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
+      {value: 'babyCarriageTotal', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
+      {value: 'visionTotal', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
+      {value: 'limbTotal', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
+      {value: 'temporalTotal', title: 'Временно травмированные люди', usersValue: 'temporal'},
+      {value: 'missingLimbsTotal', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
+      {value: 'pregnantTotal', title: 'Беременные женщины', usersValue: 'pregnant'},
+      {value: 'agedPeopleTotal', title: 'Пожилые люди', usersValue: 'agedPeople'},
+      {value: 'hearingTotal', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
+      {value: 'intellectualTotal', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
     ],
   },
   propertyList: {
