@@ -755,6 +755,13 @@ body {
     .add-link {
       font-size: 14px;
     }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 14px;
+        }
+      }
+    }
   }
   &.md {
     * {
@@ -1139,6 +1146,13 @@ body {
     }
     .add-link {
       font-size: 16px;
+    }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 16px;
+        }
+      }
     }
   }
 
@@ -1525,6 +1539,13 @@ body {
     }
     .add-link {
       font-size: 18px;
+    }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 18px;
+        }
+      }
     }
   }
 
@@ -2241,6 +2262,10 @@ body {
         }
       }
     }
+    .main-footer {
+      background: #000;
+      border-top: 2px solid #fff;
+    }
   }
   &.white {
     background: #ffffff;
@@ -2837,6 +2862,17 @@ body {
         span {
           color: #000000;
         }
+      }
+    }
+    .main-footer {
+      &__wrapper {
+        background: #fff;
+        border-top: 2px solid #000;
+      }
+      div,
+      a {
+        color: #000;
+        border-color: #000;
       }
     }
   }
