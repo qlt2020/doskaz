@@ -21,6 +21,8 @@
                 <template v-slot:[x]="data">
                     <nuxt-link class="btn btn-sm btn-success" :to="`${$route.path}/${data.item.id}`" v-if="actions.includes('edit')">Редактировать</nuxt-link>
                     <delete v-if="actions.includes('delete')" :item="data.item"/>
+                    <button type="button" class="btn btn-success" v-if="actions.includes('accept')" @click="$emit('accept', data.item.id)">Принять</button>
+                    <button type="button" class="btn btn-danger" v-if="actions.includes('decline')" @click="$emit('decline', data.item.id)" >Отклонить</button>
                     <component v-for="(action, index) in customActions" :key="index" :is="action" :item="data.item"/>
                 </template>
                 <template v-for="customSlot in customSlots" v-slot:[customSlot.slot]="data">

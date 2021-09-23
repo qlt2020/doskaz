@@ -146,7 +146,6 @@
         computed: {
           objectsStat: get('statisticks/getObjectsStatTable'),
           city: get('cities/items'),
-          groupPopulation:get('statisticks/group'),
           groupsTable() {
             if (this.selectedGroup == 0) {
               return this.usersTitleList.options

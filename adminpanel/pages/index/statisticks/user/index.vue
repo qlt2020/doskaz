@@ -17,7 +17,7 @@
         <div class="statisticks__filter d-flex">
             <Select
               :value="selectedCity"
-              :options="cityList"
+              :options="cities"
               @input="changeCity(arguments[0])"
             />            
             <Select
@@ -32,19 +32,19 @@
               Сбросить
           </button>
         </div>
-        <b-table-simple hover small caption-top responsive sticky-header="70vh">
-          <b-thead head-variant="light" sticky-header>
+        <b-table-simple hover small caption-top responsive sticky-header="70vh" :no-border-collapse="true" class="table">
+          <b-thead head-variant="light" class="table_header">
             <b-tr v-if="usersList[0]" sticky-header>
-              <b-th colspan="1">№</b-th>
-              <b-th colspan="1">Город</b-th>
+              <b-th colspan="1" :stickyColumn=true>№</b-th>
+              <b-th colspan="1" :stickyColumn=true>Город</b-th>
               <b-th colspan="4" v-if="selectedCategory === 'all'">Все</b-th>
               <b-th colspan="4" v-for="categories in usersList[0].categories" :key="categories.name" class="text-nowrap">
                 {{  usersTitleList.options[categories.name] }}
               </b-th>
             </b-tr>
             <b-tr v-if="usersList[0]">
-              <b-th></b-th>
-              <b-th></b-th>
+              <b-th :stickyColumn=true></b-th>
+              <b-th :stickyColumn=true></b-th>
               <template v-for="(categories, key, index) in usersList[0].categories">
                 <b-th class="statisticks__table-subtitle" :key="categories + key + index + 0">Общее</b-th>
                 <b-th class="statisticks__table-subtitle --blue" :key="categories + key + index + 1">Мужчины</b-th>
@@ -61,8 +61,8 @@
           </b-thead>
           <b-tbody head-variant="light" v-if="usersList">
             <b-tr v-for="(item, index) in usersList" :key="item.name">
-              <b-th class="statistics_table_stroke">{{index}}</b-th>
-              <b-th class="statistics_table_stroke">{{item.name}}</b-th>
+              <b-th class="statistics_table_stroke" :stickyColumn=true>{{index}}</b-th>
+              <b-th class="statistics_table_stroke" :stickyColumn=true>{{item.name}}</b-th>
               <template v-if="selectedCategory === 'all'">
                 <b-td>{{item.total.total}}</b-td>
                 <b-td class="--blue">{{item.total.men}}</b-td>
@@ -110,26 +110,30 @@
                   undefined: 'Категория не выбрана',
                 }
               },
-              cityList: {options:[{value: 'all', title: 'Весь Казахстан'}]},
               countryData: true,
-              selectedCity: 'all',
-              selectedCategory: 'all'
+              selectedCity: 0,
+              selectedCategory: 0
             }
         },
         async mounted() {
           await this.$store.dispatch('statisticks/usersList');
           await this.$store.dispatch('cities/load');
-          await this.getCityList();
         },
         computed: {
           usersList: get('statisticks/usersList'),
           city: get('cities/items'),
+          cities() {
+            let self = {options:[{value: 0, title: 'Весь Казахстан'}]};
+            this.city.forEach(c => {
+              self.options.push({'value': c.id, 'title': c.name})
+            });
+            return self
+          },
         },
         methods: {
           changeCategory(value) {
-            if (value === 'all') {
-              this.$store.commit('statisticks/filterUsersListReset');
-              this.selectedCity = 'all'
+            if (value == 0) {
+              this.$store.commit('statisticks/filterUsersList', {'field': 'category', 'value': 'all'});
             } else {
               this.$store.commit('statisticks/filterUsersList', {'field': 'category', 'value': value});
             }
@@ -137,35 +141,30 @@
             this.selectedCategory = value
           },
           changeCity(value) {
-            if (value === 'all') {
-              this.$store.commit('statisticks/filterUsersListReset');
-              this.selectedCategory = 'all'
-            } else {
-              this.$store.commit('statisticks/filterUsersList', {'field': 'city_id', 'value': value});
-            }
+            this.$store.commit('statisticks/filterUsersList', {'field': 'city_id', 'value': value});
             this.selectedCity = value
             this.$store.dispatch('statisticks/usersList');
           },
           resetFilter() {
             this.$store.commit('statisticks/filterUsersListReset');
             this.$store.dispatch('statisticks/usersList');
-            this.selectedCity = 'all'
-            this.selectedCategory = 'all'
-          },
-          async getCityList() {
-            let cities = await this.city
-            cities.forEach(city => {
-              this.cityList.options.push({'value': city.id, 'title': city.name})
-            });
+            this.selectedCity = 0
+            this.selectedCategory = 0
           },
           async exportList() {
-              window.open('https://doskaz.qlt.kz/api/user/statistics/export/excel', '_blank')
+            window.open(`https://doskaz.qlt.kz/api/user/statistics/export/excel?city_id=${this.selectedCity}&category=${this.selectedCategory == 0 ? 'all' : this.selectedCategory}`, '_blank')
           }
         }
     }
 </script>
 
 <style>
+
+.statisticks .table .table_header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
 
 .statisticks .statisticks__filter {
   margin-bottom: 43px;
