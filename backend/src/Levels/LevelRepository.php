@@ -27,7 +27,7 @@ class LevelRepository
     public function forAggregate(int $id, callable $callback)
     {
         return $this->entityManager->transactional(function () use ($id, $callback) {
-            $task = $this->repository->find($id, LockMode::PESSIMISTIC_WRITE);
+            $task = $this->repository->findOneBy(['userId' => $id]);
             $callback($task);
         });
     }
