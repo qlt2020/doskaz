@@ -9,7 +9,21 @@ export default {
   name: 'AnychartColumn',
   data() {
     return {
-      chart: null
+      chart: null,
+        month: {
+          1: 'Январь',
+          2: 'Февраль',
+          3: 'Март',
+          4: 'Апрель',
+          5: 'Май',
+          6: 'Июнь',
+          7: 'Июль',
+          8: 'Август',
+          9: 'Сентябрь',
+          10: 'Октябрь',
+          11: 'Ноябрь',
+          12: 'Декабрь',
+        }
     }
   },
   mounted() {
@@ -22,7 +36,7 @@ export default {
         let data = []
         this.statData.forEach(item => {
           data.push({
-            x: item.id,
+            x: this.month[item.id],
             value: item.count,
             fill: this.fill || '#1890ff',
             stroke: this.stroke || '#1890ff'

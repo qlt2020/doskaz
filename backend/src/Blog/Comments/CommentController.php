@@ -17,14 +17,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use OpenApi\Annotations\Property;
+use OpenApi\Annotations\Items;
 
-/**
- * @Route(path="/api/blog/posts")
- */
 class CommentController extends AbstractController
 {
     /**
-     * @Route(path="/{id}/comments", requirements={"id" = "\d+"}, methods={"GET"})
+     * @Route(path="/api/blog/posts/{id}/comments", requirements={"id" = "\d+"}, methods={"GET"})
      * @param Post $post
      * @param Connection $connection
      * @param Request $request
@@ -81,6 +81,7 @@ class CommentController extends AbstractController
             ->from('blog_comments')
             ->leftJoin('blog_comments', 'users', 'users', 'users.id = blog_comments.user_id')
             ->andWhere('post_id = :postId')
+            ->andWhere('is_published = true')
             ->setParameter('postId', $post->id())
             ->orderBy(sprintf('"%s"', $request->query->get('sortBy', 'createdAt')), $request->query->get('sortOrder', 'desc'))
             ->execute()
@@ -109,7 +110,7 @@ class CommentController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route(path="/{id}/comments", requirements={"id" = "\d+"}, methods={"POST"})
+     * @Route(path="/api/blog/posts/{id}/comments", requirements={"id" = "\d+"}, methods={"POST"})
      * @param Post $post
      * @param CommentData $commentData
      * @param CommentRepository $commentRepository
@@ -155,5 +156,149 @@ class CommentController extends AbstractController
         $comment = new Comment($post->id(), $this->getUser()->id(), $commentData->text, $commentData->parentId);
         $commentRepository->add($comment);
         $flusher->flush();
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route(path="/api/admin/comments/update/{id}", methods={"POST"})
+     * @param Comment $comment
+     * @param CommentData $data
+     * @param Flusher $flusher
+     * @return JsonResponse
+     * @\OpenApi\Annotations\Post(
+     *     path="/api/admin/comments/update/{id}",
+     *     @Parameter(name="id", in="path", required=true, description="id комментария", @Schema(type="string"), example="58a5d23c-2b17-47b2-b5a7-fca7b40e1044"),
+     *     summary="Модерация комментария к новости",
+     *     security={{"clientAuth": {}}},
+     *     tags={"Комментарии"},
+     *     @RequestBody(
+     *         @JsonContent(
+     *             @Property(property="text", type="string", description="Текст комментария")
+     *         )
+     *     ),
+     *     @Response(response=404, description=""),
+     *     @Response(response=401, description=""),
+     *     @Response(response=204, description=""),
+     *     @Response(
+     *         response=400,
+     *         description="Validation Failed",
+     *         @JsonContent(
+     *             @Property(property="message", type="string", example="Validation Failed"),
+     *             @Property(property="code", type="number", example=400),
+     *             @Property(
+     *                 property="errors",
+     *                 type="array",
+     *                 @Items(
+     *                     type="object",
+     *                     @Property(property="property", type="string", description="Имя свойства"),
+     *                     @Property(property="message", type="string", description="Текст ошибки"),
+     *                 )
+     *             )
+     *         )
+     *     ),
+     * )
+     */
+    public function update(Comment $comment, CommentData $data, Flusher $flusher): JsonResponse
+    {
+        $comment->update($data);
+        $flusher->flush();
+
+        return new JsonResponse('Comment has been modified', 200);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route(path="/api/admin/comments/accept/{id}", methods={"GET"})
+     * @param Comment $comment
+     * @param Flusher $flusher
+     * @return JsonResponse
+     * @Get(
+     *     path="/api/admin/comments/accept/{id}",
+     *     @Parameter(name="id", in="path", required=true, description="id комментария", @Schema(type="string"), example="58a5d23c-2b17-47b2-b5a7-fca7b40e1044"),
+     *     summary="Принятие отзыва к объекту",
+     *     tags={"Комментарии"},
+     *     security={{"clientAuth": {}}},
+     *     @Response(response=404, description=""),
+     *     @Response(response=401, description=""),
+     *     @Response(response=204, description=""),
+     * )
+     */
+    public function accept(Comment $comment, Flusher $flusher): JsonResponse
+    {
+        $comment->accept();
+        $flusher->flush();
+
+        return new JsonResponse('The review has been accepted', 200);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route(path="/api/admin/comments/decline/{id}", methods={"GET"})
+     * @param Comment $comment
+     * @param CommentRepository $repository
+     * @param Flusher $flusher
+     * @return JsonResponse
+     * @Get(
+     *     path="/api/admin/comments/decline/{id}",
+     *     @Parameter(name="id", in="path", required=true, description="id комментария", @Schema(type="string"), example="58a5d23c-2b17-47b2-b5a7-fca7b40e1044"),
+     *     summary="Отклонение комментария к объекту",
+     *     tags={"Комментарии"},
+     *     security={{"clientAuth": {}}},
+     *     @Response(response=404, description=""),
+     *     @Response(response=401, description=""),
+     *     @Response(response=204, description=""),
+     * )
+     */
+    public function decline(Comment $comment, CommentRepository $repository, Flusher $flusher): JsonResponse
+    {
+        $repository->delete($comment);
+        $flusher->flush();
+
+        return new JsonResponse('The comment has been declined', 200);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route(path="/api/admin/comments", methods={"GET"})
+     * @param Request $request
+     * @param Connection $connection
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     * @Get(
+     *     path="/api/admin/comments",
+     *     @Parameter(name="is_published", in="query", required=false, description="Опубликован", @Schema(type="boolean")),
+     *     summary="Комментарии к новостям",
+     *     security={{"clientAuth": {}}},
+     *     tags={"Комментарии"},
+     *     @Response(response=404, description=""),
+     *     @Response(response=401, description=""),
+     *     @Response(response=204, description=""),
+     * )
+     */
+    public function list(Request $request, Connection $connection): array
+    {
+        $query = $connection->createQueryBuilder()->from('blog_comments')
+            ->leftJoin('blog_comments', 'blog_posts', 'posts', 'blog_comments.post_id = posts.id')
+            ->leftJoin('blog_comments', 'users', 'authors', 'authors.id = blog_comments.user_id')
+            ->select([
+                'blog_comments.id',
+                'blog_comments.is_published',
+                'blog_comments.text',
+                'posts.title as post',
+                'posts.id as post_id',
+                'authors.full_name->>\'firstAndLast\' as author'
+            ])
+            ->andWhere('posts.deleted_at is NULL')
+            ->orderBy('blog_comments.created_at', 'desc');
+
+        if ($request->query->has('is_published')) {
+            $query->andWhere("blog_comments.is_published = {$request->query->getAlpha('is_published')}");
+        }
+
+        $results = $query->execute()->fetchAllAssociative();
+        return [
+            'items' => $results,
+            'count' => count($results)
+        ];
     }
 }

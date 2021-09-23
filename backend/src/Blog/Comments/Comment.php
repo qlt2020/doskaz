@@ -60,6 +60,12 @@ class Comment implements EventProducer
      */
     private $createdAt;
 
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $isPublished = 0;
+
     public function increasePopularity()
     {
         $this->popularity++;
@@ -83,5 +89,15 @@ class Comment implements EventProducer
     public function userId(): int
     {
         return $this->userId;
+    }
+
+    public function update(CommentData $data)
+    {
+        $this->text = $data->text;
+    }
+
+    public function accept()
+    {
+        $this->isPublished = 1;
     }
 }
