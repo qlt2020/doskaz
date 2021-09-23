@@ -16,7 +16,11 @@
       >
         <path
           d="M1 1L4.5 4.5L8 1"
-          :stroke="visualImpairedModeSettings === 'white' ? '#3a3a3a' : '#fff'"
+          :stroke="
+            visualImpairedModeSettings.colorTheme === 'white'
+              ? '#3a3a3a'
+              : '#fff'
+          "
           stroke-width="1.5"
         />
       </svg>
@@ -82,7 +86,6 @@ export default {
       this.isOpened = false;
     },
     selectOption(option) {
-      console.log(option);
       this.$emit("input", option.value);
       this.closeDropdown();
     },
@@ -111,6 +114,7 @@ export default {
   position: relative;
   width: 100%;
   background: #fff;
+  min-width: 270px;
   &__item {
     position: relative;
     padding: 15px 35px 15px 20px;

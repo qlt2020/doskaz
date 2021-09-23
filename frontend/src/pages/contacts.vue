@@ -151,12 +151,7 @@
           {{ $t("contacts.regionalRepresentativesText") }}
         </p>
         <div class="select">
-          <DropdownBlock
-            :options="citiesForSelect"
-            :top="'auto'"
-            :bottom="'100%'"
-            v-model="city"
-          />
+          <DropdownBlock :options="citiesForSelect" v-model="city" />
         </div>
         <div class="represent__list">
           <div
