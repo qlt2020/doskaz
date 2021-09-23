@@ -172,7 +172,7 @@ class AdminController extends AbstractController
      *     @Response(response=200, description=""),
      * )
      */
-    public function statistics(Connection $connection, Request $request)
+    public function statistics(Connection $connection, Request $request): array
     {
         $query = $connection->createQueryBuilder()->from('cities')
             ->leftJoin('cities', 'users', 'users', 'users.city_id = cities.id');
