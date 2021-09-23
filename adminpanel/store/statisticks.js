@@ -212,12 +212,9 @@ export const actions = {
   },
 
   async getObjectsStat({commit, state}) {
-    // if (state.objectsStat.length) {
-    //   return;
-    // }
     const listProperty = state.propertyList
 
-    const {data} = await this.$axios.get('/api/admin/objects/statistic', state.objectsStatFilter);
+    const {data} = await this.$axios.get('/api/objects/statistic', state.objectsStatFilter);
     commit('SET_OBJECTS_STAT_PRIMARY', data)
     const objectsByCategory = data.reduce((a, c) => {
       const newObject = (
@@ -399,6 +396,8 @@ export const actions = {
 
   async usersList({commit, state}) {
     const {data} = await this.$axios.get('/api/admin/users/statistics', state.usersFilter)
+
+    data.forEach(function(v){ delete v.categories.justView});
     commit('SET_USERS_LIST', data)
   },
 

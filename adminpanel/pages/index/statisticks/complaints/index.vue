@@ -72,7 +72,9 @@
                 cityList: {options:[{value: null, title: 'Весь Казахстан'}]},
                 countryData: true,
                 selectedCity: '',
-                selectedDate: ''
+                selectedDate: '',
+                dateFrom: '',
+                dateTo: ''
             }
         },
         async mounted() {
@@ -94,7 +96,9 @@
                 let from = new Date(val[0]).toISOString().split('T')[0]
                 let to = new Date(val[1]).toISOString().split('T')[0]
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': from});
+                this.dateFrom = from;
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateTo', 'value': to});
+                this.dateTo = to;
                 await this.$store.dispatch('statisticks/complaintsList');
             },
             async clearDate() {
@@ -107,6 +111,8 @@
                 this.$store.dispatch('statisticks/complaintsList');
                 this.selectedCity = ''
                 this.selectedDate = ''
+                this.dateFrom = ''
+                this.dateTo = ''
             },
             async getCityList() {
                 let cities = await this.city
@@ -115,7 +121,16 @@
                 });
             },
             async exportList() {
-                window.open('/api/complaints/export/excel', '_blank')
+                let dateFrom = '',
+                      dateTo = ''
+                if (this.dateFrom) {
+                    dateFrom = `&dateFrom=${this.dateFrom}`
+                } 
+                if (this.dateTo) {
+                    dateTo = `&dateTo=${this.dateTo}`
+                }
+
+                window.open(`/api/complaints/export/excel?city_id=${this.selectedCity ? this.selectedCity : 0}${dateTo}${dateFrom}`, '_blank')
             }
         }
     }

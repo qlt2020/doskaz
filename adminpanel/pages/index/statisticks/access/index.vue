@@ -171,6 +171,7 @@
             } else {
               this.getSubCategories(value);
             }
+            this.selectedSubCategory = 0
             this.$store.commit('statisticks/filterObjectsStat', {'field': 'main_category_id', 'value': value});
             this.$store.commit('statisticks/filterObjectsStat', {'field': 'category_id', 'value': 0});
             this.selectedCategory = value;
@@ -212,7 +213,7 @@
             } else {
               group = this.selectedGroup
             }
-            window.open(`https://doskaz.qlt.kz/api/admin/objects/statistic/export/excel?city_id=${this.selectedCity}&main_category_id=${this.selectedCategory}&category_id=${this.selectedSubCategory}&group=${group}`, '_blank')
+            window.open(`/api/objects/statistic/export/excel?city_id=${this.selectedCity}&main_category_id=${this.selectedCategory}&category_id=${this.selectedSubCategory}&group=${group}`, '_blank')
           }
         }
     }
