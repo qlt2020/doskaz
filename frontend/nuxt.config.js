@@ -16,6 +16,7 @@ export default {
     "@nuxtjs/feed",
     "@nuxtjs/sentry",
     "@nuxtjs/date-fns",
+    'bootstrap-vue/nuxt',
   ],
   proxy: {
     "/pipeline": {
@@ -55,6 +56,7 @@ export default {
     "~/static/normalize.css",
     "@fortawesome/fontawesome-free/css/all.css",
     "~/styles/layout.scss",
+    'bootstrap-vue/dist/bootstrap-vue.css'
   ],
   head: {
     meta: [
