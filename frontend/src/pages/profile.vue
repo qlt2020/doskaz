@@ -1,7 +1,7 @@
 <template>
   <div class="user-page">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="profile-container">
       <div class="complaint__top profile-top">
         <h2 class="title">
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "~/components/MainHeader";
 import UserPageHeader from "~/components/user/UserPageHeader.vue";
 import UserProfile from "~/components/user/UserProfile";
@@ -59,6 +60,9 @@ export default {
       store.dispatch("authentication/loadUser"),
       store.dispatch("awards/load"),
     ]);
+  },
+  computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
   },
 };
 </script>

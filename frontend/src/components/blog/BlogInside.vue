@@ -276,9 +276,6 @@ select::-ms-expand {
     flex-direction: column;
     justify-content: flex-end;
   }
-  &__in {
-    padding-top: 100px !important;
-  }
   &__category {
     &__title {
       font-size: 22px;
@@ -452,11 +449,6 @@ select::-ms-expand {
             padding: 25px 0;
           }
         }
-      }
-
-      .blog__in {
-        padding: 30px 0 0;
-        margin: 0 0 28px;
       }
     }
   }

@@ -152,33 +152,36 @@ export default {
       this.objectManager = yamap;
       map.geoObjects.add(yamap);
       yamap.objects.events.add(["click"], (e) => {
-        var id = e.get("objectId");
-        var allObjects = e.originalEvent.currentTarget._objectsById;
-        var allObjectsId = Object.keys(allObjects);
-        var currentObject = allObjects[id];
-        currentObject.properties.background = "white";
-        currentObject.properties.fill = currentObject.properties.color;
-        if (allObjectsId.find((el) => el == this.clickedObjectId)) {
-          allObjects[this.clickedObjectId].properties.background =
-            allObjects[this.clickedObjectId].properties.color;
-          allObjects[this.clickedObjectId].properties.fill = "white";
-        }
-        this.setClickedObject(id);
-        const isSame =
-          this.$route.name === "objects-id" &&
-          this.$route.params.id === e.get("objectId");
-        this.$router.push(
-          this.localePath({
-            name: "objects-id",
-            params: { id: e.get("objectId") },
-            query: isSame
-              ? {
-                  t: now(),
-                }
-              : undefined,
-          })
-        );
+        this.clickOnObject(e);
       });
+    },
+    clickOnObject(e) {
+      var id = e.get("objectId");
+      var allObjects = e.originalEvent.currentTarget._objectsById;
+      var allObjectsId = Object.keys(allObjects);
+      var currentObject = allObjects[id];
+      currentObject.properties.background = "white";
+      currentObject.properties.fill = currentObject.properties.color;
+      if (allObjectsId.find((el) => el == this.clickedObjectId)) {
+        allObjects[this.clickedObjectId].properties.background =
+          allObjects[this.clickedObjectId].properties.color;
+        allObjects[this.clickedObjectId].properties.fill = "white";
+      }
+      this.setClickedObject(id);
+      const isSame =
+        this.$route.name === "objects-id" &&
+        this.$route.params.id === e.get("objectId");
+      this.$router.push(
+        this.localePath({
+          name: "objects-id",
+          params: { id: e.get("objectId") },
+          query: isSame
+            ? {
+                t: now(),
+              }
+            : undefined,
+        })
+      );
     },
     applyFilter: debounce(
       function(val) {
@@ -211,6 +214,7 @@ export default {
       }
     },
     coordinatesAndZoom(val, prev) {
+      console.log(`value ${val?.toString()}`);
       if (!this.map) {
         return;
       }
@@ -224,6 +228,7 @@ export default {
       }
     },
     location(val) {
+      console.log(`value${val}`);
       this.setLocation(val);
     },
   },
