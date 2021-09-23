@@ -603,7 +603,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 20px;
+              font-size: 24px;
             }
           }
         }
@@ -626,6 +626,9 @@ body {
           span {
             font-size: 30px;
           }
+        }
+        &__mob-title {
+          font-size: 24px;
         }
       }
       &-task {
@@ -762,6 +765,24 @@ body {
       &__bottom {
         a {
           font-size: 14px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 22px;
+      }
+      .modal__body {
+        .text {
+          font-size: 14px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 18px;
+          }
         }
       }
     }
@@ -998,7 +1019,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 22px;
+              font-size: 28px;
             }
           }
         }
@@ -1021,6 +1042,9 @@ body {
           span {
             font-size: 32px;
           }
+        }
+        &__mob-title {
+          font-size: 28px;
         }
       }
       &-task {
@@ -1157,6 +1181,24 @@ body {
       &__bottom {
         a {
           font-size: 16px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 26px;
+      }
+      .modal__body {
+        .text {
+          font-size: 18px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 22px;
+          }
         }
       }
     }
@@ -1394,7 +1436,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 24px;
+              font-size: 32px;
             }
           }
         }
@@ -1417,6 +1459,9 @@ body {
           span {
             font-size: 34px;
           }
+        }
+        &__mob-title {
+          font-size: 32px;
         }
       }
       &-task {
@@ -1553,6 +1598,24 @@ body {
       &__bottom {
         a {
           font-size: 18px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 30px;
+      }
+      .modal__body {
+        .text {
+          font-size: 22px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 26px;
+          }
         }
       }
     }
@@ -2339,6 +2402,12 @@ body {
     }
     .represent__item {
       background: #000;
+    }
+    .modal {
+      &__content {
+        background: #000;
+        border: 1px solid #fff;
+      }
     }
   }
   &.white {
@@ -3149,6 +3218,77 @@ body {
             color: inherit;
           }
         }
+      }
+      &-object {
+        .top {
+          .date {
+            color: inherit;
+            font-size: inherit;
+          }
+        }
+        .category {
+          .cat-icon {
+            display: none;
+          }
+        }
+      }
+      &-comments {
+        &__btn {
+          border-radius: 0;
+          border: 1px solid;
+          background: transparent;
+          color: inherit;
+        }
+      }
+      &-notifications {
+        &__item {
+          border-radius: 0;
+          box-shadow: none;
+          border: 1px solid;
+          background: transparent;
+        }
+        &__info {
+          .user-notifications__title .name {
+            color: inherit;
+            font-size: inherit;
+          }
+          .user-notifications__date {
+            color: inherit;
+            font-size: inherit;
+          }
+        }
+        &__head__btn {
+          border: 1px solid;
+          background: transparent;
+          color: inherit;
+          border-radius: 0;
+        }
+        &__category {
+          .cat-img {
+            display: none;
+          }
+          span {
+            font-size: inherit;
+            color: inherit;
+          }
+        }
+        &__text {
+          color: inherit;
+        }
+      }
+    }
+    .button {
+      border-radius: 0;
+      img {
+        display: none;
+      }
+    }
+    .modal {
+      &__content {
+        border-radius: 0;
+      }
+      &__title {
+        color: inherit;
       }
     }
   }
