@@ -1,7 +1,7 @@
 <template>
   <div class="add-object">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="container">
       <div class="complaint__top">
         <div class="title-back">
@@ -42,7 +42,7 @@ import MainFooter from "@/components/MainFooter";
 export default {
   head() {
     return {
-      title: this.$t("objectAdding.pageHeader")
+      title: this.$t("objectAdding.pageHeader"),
     };
   },
   middleware: ["authenticated"],
@@ -51,18 +51,19 @@ export default {
     MainHeader,
     ObjectAddContent,
     ViTop,
-    MainFooter
+    MainFooter,
   },
   async fetch({ store }) {
     return store.dispatch("objectAdding/init");
   },
   methods: {
-    ...call("objectAdding", ["changeForm"])
+    ...call("objectAdding", ["changeForm"]),
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     forms: get("objectAdding/forms"),
-    selectedForm: get("objectAdding/data@form")
-  }
+    selectedForm: get("objectAdding/data@form"),
+  },
 };
 </script>
 

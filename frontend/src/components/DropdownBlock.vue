@@ -14,7 +14,15 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path d="M1 1L4.5 4.5L8 1" stroke="#3a3a3a" stroke-width="1.5" />
+        <path
+          d="M1 1L4.5 4.5L8 1"
+          :stroke="
+            visualImpairedModeSettings.colorTheme === 'white'
+              ? '#3a3a3a'
+              : '#fff'
+          "
+          stroke-width="1.5"
+        />
       </svg>
     </div>
     <div
@@ -35,6 +43,7 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
+import { get } from "vuex-pathify";
 
 export default {
   name: "DropdownBlock",
@@ -85,6 +94,7 @@ export default {
     ClickOutside,
   },
   computed: {
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
     selectedTitle() {
       const selectedOption = this.options.find(
         (item) => item.value === this.value
@@ -108,6 +118,7 @@ export default {
   position: relative;
   width: 100%;
   background: #fff;
+  min-width: 270px;
   &__item {
     position: relative;
     padding: 15px 35px 15px 20px;

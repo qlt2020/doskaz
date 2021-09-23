@@ -141,6 +141,23 @@
                 {{ locale.name }}
               </option>
             </select>
+            <svg
+              width="9"
+              height="6"
+              viewBox="0 0 9 6"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L4.5 4.5L8 1"
+                :stroke="
+                  visualImpairedModeSettings.colorTheme === 'white'
+                    ? '#3a3a3a'
+                    : '#fff'
+                "
+                stroke-width="1.5"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -179,6 +196,9 @@ export default {
     };
   },
   methods: {
+    changeLang(target) {
+      this.$router.push(this.switchLocalePath(target));
+    },
     disableVisualImpairedMode: call("visualImpairedModeSettings/disable"),
     ...call("visualImpairedModeSettings", [
       "changeColorTheme",
@@ -603,7 +623,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 20px;
+              font-size: 24px;
             }
           }
         }
@@ -626,6 +646,9 @@ body {
           span {
             font-size: 30px;
           }
+        }
+        &__mob-title {
+          font-size: 24px;
         }
       }
       &-task {
@@ -762,6 +785,24 @@ body {
       &__bottom {
         a {
           font-size: 14px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 22px;
+      }
+      .modal__body {
+        .text {
+          font-size: 14px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 18px;
+          }
         }
       }
     }
@@ -998,7 +1039,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 22px;
+              font-size: 28px;
             }
           }
         }
@@ -1021,6 +1062,9 @@ body {
           span {
             font-size: 32px;
           }
+        }
+        &__mob-title {
+          font-size: 28px;
         }
       }
       &-task {
@@ -1157,6 +1201,24 @@ body {
       &__bottom {
         a {
           font-size: 16px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 26px;
+      }
+      .modal__body {
+        .text {
+          font-size: 18px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 22px;
+          }
         }
       }
     }
@@ -1394,7 +1456,7 @@ body {
         &__events {
           .title {
             span {
-              font-size: 24px;
+              font-size: 32px;
             }
           }
         }
@@ -1417,6 +1479,9 @@ body {
           span {
             font-size: 34px;
           }
+        }
+        &__mob-title {
+          font-size: 32px;
         }
       }
       &-task {
@@ -1553,6 +1618,24 @@ body {
       &__bottom {
         a {
           font-size: 18px;
+        }
+      }
+    }
+    .modal,
+    .login-form {
+      .modal__title {
+        font-size: 30px;
+      }
+      .modal__body {
+        .text {
+          font-size: 22px;
+        }
+      }
+      .modal__buttons {
+        .modal__buttons__item {
+          .text {
+            font-size: 26px;
+          }
         }
       }
     }
@@ -1825,6 +1908,9 @@ body {
           select {
             border-color: #ffffff;
           }
+        }
+        .photo-input {
+          background-color: #fff;
         }
       }
       &__button {
@@ -2339,6 +2425,12 @@ body {
     }
     .represent__item {
       background: #000;
+    }
+    .modal {
+      &__content {
+        background: #000;
+        border: 1px solid #fff;
+      }
     }
   }
   &.white {
@@ -2995,6 +3087,18 @@ body {
   }
   &.black,
   &.white {
+    .vi__auth-b {
+      .select {
+        position: relative;
+        svg {
+          position: absolute;
+          top: 50%;
+          transform: translate(0, -50%) scale(2);
+          right: 20px;
+          transition: 0.1s ease;
+        }
+      }
+    }
     .add-object {
       &__step {
         .step-progress {
@@ -3012,12 +3116,46 @@ body {
         .col.--small.--rating {
           display: none;
         }
+        .input {
+          input {
+            font-size: inherit;
+          }
+        }
+        &.add-object__line.--lrg.add-object__line-comment {
+          .add-object__title {
+            color: inherit;
+          }
+        }
       }
       &__button {
         padding: 0;
         text-align: center;
+        border-radius: 0;
+        font-size: inherit;
         svg {
           display: none;
+        }
+        span {
+          font-size: inherit;
+        }
+      }
+      &__link {
+        border-radius: 0;
+        border-color: inherit;
+        color: inherit;
+      }
+      &__form {
+        border-radius: 0;
+      }
+      &__title {
+        color: inherit;
+        &:before {
+          display: none;
+        }
+      }
+      &__textarea {
+        textarea {
+          font-size: inherit;
         }
       }
     }
@@ -3149,6 +3287,98 @@ body {
             color: inherit;
           }
         }
+      }
+      &-object {
+        .top {
+          .date {
+            color: inherit;
+            font-size: inherit;
+          }
+        }
+        .category {
+          .cat-icon {
+            display: none;
+          }
+        }
+      }
+      &-comments {
+        &__btn {
+          border-radius: 0;
+          border: 1px solid;
+          background: transparent;
+          color: inherit;
+        }
+      }
+      &-notifications {
+        &__item {
+          border-radius: 0;
+          box-shadow: none;
+          border: 1px solid;
+          background: transparent;
+        }
+        &__info {
+          .user-notifications__title .name {
+            color: inherit;
+            font-size: inherit;
+          }
+          .user-notifications__date {
+            color: inherit;
+            font-size: inherit;
+          }
+        }
+        &__head__btn {
+          border: 1px solid;
+          background: transparent;
+          color: inherit;
+          border-radius: 0;
+        }
+        &__category {
+          .cat-img {
+            display: none;
+          }
+          span {
+            font-size: inherit;
+            color: inherit;
+          }
+        }
+        &__text {
+          color: inherit;
+        }
+      }
+    }
+    .button {
+      border-radius: 0;
+      img {
+        display: none;
+      }
+    }
+    .modal {
+      &__content {
+        border-radius: 0;
+      }
+      &__title {
+        color: inherit;
+      }
+    }
+    .add-link {
+      color: inherit;
+    }
+    input,
+    textarea {
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: inherit;
+        opacity: 1; /* Firefox */
+      }
+
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: inherit;
+      }
+
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: inherit;
       }
     }
   }
