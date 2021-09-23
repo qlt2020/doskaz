@@ -1,59 +1,9 @@
 import {make} from "vuex-pathify";
 
 export const state = () => ({
-  complaintsStat: [],
-  complaintsCount: null,
-  complaintsFilter: {
-    params: {
-      year_id: 2021
-    }
-  },
-  complaintsFilteredStat: [],
-  objectsStat: [],
-  objectsStatPrimary: [],
   objectsStatTable: [],
-  objectsCount: {},
   objectsStatFilter: {
     params: {}
-  },
-  feedbackStat: [],
-  feedbackCount: null,
-  feedbackFilter: {
-    params: {
-      year_id: 2020
-    }
-  },
-  feedbackFilteredStat: [],
-  usersStat: [],
-  usersAge: [],
-  usersAgeFilter: null,
-  usersList: [],
-  usersFilter: {
-    params: {
-    }
-  },
-  complaintsListFilter: {
-    params: {
-        city_id: '',
-        dateFrom: '',
-        dateTo: ''
-    }
-  },
-  complaintsList: [],
-  group: {
-    options:[
-      {value: 'kidsTotal', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
-      {value: 'movementTotal', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
-      {value: 'babyCarriageTotal', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
-      {value: 'visionTotal', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
-      {value: 'limbTotal', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
-      {value: 'temporalTotal', title: 'Временно травмированные люди', usersValue: 'temporal'},
-      {value: 'missingLimbsTotal', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
-      {value: 'pregnantTotal', title: 'Беременные женщины', usersValue: 'pregnant'},
-      {value: 'agedPeopleTotal', title: 'Пожилые люди', usersValue: 'agedPeople'},
-      {value: 'hearingTotal', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
-      {value: 'intellectualTotal', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
-    ],
   },
   propertyList: {
     hearingTotal: 0,
@@ -115,107 +65,26 @@ export const state = () => ({
 
 export const mutations = {
   ...make.mutations(state),
-  filterComplaints: (state, { field, value }) => {
-    state.complaintsFilter.params[field] = value
-  },
-  feedbackFilter: (state, { field, value }) => {
-    state.feedbackFilter.params[field] = value
-  },
-  filterUsersList: (state, { field, value }) => {
-    state.usersFilter.params[field] = value
-  },
-  filterUsersListReset: state => {
-    state.usersFilter.params = {}
-  },
-  filterComplaintsListReset: state => {
-    state.complaintsListFilter.params.city_id = ''
-    state.complaintsListFilter.params.dateFrom = ''
-    state.complaintsListFilter.params.dateTo = ''
-  },
-  filterComplaintsList: (state, { field, value }) => {
-      state.complaintsListFilter.params[field] = value
-  },
   filterObjectsStat: (state, { field, value }) => {
     state.objectsStatFilter.params[field] = value
   },
   filterObjectsReset: state => {
     state.objectsStatFilter.params = {}
-  },
+  }
 }
 
 export const getters = {
-  complaints: state => state.complaintsStat,
-  objectsStat: state => state.objectsStat,
-  feedbackStat: state => state.feedbackStat,
-  complaintsCount: state => state.complaintsCount,
-  feedbackCount: state => state.feedbackCount,
-  getObjectsStat: state => state.objectsStat,
   getObjectsStatTable: state => state.objectsStatTable
 }
 
-function getCountToCategory(data, id, value, getCount) {
-  return Object.values(
-    data.reduce((a, c) => {
-      (
-        a[c[id]] ||
-        (a[c[id]] = {
-          id: c[id],
-          name: c[value],
-          count: 0
-        })
-      ).count += c[getCount]
-      return a
-    }, {})
-  )
-}
-
-function totalCount(data, count) {
-  return data.reduce(
-      (prev, curr) => {
-        prev[count] += curr[count]
-        return prev
-      },
-      {
-        count: 0,
-      }
-    )
-}
-
 export const actions = {
-  async loadComplaints({commit}) {
-    const {data} = await this.$axios.get('/api/complaints/statistic', {})
 
-    const count = totalCount(data.result, 'count')
-    commit('SET_COMPLAINTS_COUNT', count)
-
-    commit('SET_COMPLAINTS_STAT', data)
-  },
-
-  async getComplaintsFilter({commit, state}) {
-    const {data} = await this.$axios.get('/api/complaints/statistic', state.complaintsFilter)
-    const complaintsCount = getCountToCategory(data.result, 'month', 'year', 'count')
-
-    commit('SET_COMPLAINTS_FILTERED_STAT', complaintsCount)
-  },
-
-  async loadFeedback({commit}) {
-      const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
-      const count = totalCount(data.result, 'count')
-      commit('SET_FEEDBACK_COUNT', count)
-      commit('SET_FEEDBACK_STAT', data)
-  },
-
-  async getFeedbackFilter ({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
-    const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
-    commit('SET_FEEDBACK_FILTERED_STAT', feedbackStat)
-  },
-
-  async getObjectsStat({commit, state}) {
+  async getObjectsStatTable({commit, state, dispatch}) {
     const listProperty = state.propertyList
 
     const {data} = await this.$axios.get('/api/objects/statistic', state.objectsStatFilter);
-    commit('SET_OBJECTS_STAT_PRIMARY', data)
+    // commit('SET_OBJECTS_STAT_PRIMARY', data)
+
     const objectsByCategory = data.reduce((a, c) => {
       const newObject = (
             a[c['main_category_id']] ||
@@ -266,41 +135,9 @@ export const actions = {
         }
       })
       return a
-      },[])
-      .filter(objects => objects != null || objects!='empty' || objects!='undefined')
+      },[]).filter(objects => objects != null || objects!='empty' || objects!='undefined')
 
-    function sumAccesibles(typeAccesibles, item) {
-      let result = item[`hearing${typeAccesibles}`]+
-                    item[`intellectual${typeAccesibles}`]+
-                    item[`kids${typeAccesibles}`]+
-                    item[`limb${typeAccesibles}`]+
-                    item[`movement${typeAccesibles}`]+
-                    item[`vision${typeAccesibles}`]
-      return result
-    }
-    let fullAccessible = 0;
-    let partialAccessible = 0;
-    let notAccessible = 0;
-
-    objectsByCategory.forEach(item => {
-      fullAccessible += sumAccesibles('_full_accessible', item)
-      partialAccessible += sumAccesibles('_partial_accessible', item)
-      notAccessible += sumAccesibles('_not_accessible', item)
-    })
-
-    commit('SET_OBJECTS_COUNT', {fullAccessible, partialAccessible, notAccessible})
-    commit('SET_OBJECTS_STAT', objectsByCategory)
-
-
-  },
-
-  async getObjectsStatTable({commit, state, dispatch}) {
-    await dispatch('getObjectsStat')
-
-    const listProperty = state.propertyList
-    const data = state.objectsStatPrimary
-    const objectsByCategory = [...state.objectsStat]
-    const totalObjects = JSON.parse(JSON.stringify(state.objectsStat))
+    const totalObjects = objectsByCategory
 
     const objectsBySubategory = data.reduce((a, c) => {
       const newObject = (
@@ -374,36 +211,4 @@ export const actions = {
 
     commit('SET_OBJECTS_STAT_TABLE', objectsByCategory)
   },
-
-  async getUsersStat({commit, state}) {
-    if (state.usersStat.length) {
-      return;
-    }
-
-    return this.$axios.get('/api/dashboard/users/statistics').then(res => {
-      commit('SET_USERS_STAT', res.data)
-    })
-  },
-
-  async getUsersAge({commit, state}) {
-    return this.$axios.get('/api/dashboard/users/age-statistics', {
-      params: {
-        category: state.usersAgeFilter
-      }}).then(res => {
-          commit('SET_USERS_AGE', res.data[0])
-        })
-      },
-
-  async usersList({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/users/statistics', state.usersFilter)
-
-    data.forEach(function(v){ delete v.categories.justView});
-    commit('SET_USERS_LIST', data)
-  },
-
-  async complaintsList({commit, state}) {
-      const {data} = await this.$axios.get('/api/complaints/allstatistic', state.complaintsListFilter)
-
-      commit('SET_COMPLAINTS_LIST', data)
-  }
 }

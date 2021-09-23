@@ -105,7 +105,6 @@
                   pregnant: 'Беременные женщины',
                   intellectual: 'Люди с интеллектуальной инвалидностью',
                   agedPeople: 'Пожилые люди',
-                  justView: 'Просто посмотреть',
                   withChild: 'Семьи с детьми до семи лет',
                   undefined: 'Категория не выбрана',
                 }
@@ -152,7 +151,7 @@
             this.selectedCategory = 0
           },
           async exportList() {
-            window.open(`https://doskaz.qlt.kz/api/user/statistics/export/excel?city_id=${this.selectedCity}&category=${this.selectedCategory == 0 ? 'all' : this.selectedCategory}`, '_blank')
+            window.open(`/api/user/statistics/export/excel?city_id=${this.selectedCity}&category=${this.selectedCategory == 0 ? 'all' : this.selectedCategory}`, '_blank')
           }
         }
     }

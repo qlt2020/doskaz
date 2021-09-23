@@ -1,6 +1,9 @@
 <template>
   <div>
     <sidebar :posts="posts" :events="events" />
+    <div class="stat_button-wrap">
+      <StatisticsBtn/>
+    </div>
     <post-submit-message />
     <post-addition-message />
   </div>
@@ -10,10 +13,11 @@
 import Sidebar from "~/components/Sidebar";
 import PostSubmitMessage from "~/components/complaint/PostSubmitMessage";
 import PostAdditionMessage from "~/components/object_add/PostAdditionMessage";
+import StatisticsBtn from "~/components/statistics/StatisticsBtn"
 
 export default {
   name: "NormalIndexPage",
-  components: { PostAdditionMessage, PostSubmitMessage, Sidebar },
+  components: { PostAdditionMessage, PostSubmitMessage, Sidebar, StatisticsBtn },
   data() {
     return {
       posts: [],
@@ -31,4 +35,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .stat_button-wrap {
+    @media all and (max-width: 1024px) {
+      display: none;
+    }
+  }
+</style>

@@ -171,6 +171,7 @@
             } else {
               this.getSubCategories(value);
             }
+            this.selectedSubCategory = 0
             this.$store.commit('statisticks/filterObjectsStat', {'field': 'main_category_id', 'value': value});
             this.$store.commit('statisticks/filterObjectsStat', {'field': 'category_id', 'value': 0});
             this.selectedCategory = value;
@@ -182,6 +183,7 @@
             this.$store.dispatch('statisticks/getObjectsStatTable');
           },
           changeGroup(value) {
+            console.log(value);
             this.selectedGroup = value
           },
           async getSubCategories(value) {
@@ -203,7 +205,15 @@
             this.subCategoriesVisible = false
           },
           async exportList() {
-            window.open(`https://doskaz.qlt.kz/api/admin/objects/statistic/export/excel?city_id=${this.selectedCity}&main_category_id=${this.selectedCategory}&category_id=${this.selectedSubCategory}&group=${this.selectedGroup == 0 ? '' : this.selectedGroup}`, '_blank')
+            let group;
+            if (this.selectedGroup == 0) {
+              group = 'all'
+            } else if (this.selectedGroup === 'kids') {
+              group = 'withChild'
+            } else {
+              group = this.selectedGroup
+            }
+            window.open(`/api/objects/statistic/export/excel?city_id=${this.selectedCity}&main_category_id=${this.selectedCategory}&category_id=${this.selectedSubCategory}&group=${group}`, '_blank')
           }
         }
     }
