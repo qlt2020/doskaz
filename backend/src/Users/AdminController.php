@@ -175,7 +175,7 @@ class AdminController extends AbstractController
     public function statistics(Connection $connection, Request $request): array
     {
         $query = $connection->createQueryBuilder()->from('cities')
-            ->leftJoin('cities', 'users', 'users', 'users.city_id = cities.id');;
+            ->leftJoin('cities', 'users', 'users', 'users.city_id = cities.id');
 
         if ($request->query->has('category')) {
             $categories = [$request->query->getAlpha('category')];
@@ -206,7 +206,15 @@ class AdminController extends AbstractController
         }
 
         $fetched = $query->addSelect('cities.name')
-            ->groupBy('cities.name')->execute()->fetchAllAssociative();
+                            ->addSelect('cities.id')
+                            ->groupBy('cities.name')
+                            ->addGroupBy('cities.id')
+                            ->addOrderBy('case when cities.id = 106724 then 0 else 3 END', 'ASC')
+                            ->addOrderBy('case when cities.id = 158106 then 0 else 3 END', 'ASC')
+                            ->addOrderBy('case when cities.id = 178771 then 0 else 3 END', 'ASC')
+                            ->addOrderBy('case when cities.id in (110170,68402,26551,212922,155241,125193,165288,9103,33335,79497,168533,182036,
+                                51071,31223,113407) then 1 ELSE 2 END, cities.name', 'ASC')
+                            ->execute()->fetchAllAssociative();
         
         if (isset($rkQuery)) {
             $rkFetched = $rkQuery->execute()->fetchAssociative();
