@@ -2119,23 +2119,27 @@ body {
           min-height: 50px;
           background-image: none !important;
           .menu {
-            background: #ffffff;
+            &__content {
+              &:after {
+                background: #fff;
+              }
+            }
             &__item {
               span {
-                color: #000000;
+                color: #fff;
               }
-              &.isActive,
-              &:hover {
-                background: #000000;
+              &.isActive {
+                background: #000;
+                border: 2px solid #fff;
+                border-bottom-color: transparent;
                 span {
-                  color: #ffffff;
+                  color: #fff;
                 }
               }
             }
           }
         }
         &__profile {
-          top: -52px;
           @media all and (max-width: 768px) {
             top: 8px;
           }
@@ -2228,6 +2232,13 @@ body {
         }
       }
       &-profile {
+        &__edit {
+          a {
+            span {
+              color: #fff;
+            }
+          }
+        }
         &__favorites {
           img {
             display: none;
@@ -2758,6 +2769,7 @@ body {
       &-task {
         background: #ffffff;
         border: 1px solid #000000;
+        border-radius: 0;
       }
       &-achievment {
         &__text {
@@ -2814,16 +2826,21 @@ body {
           min-height: 50px;
           background-image: none !important;
           .menu {
-            background: #000000;
+            &__content {
+              &:after {
+                background: #000000;
+              }
+            }
             &__item {
               span {
-                color: #ffffff;
+                color: #000;
               }
-              &.isActive,
-              &:hover {
-                background: #ffffff;
+              &.isActive {
+                background: #fff;
+                border: 2px solid #000;
+                border-bottom-color: transparent;
                 span {
-                  color: #000000;
+                  color: #000;
                 }
               }
               &.--logout {
@@ -2837,7 +2854,6 @@ body {
           }
         }
         &__profile {
-          top: -52px;
           @media all and (max-width: 768px) {
             top: 8px;
           }
@@ -2900,6 +2916,13 @@ body {
         }
       }
       &-profile {
+        &__edit {
+          a {
+            span {
+              color: #000;
+            }
+          }
+        }
         &__favorites {
           img {
             display: none;
@@ -3090,6 +3113,42 @@ body {
       &-row__label,
       &-link {
         color: inherit;
+      }
+    }
+    .user {
+      &-page {
+        &__header {
+          .menu {
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            &__content {
+              position: relative;
+              &:after {
+                content: "";
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 2px;
+                position: absolute;
+              }
+            }
+            &__item {
+              border-color: transparent;
+              z-index: 10;
+              margin: 0;
+              padding: 0 6px;
+            }
+          }
+        }
+      }
+      &-achievments__events .list {
+        &__date,
+        &__text {
+          span {
+            color: inherit;
+          }
+        }
       }
     }
   }
