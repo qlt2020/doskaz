@@ -141,6 +141,23 @@
                 {{ locale.name }}
               </option>
             </select>
+            <svg
+              width="9"
+              height="6"
+              viewBox="0 0 9 6"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 1L4.5 4.5L8 1"
+                :stroke="
+                  visualImpairedModeSettings.colorTheme === 'white'
+                    ? '#3a3a3a'
+                    : '#fff'
+                "
+                stroke-width="1.5"
+              />
+            </svg>
           </div>
         </div>
       </div>
@@ -179,6 +196,9 @@ export default {
     };
   },
   methods: {
+    changeLang(target) {
+      this.$router.push(this.switchLocalePath(target));
+    },
     disableVisualImpairedMode: call("visualImpairedModeSettings/disable"),
     ...call("visualImpairedModeSettings", [
       "changeColorTheme",
@@ -1889,6 +1909,9 @@ body {
             border-color: #ffffff;
           }
         }
+        .photo-input {
+          background-color: #fff;
+        }
       }
       &__button {
         border: 1px solid #ffffff;
@@ -3064,6 +3087,18 @@ body {
   }
   &.black,
   &.white {
+    .vi__auth-b {
+      .select {
+        position: relative;
+        svg {
+          position: absolute;
+          top: 50%;
+          transform: translate(0, -50%) scale(2);
+          right: 20px;
+          transition: 0.1s ease;
+        }
+      }
+    }
     .add-object {
       &__step {
         .step-progress {
@@ -3081,12 +3116,46 @@ body {
         .col.--small.--rating {
           display: none;
         }
+        .input {
+          input {
+            font-size: inherit;
+          }
+        }
+        &.add-object__line.--lrg.add-object__line-comment {
+          .add-object__title {
+            color: inherit;
+          }
+        }
       }
       &__button {
         padding: 0;
         text-align: center;
+        border-radius: 0;
+        font-size: inherit;
         svg {
           display: none;
+        }
+        span {
+          font-size: inherit;
+        }
+      }
+      &__link {
+        border-radius: 0;
+        border-color: inherit;
+        color: inherit;
+      }
+      &__form {
+        border-radius: 0;
+      }
+      &__title {
+        color: inherit;
+        &:before {
+          display: none;
+        }
+      }
+      &__textarea {
+        textarea {
+          font-size: inherit;
         }
       }
     }
@@ -3288,6 +3357,27 @@ body {
         border-radius: 0;
       }
       &__title {
+        color: inherit;
+      }
+    }
+    .add-link {
+      color: inherit;
+    }
+    input,
+    textarea {
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: inherit;
+        opacity: 1; /* Firefox */
+      }
+
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: inherit;
+      }
+
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
         color: inherit;
       }
     }
