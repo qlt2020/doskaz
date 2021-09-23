@@ -1,7 +1,7 @@
 <template>
   <div class="error-page">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!visualImpairedModeSettings.enabled" />
     <div
       class="error-page-wrapper"
       :class="visualImpairedModeSettings.enabled ? 'vis' : ''"
