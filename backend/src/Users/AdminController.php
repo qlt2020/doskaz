@@ -177,7 +177,7 @@ class AdminController extends AbstractController
         $query = $connection->createQueryBuilder()->from('cities')
             ->leftJoin('cities', 'users', 'users', 'users.city_id = cities.id');
 
-        if ($request->query->has('category')) {
+        if ($request->query->has('category') && $request->query->get('category') != 'all') {
             $categories = [$request->query->getAlpha('category')];
         } else {
             $categories = User::USER_CATEGORIES;
@@ -199,7 +199,7 @@ class AdminController extends AbstractController
         $query->addSelect("SUM (CASE WHEN users.gender = 'm' THEN 1 ELSE 0 END) AS total_men");
         $query->addSelect("SUM (CASE WHEN users.gender = 'f' THEN 1 ELSE 0 END) AS total_women");
 
-        if ($request->query->has('city_id')) {
+        if ($request->query->has('city_id') && $request->query->getInt('city_id') != 0) {
             $query->where("cities.id = {$request->query->getInt('city_id')}");
         } else {
             $rkQuery = clone $query;
