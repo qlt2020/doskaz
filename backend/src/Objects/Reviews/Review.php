@@ -51,6 +51,12 @@ class Review implements EventProducer
     private $authorId;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean", options={"default": 0})
+     */
+    private $isPublished = 0;
+
+    /**
      * Review constructor.
      * @param int $objectId
      * @param string $text
@@ -65,5 +71,20 @@ class Review implements EventProducer
         $this->authorId = $authorId;
         $this->createdAt = new \DateTimeImmutable();
         $this->remember(new Event\ReviewCreated($this->id, $this->objectId, $this->authorId));
+    }
+
+    public function update(ReviewData $reviewData)
+    {
+        $this->text = $reviewData->text;
+    }
+
+    public function accept()
+    {
+        $this->isPublished = 1;
+    }
+
+    public function decline()
+    {
+        $this->deletedAt = new \DateTimeImmutable();
     }
 }

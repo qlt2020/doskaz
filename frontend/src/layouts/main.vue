@@ -739,5 +739,25 @@ export default {
       }
     }
   }
+  .main-filter__visual {
+    margin: 0 15px 0 auto;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    @media screen and (max-width: 1366px) {
+      margin-left: 25px;
+      justify-content: center;
+    }
+
+    &.--desktop {
+      @media all and (max-width: 1023px) {
+        display: none;
+      }
+    }
+  }
 }
 </style>

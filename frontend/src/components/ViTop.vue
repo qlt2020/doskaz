@@ -1,6 +1,6 @@
 <template>
   <div class="vi-top" v-if="enabled">
-    <div class="vi-top__in">
+    <div class="container">
       <div class="vi-top__item-b">
         <div class="vi-top__item">
           <h5 class="vi-top__title">
@@ -11,7 +11,7 @@
               class="vi-top__link --sm"
               :class="{
                 '--active': fontSize === 'sm',
-                '--ct-black': colorTheme === 'black'
+                '--ct-black': colorTheme === 'black',
               }"
               @click="changeFontSize('sm')"
               >A</span
@@ -20,7 +20,7 @@
               class="vi-top__link --md"
               :class="{
                 '--active': fontSize === 'md',
-                '--ct-black': colorTheme === 'black'
+                '--ct-black': colorTheme === 'black',
               }"
               @click="changeFontSize('md')"
               >A</span
@@ -29,7 +29,7 @@
               class="vi-top__link --lrg"
               :class="{
                 '--active': fontSize === 'lrg',
-                '--ct-black': colorTheme === 'black'
+                '--ct-black': colorTheme === 'black',
               }"
               @click="changeFontSize('lrg')"
               >A</span
@@ -45,7 +45,7 @@
               class="vi-top__link --white"
               :class="{
                 '--active': colorTheme === 'white',
-                '--ct-black': colorTheme === 'black'
+                '--ct-black': colorTheme === 'black',
               }"
               @click="changeColorTheme('white')"
               >Ц</span
@@ -67,13 +67,100 @@
               class="vi-top__link --btn"
               :class="{
                 '--active': fontFamily === 'lato',
-                '--ct-black': colorTheme === 'black'
+                '--ct-black': colorTheme === 'black',
               }"
               @click="changeFontFamily('lato')"
               >{{ $t("visualImpairedSettings.fontFamilySans") }}</span
             >
           </div>
         </div>
+        <button class="vi-switch" @click="disableVisualImpairedMode">
+          <img
+            :src="require('~/assets/visually-black.svg')"
+            alt=""
+            v-if="visualImpairedModeSettings.colorTheme === 'white'"
+          />
+          <img
+            :src="require('~/assets/visually-white.svg')"
+            alt=""
+            v-if="visualImpairedModeSettings.colorTheme === 'black'"
+          />
+          <span class="--fcolor">{{
+            $t("visualImpairedSettings.normalModeSwitchTitle")
+          }}</span>
+        </button>
+      </div>
+      <div class="vi-header__bottom --bcolor --fcolor">
+        <nuxt-link :to="localePath({ name: 'index' })" class="vi__logo">
+          <img
+            :src="require('~/assets/logo-black.svg')"
+            alt=""
+            v-if="visualImpairedModeSettings.colorTheme === 'white'"
+          />
+          <img
+            :src="require('~/assets/logo-white.svg')"
+            alt=""
+            v-if="visualImpairedModeSettings.colorTheme === 'black'"
+          />
+        </nuxt-link>
+        <div class="vi__auth-b">
+          <template v-if="!user">
+            <nuxt-link
+              :to="localePath({ name: 'login' })"
+              class="vi__auth-link"
+              >{{ $t("login.viHeaderLoginTitle") }}</nuxt-link
+            >
+            <span class="vi__auth-or">{{ $t("login.viHeaderLoginOr") }}</span>
+            <nuxt-link
+              :to="localePath({ name: 'login' })"
+              class="vi__auth-link"
+              >{{ $t("login.viHeaderRegister") }}</nuxt-link
+            >
+          </template>
+          <template v-else>
+            <nuxt-link
+              :to="localePath({ name: 'profile' })"
+              class="vi__auth-link"
+            >
+              <username :value="name" />
+            </nuxt-link>
+          </template>
+          <span class="vi__auth-text"
+            ><b>{{ $t("visualImpairedSettings.siteLanguage") }}</b></span
+          >
+          <div class="select">
+            <select
+              :value="$i18n.locale"
+              @change="$router.push(switchLocalePath($event.target.value))"
+            >
+              <option
+                v-for="locale in $i18n.locales"
+                :key="locale.code"
+                :value="locale.code"
+              >
+                {{ locale.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="vi__footer --bcolor">
+        <a href="" class="vi__footer-link">{{ $t("mainMenu.help") }}</a>
+        <nuxt-link
+          :to="localePath({ name: 'about' })"
+          class="vi__footer-link"
+          >{{ $t("mainMenu.about") }}</nuxt-link
+        >
+        <nuxt-link
+          :to="localePath({ name: 'blog-cat-slug' })"
+          class="vi__footer-link"
+          >{{ $t("mainMenu.blog") }}</nuxt-link
+        >
+        <nuxt-link
+          :to="localePath({ name: 'contacts' })"
+          class="vi__footer-link"
+          >{{ $t("mainMenu.contacts") }}</nuxt-link
+        >
       </div>
     </div>
   </div>
@@ -87,33 +174,40 @@ export default {
   head() {
     return {
       bodyAttrs: {
-        class: this.bodyClasses
-      }
+        class: this.bodyClasses,
+      },
     };
   },
   methods: {
+    disableVisualImpairedMode: call("visualImpairedModeSettings/disable"),
     ...call("visualImpairedModeSettings", [
       "changeColorTheme",
       "changeFontSize",
-      "changeFontFamily"
-    ])
+      "changeFontFamily",
+    ]),
   },
   computed: {
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
+    user: get("authentication/user"),
+    name: get("authentication/name"),
     ...get("visualImpairedModeSettings", [
       "bodyClasses",
       "enabled",
       "fontFamily",
       "fontSize",
-      "colorTheme"
-    ])
-  }
+      "colorTheme",
+    ]),
+  },
 };
 </script>
 
 <style lang="scss">
 .vi-top {
-  background: #e7e7e7;
-  padding: 20px 0 40px;
+  .vi__footer {
+    border: none;
+  }
+  background: #fff;
+  padding-top: 20px;
   @media all and (max-width: 1200px) {
     padding: 20px 10px;
   }
@@ -162,9 +256,18 @@ export default {
       }
     }
     &-b {
+      border-bottom: 2px solid;
       display: flex;
+      align-items: center;
+      padding-bottom: 40px;
       @media all and (max-width: 768px) {
         flex-wrap: wrap;
+      }
+      .vi-switch {
+        margin-left: auto;
+        background: none;
+        border: none;
+        cursor: pointer;
       }
     }
   }
@@ -271,6 +374,14 @@ body {
     * {
       font-size: 16px;
     }
+    .blog__in .input__wrapper .input {
+      input {
+        font-size: 16px;
+      }
+    }
+    .blog .blog__search__btn .text {
+      font-size: 18px;
+    }
     .title {
       font-size: 42px;
       @media all and (max-width: 1023px) {
@@ -347,6 +458,9 @@ body {
       }
       &__link {
         font-size: 24px;
+        &-title {
+          font-size: 24px;
+        }
       }
     }
     .main-header {
@@ -443,11 +557,13 @@ body {
         }
       }
       &__category {
-        &_link {
-          font-size: 16px;
+        &-link {
+          span {
+            font-size: 16px;
+          }
         }
         &-title {
-          font-size: 14px;
+          font-size: 22px;
         }
       }
       &__item {
@@ -642,10 +758,25 @@ body {
     .add-link {
       font-size: 14px;
     }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 14px;
+        }
+      }
+    }
   }
   &.md {
     * {
       font-size: 20px;
+    }
+    .blog__in .input__wrapper .input {
+      input {
+        font-size: 20px;
+      }
+    }
+    .blog .blog__search__btn .text {
+      font-size: 21px;
     }
     .title {
       font-size: 46px;
@@ -723,6 +854,9 @@ body {
       }
       &__link {
         font-size: 26px;
+        &-title {
+          font-size: 26px;
+        }
       }
     }
     .main-header {
@@ -818,11 +952,13 @@ body {
         }
       }
       &__category {
-        &_link {
-          font-size: 18px;
+        &-link {
+          span {
+            font-size: 18px;
+          }
         }
         &-title {
-          font-size: 16px;
+          font-size: 26px;
         }
       }
       &__item {
@@ -1017,9 +1153,27 @@ body {
     .add-link {
       font-size: 16px;
     }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 16px;
+        }
+      }
+    }
   }
 
   &.lrg {
+    * {
+      font-size: 24px;
+    }
+    .blog__in .input__wrapper .input {
+      input {
+        font-size: 24px;
+      }
+    }
+    .blog .blog__search__btn .text {
+      font-size: 24px;
+    }
     .title {
       font-size: 48px;
       @media all and (max-width: 1023px) {
@@ -1096,6 +1250,9 @@ body {
       }
       &__link {
         font-size: 28px;
+        &-title {
+          font-size: 28px;
+        }
       }
     }
     .main-header {
@@ -1191,11 +1348,13 @@ body {
         }
       }
       &__category {
-        &_link {
-          font-size: 20px;
+        &-link {
+          span {
+            font-size: 20px;
+          }
         }
         &-title {
-          font-size: 18px;
+          font-size: 30px;
         }
       }
       &__item {
@@ -1390,6 +1549,13 @@ body {
     .add-link {
       font-size: 18px;
     }
+    .main-footer {
+      &__bottom {
+        a {
+          font-size: 18px;
+        }
+      }
+    }
   }
 
   &.sm,
@@ -1411,6 +1577,18 @@ body {
     }
     background: #000000;
     border-color: #ffffff;
+    .blog__in {
+      .input__wrapper {
+        .input {
+          border: 1px solid #fff;
+          border-radius: 0;
+          background: #000;
+          input {
+            background: #000;
+          }
+        }
+      }
+    }
     .vi-top {
       background: #000000;
       border-bottom: 1px solid #ffffff;
@@ -1457,6 +1635,10 @@ body {
       select {
         background: #000000;
         border-color: #ffffff;
+        color: #fff;
+      }
+      &:after {
+        border-top-color: #fff;
       }
       &-text {
         select {
@@ -1749,6 +1931,9 @@ body {
             }
           }
         }
+        button {
+          background: #000;
+        }
       }
     }
     .about {
@@ -1798,6 +1983,8 @@ body {
     }
     .blog {
       &__item {
+        background: #000;
+        border-color: #fff;
         &-title,
         h3,
         &-text,
@@ -1857,6 +2044,13 @@ body {
               border-color: #ffffff;
             }
           }
+        }
+      }
+      &__side {
+        &-main {
+          background: #000;
+          border: 1px solid #fff;
+          border-radius: 0;
         }
       }
     }
@@ -1925,23 +2119,27 @@ body {
           min-height: 50px;
           background-image: none !important;
           .menu {
-            background: #ffffff;
+            &__content {
+              &:after {
+                background: #fff;
+              }
+            }
             &__item {
               span {
-                color: #000000;
+                color: #fff;
               }
-              &.isActive,
-              &:hover {
-                background: #000000;
+              &.isActive {
+                background: #000;
+                border: 2px solid #fff;
+                border-bottom-color: transparent;
                 span {
-                  color: #ffffff;
+                  color: #fff;
                 }
               }
             }
           }
         }
         &__profile {
-          top: -52px;
           @media all and (max-width: 768px) {
             top: 8px;
           }
@@ -2034,6 +2232,13 @@ body {
         }
       }
       &-profile {
+        &__edit {
+          a {
+            span {
+              color: #fff;
+            }
+          }
+        }
         &__favorites {
           img {
             display: none;
@@ -2080,10 +2285,73 @@ body {
         }
       }
     }
+    .main-footer {
+      background: #000;
+      border-top: 2px solid #fff;
+    }
+    .blog {
+      &__material-item {
+        background: #000;
+        &__body {
+          border: 1px solid #fff;
+          border-top: none;
+        }
+      }
+    }
+    .blog__content__inside {
+      background: #000;
+      border-color: #fff;
+    }
+    .contacts {
+      background: #000;
+    }
+    .dropdown__block {
+      &__selected {
+        border-color: #fff;
+        background: #000;
+        span {
+          color: #fff;
+        }
+        &.opened {
+          border-color: #fff;
+          & + .dropdown__block__list {
+            border-color: #fff;
+          }
+        }
+      }
+      &__list {
+        .dropdown__block__item {
+          background: #000;
+          span {
+            color: #fff;
+          }
+          &:hover {
+            background: #fff;
+            span {
+              color: #000;
+            }
+          }
+        }
+      }
+    }
+    .container-represent {
+      background: #000;
+    }
+    .represent__item {
+      background: #000;
+    }
   }
   &.white {
     background: #ffffff;
     color: #000000;
+    .blog__in {
+      .input__wrapper {
+        .input {
+          border: 1px solid #000000;
+          border-radius: 0;
+        }
+      }
+    }
     .title {
       color: #000000;
       span {
@@ -2168,12 +2436,16 @@ body {
       }
     }
     .contacts {
+      background: #fff;
       &__wrapper {
         background: #ffffff;
         border-bottom: 1px solid #000000;
       }
       &__link {
         color: #000000;
+        &-label {
+          color: inherit;
+        }
       }
       &__text {
         color: #000000;
@@ -2191,6 +2463,9 @@ body {
               border-color: #000000;
             }
           }
+        }
+        button {
+          background: #fff;
         }
       }
     }
@@ -2423,6 +2698,11 @@ body {
         img {
           color: #000000;
         }
+        &__content {
+          &-link {
+            color: #000;
+          }
+        }
       }
       &__list {
         &-item {
@@ -2475,6 +2755,13 @@ body {
           }
         }
       }
+      &__side {
+        &-main {
+          background: #fff;
+          border: 1px solid #000;
+          border-radius: 0;
+        }
+      }
     }
     .user {
       &-profile,
@@ -2482,6 +2769,7 @@ body {
       &-task {
         background: #ffffff;
         border: 1px solid #000000;
+        border-radius: 0;
       }
       &-achievment {
         &__text {
@@ -2538,16 +2826,21 @@ body {
           min-height: 50px;
           background-image: none !important;
           .menu {
-            background: #000000;
+            &__content {
+              &:after {
+                background: #000000;
+              }
+            }
             &__item {
               span {
-                color: #ffffff;
+                color: #000;
               }
-              &.isActive,
-              &:hover {
-                background: #ffffff;
+              &.isActive {
+                background: #fff;
+                border: 2px solid #000;
+                border-bottom-color: transparent;
                 span {
-                  color: #000000;
+                  color: #000;
                 }
               }
               &.--logout {
@@ -2561,7 +2854,6 @@ body {
           }
         }
         &__profile {
-          top: -52px;
           @media all and (max-width: 768px) {
             top: 8px;
           }
@@ -2624,6 +2916,13 @@ body {
         }
       }
       &-profile {
+        &__edit {
+          a {
+            span {
+              color: #000;
+            }
+          }
+        }
         &__favorites {
           img {
             display: none;
@@ -2657,6 +2956,41 @@ body {
           color: #000000;
         }
       }
+    }
+    .main-footer {
+      &__wrapper {
+        background: #fff;
+        border-top: 2px solid #000;
+      }
+      div,
+      a {
+        color: #000;
+        border-color: #000;
+      }
+    }
+    .dropdown__block {
+      &__selected {
+        border-color: #000;
+        &.opened {
+          border-color: #000;
+          & + .dropdown__block__list {
+            border-color: #000;
+          }
+        }
+      }
+      &__list {
+        .dropdown__block__item {
+          &:hover {
+            background: #000;
+            span {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+    .represent__item {
+      background: #fff;
     }
   }
   &.black,
@@ -2706,6 +3040,115 @@ body {
       &__link {
         padding: 0;
         background: none;
+        &-title {
+          &:before {
+            display: none;
+          }
+        }
+      }
+      &__left,
+      &__right {
+        box-shadow: none;
+        border: 1px solid;
+        border-radius: 0;
+      }
+      &__line {
+        button {
+          border-radius: 0;
+        }
+      }
+      &__social {
+        a {
+          border: 1px solid;
+          background-color: #000;
+        }
+      }
+    }
+    .blog {
+      &__item {
+        border-radius: 0;
+        border: 1px solid #000;
+      }
+      &__material-item {
+        border-radius: 0;
+      }
+    }
+    .blog__content__inside {
+      border-radius: 0;
+      box-shadow: none;
+      &-content {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    .input {
+      border: 1px solid;
+      border-radius: 0;
+    }
+    .dropdown__block {
+      &__item {
+        span {
+          font-size: inherit;
+        }
+      }
+      &__selected {
+        box-shadow: none;
+        border-radius: 0;
+        border-bottom: 1px solid;
+        &.opened {
+          border-radius: 0;
+          & + .dropdown__block__list {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+    .textarea {
+      border: 1px solid;
+      border-radius: 0;
+    }
+    .represent__item {
+      border-radius: 0;
+      border: 1px solid;
+      &-row__label,
+      &-link {
+        color: inherit;
+      }
+    }
+    .user {
+      &-page {
+        &__header {
+          .menu {
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            &__content {
+              position: relative;
+              &:after {
+                content: "";
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 2px;
+                position: absolute;
+              }
+            }
+            &__item {
+              border-color: transparent;
+              z-index: 10;
+              margin: 0;
+              padding: 0 6px;
+            }
+          }
+        }
+      }
+      &-achievments__events .list {
+        &__date,
+        &__text {
+          span {
+            color: inherit;
+          }
+        }
       }
     }
   }
@@ -2718,6 +3161,39 @@ body {
   &.noto {
     * {
       font-family: "Noto Serif", serif;
+    }
+  }
+  .select {
+    height: 60px;
+    position: relative;
+    width: 100%;
+    select {
+      border: 1px solid;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 40px 0 20px;
+      line-height: 26px;
+      height: 100%;
+      display: block;
+      width: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      -ms-appearance: none;
+      color: #000000;
+      background: #ffffff;
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      top: 28px;
+      right: 20px;
+      border-top: 5px solid #000000;
+      border-right: 5px solid transparent;
+      border-left: 5px solid transparent;
     }
   }
 }

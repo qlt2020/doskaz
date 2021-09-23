@@ -365,7 +365,7 @@ export default {
     }
   }
 
-  &__visual {
+  /* &__visual {
     margin: 0 15px 0 auto;
     cursor: pointer;
     transition: opacity 0.3s;
@@ -384,7 +384,7 @@ export default {
         display: none;
       }
     }
-  }
+  } */
 
   &__title {
     padding-top: 20px;
