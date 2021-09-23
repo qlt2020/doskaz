@@ -861,6 +861,11 @@ export default {
   .btn-change-type {
     display: none;
   }
+
+  .stat_button-wrap {
+    margin-left: 10px;
+  }
+  
   @media screen and (max-width: 991px) {
     .btn-change-type {
       position: absolute;
@@ -869,7 +874,7 @@ export default {
       z-index: 2;
       display: flex;
       justify-content: center;
-      div {
+      .button_wrap {
         background-color: #ffffff;
         padding: 7px;
         border-radius: 10px;

@@ -43,7 +43,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(complaint, index) in complaintsList">
+            <tr v-for="(complaint, index) in complaintsList" :key="complaint + index">
                 <th scope="row">{{ index }}</th>
                 <td>{{ complaint.city_name }}</td>
                 <td>{{ complaint.complaint_count }}</td>

@@ -27,7 +27,7 @@
         :key="index"
         @click="selectOption(option)"
       >
-        <span>{{ option.title }}</span>
+        <span>{{ option.title || option.name}}</span>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@ export default {
       this.isOpened = false;
     },
     selectOption(option) {
-      this.$emit("input", option.value);
+      this.$emit("input", option.value || option.id);
       this.closeDropdown();
     },
   },
@@ -89,8 +89,12 @@ export default {
       const selectedOption = this.options.find(
         (item) => item.value === this.value
       );
+      const selectStat = this.options.find((item) => item.id === this.value)
+
       if (selectedOption) {
         return selectedOption.title;
+      } else if (selectStat) {
+        return selectStat.title || selectStat.name
       } else {
         return this.options[0].title;
       }

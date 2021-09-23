@@ -6,6 +6,7 @@
   align-items: center;
   transition: 0.3s ease;
   border: none;
+
   span {
     display: block;
     color: #fff;
@@ -13,9 +14,11 @@
     font-family: "Montserrat";
     font-weight: 600;
     margin: 10px;
+
     @media screen and (max-width: 991px) {
       font-size: 12px;
     }
+
     &.icon {
       margin-right: 15px;
     }
@@ -40,6 +43,7 @@
   &.btn_white {
     background: $white;
     border: 2px solid $blue;
+
     span {
       color: $black;
     }
