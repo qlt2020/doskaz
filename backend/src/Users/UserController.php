@@ -573,7 +573,7 @@ final class UserController extends AbstractController
 
         uasort($items, function ($a, $b) use ($sort, $field) {
             $value = ($a[$field] ?? 0) <=> ($b[$field] ?? 0);
-            return ($sort === 'desc') ? - $value : $value;
+            return ($sort === 'desc') ? (- $value) : $value;
         });
 
         $results = [];
