@@ -86,7 +86,7 @@ class HelpController extends AbstractController
     }
 
     /**
-     * @Route(path="/{id}", methods={"POST"}, requirements={"id"="\d+"})
+     * @Route(path="/{id}", methods={"PUT"}, requirements={"id"="\d+"})
      * @IsGranted("ROLE_ADMIN")
      * @Post(
      *     path="/api/help/{id}",
