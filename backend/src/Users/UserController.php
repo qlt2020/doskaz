@@ -525,41 +525,28 @@ final class UserController extends AbstractController
     {
         [$field, $sort] = explode(' ', $request->query->get('sort', 'date desc'));
         $perPage = 10;
-
-        $qb = $connection->createQueryBuilder()
-            ->select([
-                'id',
-                'type',
-                'date',
-            ])
-            ->from('user_comments_history')
-            ->andWhere('user_comments_history.user_id = :userId')
-            ->setParameter('userId', $this->getUser()->id());
-
-        $items = (clone $qb)
-            ->setMaxResults($perPage)
-            ->setFirstResult(($request->query->getInt('page', 1) - 1) * $perPage)
-            ->orderBy($field, $sort)
-            ->execute()
-            ->fetchAll();
-
+        $userId = $this->getUser()->id();
+        $page = $request->query->getInt('page', 1) - 1;
 
         $postComments = $connection->createQueryBuilder()
             ->select([
                 'blog_comments.id',
                 'blog_comments.text',
+                'blog_comments.created_at as date',
+                'blog_comments.popularity',
                 'blog_posts.title',
                 'blog_posts.id as "postId"',
                 'blog_posts.slug_value as slug',
                 'blog_categories.slug_value as "categorySlug"',
-                'blog_posts.image'
+                'blog_posts.image',
             ])
             ->from('blog_comments')
             ->leftJoin('blog_comments', 'blog_posts', 'blog_posts', 'blog_posts.id = blog_comments.post_id')
             ->leftJoin('blog_posts', 'blog_categories', 'blog_categories', 'blog_posts.category_id = blog_categories.id')
-            ->andWhere('blog_posts.deleted_at IS NULL')
-            ->andWhere('blog_comments.id in (:ids)')
-            ->setParameter('ids', array_column($items, 'id'), Connection::PARAM_STR_ARRAY)
+            ->andWhere('blog_comments.user_id = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('blog_comments.is_published = true')
+            ->setMaxResults($perPage * ($page + 1))
             ->execute()
             ->fetchAll(\PDO::FETCH_UNIQUE);
 
@@ -567,22 +554,34 @@ final class UserController extends AbstractController
             ->select([
                 'object_reviews.id',
                 'object_reviews.text',
+                'object_reviews.created_at as date',
                 'objects.title',
                 'objects.id as "objectId"',
                 'objects.photos'
             ])
             ->from('object_reviews')
             ->leftJoin('object_reviews', 'objects', 'objects', 'objects.id = object_reviews.object_id')
-            ->andWhere('objects.deleted_at IS NULL')
-            ->andWhere('object_reviews.id in (:ids)')
-            ->setParameter('ids', array_column($items, 'id'), Connection::PARAM_STR_ARRAY)
+            ->andWhere('object_reviews.author_id = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('object_reviews.deleted_at is NULL')
+            ->andWhere('object_reviews.is_published = true')
+            ->setMaxResults($perPage * ($page + 1))
             ->execute()
             ->fetchAll(\PDO::FETCH_UNIQUE);
 
-        $mappedItems = array_map(function ($item) use ($connection, $postComments, $objectReviews, $request, $urlBuilder) {
+        $items = array_merge($postComments, $objectReviews);
+
+        uasort($items, function ($a, $b) use ($sort, $field) {
+            $value = $a[$field] ?? 0 <=> $b[$field] ?? 0;
+            return ($sort === 'desc') ? - $value : $value;
+        });
+
+        $results = [];
+
+        foreach (array_slice($items, $page * $perPage , $perPage) as $id => $item) {
             $result = [
+                'id' => $id,
                 'date' => $connection->convertToPHPValue($item['date'], 'datetimetz_immutable'),
-                'type' => $item['type'],
                 'image' => null,
                 'objectId' => null,
                 'postId' => null,
@@ -590,8 +589,9 @@ final class UserController extends AbstractController
                 'categorySlug' => null
             ];
 
-            if (array_key_exists($item['id'], $postComments)) {
-                $postComment = $postComments[$item['id']];
+            if (array_key_exists($id, $postComments)) {
+                $postComment = $postComments[$id];
+                $result['type'] = 'post';
                 $result['slug'] = $postComment['slug'];
                 $result['categorySlug'] = $postComment['categorySlug'];
                 $result['title'] = $postComment['title'];
@@ -607,8 +607,9 @@ final class UserController extends AbstractController
                 }
             }
 
-            if (array_key_exists($item['id'], $objectReviews)) {
-                $objectReview = $objectReviews[$item['id']];
+            if (array_key_exists($id, $objectReviews)) {
+                $objectReview = $objectReviews[$id];
+                $result['type'] = 'object';
                 $result['title'] = $objectReview['title'];
                 $result['text'] = $objectReview['text'];
                 $result['objectId'] = $objectReview['objectId'];
@@ -622,12 +623,12 @@ final class UserController extends AbstractController
                 }
             }
 
-            return $result;
-        }, $items);
+            $results[] = $result;
+        }
 
         return [
-            'pages' => $qb->select('CEIL(count(*)::FLOAT / :perPage)::INT')->setParameter('perPage', $perPage)->execute()->fetchColumn(),
-            'items' => $mappedItems
+            'pages' => ceil(count($results) / $perPage),
+            'items' => $results
         ];
     }
 
