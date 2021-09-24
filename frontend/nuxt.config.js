@@ -16,7 +16,6 @@ export default {
     "@nuxtjs/feed",
     "@nuxtjs/sentry",
     "@nuxtjs/date-fns",
-    'bootstrap-vue/nuxt',
   ],
   proxy: {
     "/pipeline": {
@@ -48,15 +47,14 @@ export default {
     { src: "~plugins/csrf.js", mode: "server" },
     { src: "~plugins/no-ssr.js", mode: "client" },
     { src: "~plugins/authenticated.js" },
-    { src: '~plugins/vuex-persist.js', ssr: false },
-    { src: '~plugins/scrollactive.js' }
+    { src: "~plugins/vuex-persist.js", ssr: false },
+    { src: "~plugins/scrollactive.js" },
   ],
   buildModules: ["@nuxtjs/google-analytics", "@nuxtjs/yandex-metrika"],
   css: [
     "~/static/normalize.css",
     "@fortawesome/fontawesome-free/css/all.css",
     "~/styles/layout.scss",
-    'bootstrap-vue/dist/bootstrap-vue.css'
   ],
   head: {
     meta: [
