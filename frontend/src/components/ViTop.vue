@@ -3162,16 +3162,16 @@ body {
         }
       }
       &__rating {
+        border: 1px solid;
+        &:before {
+          background: #000;
+        }
         &-text {
           position: relative;
-          margin: 0;
           left: auto;
         }
       }
       &__line {
-        .col.--small.--rating {
-          display: none;
-        }
         .input {
           input {
             font-size: inherit;

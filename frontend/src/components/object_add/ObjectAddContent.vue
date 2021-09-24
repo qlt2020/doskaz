@@ -315,7 +315,7 @@ select {
     }
 
     &:after {
-      background: url("@/assets/icons/av-green.svg") no-repeat;
+      background: url("@/assets/icons/av-green.svg") no-repeat center/cover;
       background-size: contain;
       right: 10px;
       margin: 0 -10px 0 0;
@@ -335,7 +335,7 @@ select {
     }
 
     &:after {
-      background: url("@/assets/icons/av-yellow.svg") no-repeat;
+      background: url("@/assets/icons/av-yellow.svg") no-repeat center/cover;
       background-size: contain;
       left: 50%;
       margin: 0 0 0 -10px;
@@ -355,7 +355,7 @@ select {
     }
 
     &:after {
-      background: url("@/assets/icons/av-red.svg") no-repeat;
+      background: url("@/assets/icons/av-red.svg") no-repeat center/cover;
       background-size: contain;
       left: 15px;
       margin: 0 0 0 -10px;
@@ -364,6 +364,42 @@ select {
 
   .--text-red {
     display: block;
+  }
+}
+
+body {
+  &.black,
+  &.white {
+    .--av-green {
+      .add-object__rating {
+        &:after {
+          background: url("@/assets/icons/av-green-black.svg") no-repeat
+            center/cover;
+          border: 1px solid;
+          border-radius: 50%;
+        }
+      }
+    }
+    .--av-yellow {
+      .add-object__rating {
+        &:after {
+          background: url("@/assets/icons/av-yellow-black.svg") no-repeat
+            center/cover;
+          border: 1px solid;
+          border-radius: 50%;
+        }
+      }
+    }
+    .--av-red {
+      .add-object__rating {
+        &:after {
+          background: url("@/assets/icons/av-red-black.svg") no-repeat
+            center/cover;
+          border: 1px solid;
+          border-radius: 50%;
+        }
+      }
+    }
   }
 }
 
