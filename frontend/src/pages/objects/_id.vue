@@ -51,11 +51,6 @@ export default {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
     userCategory: get("disabilitiesCategorySettings/currentCategory"),
   },
-  mounted() {
-    console.log(this.object);
-    console.log(this.coordinates);
-    console.log(this.coordinatesAndZoom);
-  },
   watch: {
     "$route.query.t"() {
       this.coordinatesAndZoom = {
@@ -66,6 +61,14 @@ export default {
     userCategory() {
       this.reloadObject();
     },
+  },
+  async mounted() {
+    await this.$store.dispatch("objectAdding/init");
+    await this.$store.dispatch("object/load", this.$route.params.id);
+    this.$store.commit("map/SET_COORDINATES_AND_ZOOM", {
+      coordinates: this.$store.state.object.item.coordinates,
+      zoom: this.$route.query ?  this.$route.query.zoom : 19,
+    });
   },
   destroyed() {
     this.coordinatesAndZoom = null;
