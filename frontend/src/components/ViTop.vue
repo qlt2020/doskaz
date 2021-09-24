@@ -3384,6 +3384,19 @@ body {
           background: transparent;
           color: inherit;
         }
+        &__item {
+          background: transparent;
+          box-shadow: none;
+          border-radius: 0;
+          border: 1px solid;
+        }
+        &__info {
+          .user-comments__title,
+          .user-comments__date {
+            color: inherit;
+            font-size: inherit;
+          }
+        }
       }
       &-notifications {
         &__item {
@@ -3419,6 +3432,14 @@ body {
         }
         &__text {
           color: inherit;
+        }
+      }
+      &-tasks {
+        &__item {
+          background: transparent;
+          box-shadow: none;
+          border-radius: 0;
+          border: 1px solid;
         }
       }
     }
