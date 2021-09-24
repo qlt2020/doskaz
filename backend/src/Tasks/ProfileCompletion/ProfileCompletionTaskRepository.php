@@ -39,4 +39,9 @@ class ProfileCompletionTaskRepository
     {
         return $this->repository->find($id);
     }
+
+    public function findByUserId(int $userId): ?ProfileCompletionTask
+    {
+        return $this->repository->findOneBy(['userId' => $userId]);
+    }
 }
