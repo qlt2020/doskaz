@@ -88,7 +88,7 @@ final class PostsFinder
             $post_date_to->add(new \DateInterval('P1D'));
             $post_date_to = $post_date_to->format('Y-m-d');
 
-            $queryBuilder->where('blog_posts.published_at >= :post_date_from')
+            $queryBuilder->andWhere('blog_posts.published_at >= :post_date_from')
                             ->andWhere('blog_posts.published_at <= :post_date_to')
                             ->setParameter('post_date_from', $post_date_from)
                             ->setParameter('post_date_to', $post_date_to);
