@@ -9,11 +9,11 @@
 export default {
   name: "BackBtn",
   data() {
-    return {}
+    return {};
   },
   directives: {},
   computed: {},
-  methods: {}
+  methods: {},
 };
 </script>
 
@@ -41,6 +41,20 @@ export default {
   }
   &:hover {
     box-shadow: 0px 5px 5px 0px #0000000f;
+  }
+}
+body {
+  &.black,
+  &.white {
+    .back-btn {
+      border-radius: 0;
+      border: 1px solid;
+      background: #fff;
+      .text {
+        font-size: inherit;
+        color: #000;
+      }
+    }
   }
 }
 </style>

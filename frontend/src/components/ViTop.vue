@@ -1022,6 +1022,17 @@ body {
           }
         }
       }
+      &.help {
+        .container {
+          .item {
+            .item-content {
+              .item-title {
+                font-size: 26px;
+              }
+            }
+          }
+        }
+      }
     }
     .user {
       &-page {
@@ -1436,6 +1447,17 @@ body {
         &-link {
           span {
             font-size: 18px;
+          }
+        }
+      }
+      &.help {
+        .container {
+          .item {
+            .item-content {
+              .item-title {
+                font-size: 30px;
+              }
+            }
           }
         }
       }
@@ -2383,6 +2405,29 @@ body {
           border-top: none;
         }
       }
+      &__item {
+        &-img {
+          &-category {
+            background: rgba(0, 0, 0, 0.5);
+          }
+        }
+      }
+      &.help {
+        .container {
+          .item {
+            .item-content {
+              .detail {
+                font-size: inherit;
+              }
+            }
+            .item-img {
+              .item-category {
+                background: rgba(0, 0, 0, 0.5);
+              }
+            }
+          }
+        }
+      }
     }
     .blog__content__inside {
       background: #000;
@@ -2854,6 +2899,17 @@ body {
           border-radius: 0;
         }
       }
+      &.help {
+        .container {
+          .item {
+            .item-content {
+              .detail {
+                color: #000;
+              }
+            }
+          }
+        }
+      }
     }
     .user {
       &-profile,
@@ -3209,6 +3265,26 @@ body {
       }
       &__material-item {
         border-radius: 0;
+      }
+      &.help {
+        .container {
+          .item {
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            border: 1px solid;
+            .item-content {
+              .detail {
+                font-size: inherit;
+              }
+            }
+            .item-img {
+              .item-category {
+                font-size: inherit;
+              }
+            }
+          }
+        }
       }
     }
     .blog__content__inside {
