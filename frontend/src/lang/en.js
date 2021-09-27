@@ -623,49 +623,67 @@ Anonymous requests are not considered.
   ready: "Ready",
   about: {
     header:
-        "We, creators of Accessible Kazakhstan map, believe that together we can create a barrier-free, accessible, safe and friendly environment for every citizen in our country. Each of us has the right to move freely. Regardless of age, place of residence, health status. Join users of Accessible Kazakhstan online map now and get access to services! Designed with care about you!",
+      "We, creators of Accessible Kazakhstan map, believe that together we can create a barrier-free, accessible, safe and friendly environment for every citizen in our country. Each of us has the right to move freely. Regardless of age, place of residence, health status. Join users of Accessible Kazakhstan online map now and get access to services! Designed with care about you!",
     section1: "What is a barrier-free environment?",
     section2: "What is a target audience of our map?",
     section3: "How does Accessible Kazakhstan map work?",
-    section4:
-        "How to use Accessible Kazakhstan map on doskaz.kz website?",
+    section4: "How to use Accessible Kazakhstan map on doskaz.kz website?",
     section5: "Как пользоваться картой «Доступный Казахстан» в приложении IOS?",
     section6:
-        "Как пользоваться картой «Доступный Казахстан» в приложении ANDROID?",
+      "Как пользоваться картой «Доступный Казахстан» в приложении ANDROID?",
     section7: "What can be done at this stage?",
     section8: "Info for volunteers",
     section9: "Project implementation",
     section10: "Financing",
     section11: "Technical assistance",
-    section1Text: "Do you think that restricting access to facilities and services is a violation of our rights? We are sure of that.\n" +
-        "On February 20, 2015, Kazakhstan ratified the Convention on the Rights of Persons with disability, and afterwards the government assumed responsibility to provide a  favorable living environment for people with disability. In the short term, the Convention must speed up the process of removing barriers that prevent people with disability from fully participation in life of the society on an equal basis with other citizens.<br> <br>\n" +
-        "Barrier-free environment is a public benefit and it is closely linked to social and economic development of a country. Accessibility opens the way to education, employment, treatment, recreation and an opportunity to have an independent way of living. \n" +
-        "In the course of development of the map, a function of collecting data about facilities was created - each user can freely obtain statistical data on number of public facilities accessible or inaccessible for visiting in any locality of the country or in the country as a whole. Presented data is a relevant tool reflecting a real situation in the field of creating an inclusive and barrier-free environment.",
-    section2Text: "Every citizen of Kazakhstan has the right to freedom of movement in a barrier-free and inclusive environment. <br><br> We, creators of Accessible Kazakhstan map, believe that together we can create an accessible, safe and friendly environment for every citizen in our country. Regardless of age, place of residence, health status. Are you with us? Join users of Accessible Kazakhstan online map now and get access to services.",
-    section3Text: "Accessible Kazakhstan is an online map of the country that displays information about accessibility of public facilities for safe and comfortable visits and use by all residents of our country. <br><br> Map users can use the service for people with limited mobility and people with special needs (these are people with disability, parents with small children in wheelchairs, the elderly, pregnant women, temporarily injured people, children aged under 7 years) and plan the most accessible and safest route, and also find out how accessible and safe a selected facility is for visiting. <br><br> Additionally, any user can mark a public place, organization, institution on the map and share public information about its accessibility.   \n" +
-        "\n" +
-
-        "Accessibility of facilities for people with limited mobility is indicated on the map by the international traffic light system:",
-    section3Access: "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
-    section3PartAccess: "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
-    section3NoAccess: "Red icon means that a facility is not accessible. It is impossible to get to the facility due to inaccessibility of its entrance group (for example, there is no ramp) or impossibility of movement inside the facility.",
-    section3Text2: "When entering the map, you will immediately see that many facilities are marked with a red icon. This is not because inaccessible facilities were specially entered on the map but because there are much fewer accessible and partially accessible facilities in population centers. <br><br> Organizations have to make an entrance to a building and all the premises inside it accessible to everyone but in most cases either a ramp does not meet standards or a person, even after he enters the building, cannot use services since there is furniture on his/her way in narrow corridors, there are stairs and there are no lifts, etc.\n",
-    section7Text: "Plan an accessible and safe route and select an accessible public facility to visit using Accessible Kazakhstan map.",
-    section7Text2: "Help other users - by scoring accessibility of the <a style='color: #1534EC; font-weight: bold' href='https://doskaz.kz/objects/164485' target='_blank'>place of your visit.</a> <br><br> <a style='color: #1534EC; font-weight: bold' href='/login' target='_blank'>Become a volunteer</a> of Accessible Kazakhstan team and contribute to development of the map.\n",
+    section1Text:
+      "Do you think that restricting access to facilities and services is a violation of our rights? We are sure of that.\n" +
+      "On February 20, 2015, Kazakhstan ratified the Convention on the Rights of Persons with disability, and afterwards the government assumed responsibility to provide a  favorable living environment for people with disability. In the short term, the Convention must speed up the process of removing barriers that prevent people with disability from fully participation in life of the society on an equal basis with other citizens.<br> <br>\n" +
+      "Barrier-free environment is a public benefit and it is closely linked to social and economic development of a country. Accessibility opens the way to education, employment, treatment, recreation and an opportunity to have an independent way of living. \n" +
+      "In the course of development of the map, a function of collecting data about facilities was created - each user can freely obtain statistical data on number of public facilities accessible or inaccessible for visiting in any locality of the country or in the country as a whole. Presented data is a relevant tool reflecting a real situation in the field of creating an inclusive and barrier-free environment.",
+    section2Text:
+      "Every citizen of Kazakhstan has the right to freedom of movement in a barrier-free and inclusive environment. <br><br> We, creators of Accessible Kazakhstan map, believe that together we can create an accessible, safe and friendly environment for every citizen in our country. Regardless of age, place of residence, health status. Are you with us? Join users of Accessible Kazakhstan online map now and get access to services.",
+    section3Text:
+      "Accessible Kazakhstan is an online map of the country that displays information about accessibility of public facilities for safe and comfortable visits and use by all residents of our country. <br><br> Map users can use the service for people with limited mobility and people with special needs (these are people with disability, parents with small children in wheelchairs, the elderly, pregnant women, temporarily injured people, children aged under 7 years) and plan the most accessible and safest route, and also find out how accessible and safe a selected facility is for visiting. <br><br> Additionally, any user can mark a public place, organization, institution on the map and share public information about its accessibility.   \n" +
+      "\n" +
+      "Accessibility of facilities for people with limited mobility is indicated on the map by the international traffic light system:",
+    section3Access:
+      "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
+    section3PartAccess:
+      "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
+    section3NoAccess:
+      "Red icon means that a facility is not accessible. It is impossible to get to the facility due to inaccessibility of its entrance group (for example, there is no ramp) or impossibility of movement inside the facility.",
+    section3Text2:
+      "When entering the map, you will immediately see that many facilities are marked with a red icon. This is not because inaccessible facilities were specially entered on the map but because there are much fewer accessible and partially accessible facilities in population centers. <br><br> Organizations have to make an entrance to a building and all the premises inside it accessible to everyone but in most cases either a ramp does not meet standards or a person, even after he enters the building, cannot use services since there is furniture on his/her way in narrow corridors, there are stairs and there are no lifts, etc.\n",
+    section7Text:
+      "Plan an accessible and safe route and select an accessible public facility to visit using Accessible Kazakhstan map.",
+    section7Text2:
+      "Help other users - by scoring accessibility of the <a style='color: #1534EC; font-weight: bold' href='https://doskaz.kz/objects/164485' target='_blank'>place of your visit.</a> <br><br> <a style='color: #1534EC; font-weight: bold' href='/login' target='_blank'>Become a volunteer</a> of Accessible Kazakhstan team and contribute to development of the map.\n",
+    section7Text2Black:
+      "Help other users - by scoring accessibility of the <a style='font-weight: bold' href='https://doskaz.kz/objects/164485' target='_blank'>place of your visit.</a> <br><br> <a style='font-weight: bold' href='/login' target='_blank'>Become a volunteer</a> of Accessible Kazakhstan team and contribute to development of the map.\n",
     section7Text3: "Share information about Accessible Kazakhstan map ",
-    section8Text: "Our volunteers have collected information on more than 20,000 public facilities, there are not only photos but also video reviews. We pin great hopes on YOU, on those who use the map. Those whom it helps every day to receive up-to-date information on the accessibility of city facilities!<br><br>\n" +
-        "We position the map as a community and we hope that YOU will become an active and full member of it, and you will add facilities to the map yourself as well as comment and update information about facilities already reflected on the map. When you place a new facility on the map yourself, please leave as detailed information as possible in comments and attach photos. This will help new map users. \n" +
-        "You can become a volunteer <a style='color: #1534EC; font-weight: bold' href='/login'>here</a>",
-    section9Text: "The project is carried out by a consortium of public organizations. See the Contacts page.",
-    section10Text: "The project is financed by the Delegation of the European Union to the Republic of Kazakhstan, the US Diplomatic Mission in Kazakhstan, the United Nations Children's Fund (UNICEF), Astana Hub International Technopark of IT Startups in Central Asia.",
-    section11Text: "If the website does not work correctly, please leave a message on the Contacts page.",
+    section8Text:
+      "Our volunteers have collected information on more than 20,000 public facilities, there are not only photos but also video reviews. We pin great hopes on YOU, on those who use the map. Those whom it helps every day to receive up-to-date information on the accessibility of city facilities!<br><br>\n" +
+      "We position the map as a community and we hope that YOU will become an active and full member of it, and you will add facilities to the map yourself as well as comment and update information about facilities already reflected on the map. When you place a new facility on the map yourself, please leave as detailed information as possible in comments and attach photos. This will help new map users. \n" +
+      "You can become a volunteer <a style='color: #1534EC; font-weight: bold' href='/login'>here</a>",
+    section8TextBlack:
+      "Our volunteers have collected information on more than 20,000 public facilities, there are not only photos but also video reviews. We pin great hopes on YOU, on those who use the map. Those whom it helps every day to receive up-to-date information on the accessibility of city facilities!<br><br>\n" +
+      "We position the map as a community and we hope that YOU will become an active and full member of it, and you will add facilities to the map yourself as well as comment and update information about facilities already reflected on the map. When you place a new facility on the map yourself, please leave as detailed information as possible in comments and attach photos. This will help new map users. \n" +
+      "You can become a volunteer <a style='font-weight: bold' href='/login'>here</a>",
+    section9Text:
+      "The project is carried out by a consortium of public organizations. See the Contacts page.",
+    section10Text:
+      "The project is financed by the Delegation of the European Union to the Republic of Kazakhstan, the US Diplomatic Mission in Kazakhstan, the United Nations Children's Fund (UNICEF), Astana Hub International Technopark of IT Startups in Central Asia.",
+    section11Text:
+      "If the website does not work correctly, please leave a message on the Contacts page.",
     accessible: "Accessible",
     partialAccessible: "Partially accessible",
     notAccessible: "Not accessible",
   },
   selectObjectType: "Select facility type",
   detectedLocation: {
-    modalText: "We have determined your {break} location as {span},{break} are you here?",
+    modalText:
+      "We have determined your {break} location as {span},{break} are you here?",
     buttonYes: "Yes",
     buttonNo: "Change city",
   },

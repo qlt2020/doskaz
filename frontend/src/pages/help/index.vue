@@ -1,7 +1,7 @@
 <template>
-  <div class="blog">
+  <div class="blog help">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
 
     <div class="container">
       <div class="title">
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "@/components/MainHeader";
 import ViTop from "@/components/ViTop";
 import MainFooter from "@/components/MainFooter";
@@ -80,6 +81,9 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
   },
 };
 </script>
