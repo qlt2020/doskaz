@@ -1,17 +1,15 @@
 <template>
   <div class="about">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="about__top">
-      <div
-        class="about__top-bg"
-      >
+      <div class="about__top-bg">
         <div class="wrapper" style="text-align: start">
           <span class="title">
-          {{ $t('mainMenu.about') }}
+            {{ $t("mainMenu.about") }}
           </span>
           <p class="text">
-            {{ $t('about.header') }}
+            {{ $t("about.header") }}
           </p>
         </div>
       </div>
@@ -19,91 +17,157 @@
     <div class="about-wrapper">
       <div class="containers-wrap">
         <section id="what_it_is" class="about__container">
-          <span class="about__container__title">{{ $t('about.section1') }}</span>
-          <div class="about__container__text" v-html="$t('about.section1Text')"/>
+          <span class="about__container__title">{{
+            $t("about.section1")
+          }}</span>
+          <div
+            class="about__container__text"
+            v-html="$t('about.section1Text')"
+          />
         </section>
         <section id="for_whom" class="about__container">
-          <span class="about__container__title">{{ $t('about.section2') }}</span>
+          <span class="about__container__title">{{
+            $t("about.section2")
+          }}</span>
           <div style="display: flex">
-            <div class="about__container__text" v-html="$t('about.section2Text')" />
-            <img class="for-whom__img" :src="require('@/assets/img/about/for_whom.png')">
+            <div
+              class="about__container__text"
+              v-html="$t('about.section2Text')"
+            />
+            <img
+              class="for-whom__img"
+              :src="require('@/assets/img/about/for_whom.png')"
+            />
           </div>
         </section>
         <section id="how_works" class="about__container">
-          <span class="about__container__title">{{ $t('about.section3') }}</span>
-          <div class="about__container__text" v-html="$t('about.section3Text')" />
+          <span class="about__container__title">{{
+            $t("about.section3")
+          }}</span>
+          <div
+            class="about__container__text"
+            v-html="$t('about.section3Text')"
+          />
           <div class="about__container__how-works">
             <div class="item green">
               <div class="info">
-                <img :src="require('@/assets/img/about/available.png')">
-                <span class="title__green">{{ $t('about.accessible') }}</span>
+                <div class="icon">
+                  <img
+                    :src="require('@/assets/img/about/available_icon.svg')"
+                  />
+                </div>
+                <span class="title__green">{{ $t("about.accessible") }}</span>
               </div>
               <div class="desc">
-                {{ $t('about.section3Access') }}
+                {{ $t("about.section3Access") }}
               </div>
             </div>
             <div class="item yellow">
               <div class="info">
-                <img :src="require('@/assets/img/about/partial.png')">
-                <span class="title__yellow">{{ $t('about.partialAccessible') }}</span>
+                <div class="icon">
+                  <img :src="require('@/assets/img/about/partial_icon.svg')" />
+                </div>
+                <span class="title__yellow">{{
+                  $t("about.partialAccessible")
+                }}</span>
               </div>
               <div class="desc">
-                {{ $t('about.section3PartAccess') }}
+                {{ $t("about.section3PartAccess") }}
               </div>
             </div>
             <div class="item red">
               <div class="info">
-                <img :src="require('@/assets/img/about/not_access.png')">
-                <span class="title__red">{{ $t('about.notAccessible') }}</span>
+                <div class="icon">
+                  <img
+                    :src="require('@/assets/img/about/not_access_icon.svg')"
+                  />
+                </div>
+                <span class="title__red">{{ $t("about.notAccessible") }}</span>
               </div>
               <div class="desc">
-                {{ $t('about.section3NoAccess') }}
+                {{ $t("about.section3NoAccess") }}
               </div>
             </div>
           </div>
-          <div class="about__container__text" v-html="$t('about.section3Text2')" />
+          <div
+            class="about__container__text"
+            v-html="$t('about.section3Text2')"
+          />
         </section>
-<!--        <section id="how_use_web" class="about__container">-->
-<!--          <span class="about__container__title">{{ $t('about.section4') }}</span>-->
-<!--          -->
-<!--        </section>-->
-<!--        <section id="how_use_ios" class="about__container">-->
-<!--          <span class="about__container__title">{{ $t('about.section5') }}</span>-->
-<!--          -->
-<!--        </section>-->
-<!--        <section id="how_use_android" class="about__container">-->
-<!--          <span class="about__container__title">{{ $t('about.section6') }}</span>-->
-<!--          -->
-<!--        </section>-->
+        <!--        <section id="how_use_web" class="about__container">-->
+        <!--          <span class="about__container__title">{{ $t('about.section4') }}</span>-->
+        <!--          -->
+        <!--        </section>-->
+        <!--        <section id="how_use_ios" class="about__container">-->
+        <!--          <span class="about__container__title">{{ $t('about.section5') }}</span>-->
+        <!--          -->
+        <!--        </section>-->
+        <!--        <section id="how_use_android" class="about__container">-->
+        <!--          <span class="about__container__title">{{ $t('about.section6') }}</span>-->
+        <!--          -->
+        <!--        </section>-->
         <section id="what_available_now" class="about__container">
-          <span class="about__container__title">{{ $t('about.section7') }}</span>
+          <span class="about__container__title">{{
+            $t("about.section7")
+          }}</span>
           <div class="about__container__steps">
             <div class="step">
-              <img :src="require('@/assets/img/about/step1.svg')">
+              <img :src="require('@/assets/img/about/step1.svg')" />
               <span>
-              {{ $t('about.section7Text') }} <nuxt-link :to="localePath({ name: 'index' })"
-              ><span style="color: #1534EC; font-weight: bold">"{{ $t("meta.title") }}"</span></nuxt-link></span>
+                {{ $t("about.section7Text") }}
+                <nuxt-link :to="localePath({ name: 'index' })"
+                  ><span
+                    :style="
+                      !viModeEnabled
+                        ? 'color: #1534EC; font-weight: bold'
+                        : 'font-weight: bold'
+                    "
+                    >"{{ $t("meta.title") }}"</span
+                  ></nuxt-link
+                ></span
+              >
             </div>
             <div class="step">
-              <img :src="require('@/assets/img/about/step2.png')">
-              <div style="width: 100%;" v-html="$t('about.section7Text2')" />
+              <img :src="require('@/assets/img/about/step2.png')" />
+              <div
+                style="width: 100%;"
+                v-html="
+                  !viModeEnabled
+                    ? $t('about.section7Text2')
+                    : $t('about.section7Text2Black')
+                "
+              />
             </div>
             <div class="step">
-              <img :src="require('@/assets/img/about/step3.png')">
+              <img :src="require('@/assets/img/about/step3.png')" />
               <div>
-                {{ $t('about.section7Text3') }}
-                <div style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;grid-column-gap: 5px;justify-items: center;">
-                  <div @click="share('fb')" style="cursor: pointer;display: flex;box-shadow: 0px 16px 24px rgb(0 0 0 / 6%), 0px 2px 6px rgb(0 0 0 / 4%), 0px 0px 1px rgb(0 0 0 / 4%);border-radius: 5px;width: 30px;height: 30px;">
-                    <img style="margin: auto" :src="require('@/assets/img/about/fb.png')">
+                {{ $t("about.section7Text3") }}
+                <div
+                  style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;grid-column-gap: 5px;justify-items: center;"
+                >
+                  <div class="social-icon" @click="share('fb')">
+                    <img
+                      style="margin: auto"
+                      :src="require('@/assets/img/social/fcb.svg')"
+                    />
                   </div>
-                  <div @click="share('vk')" style="cursor: pointer;display: flex;box-shadow: 0px 16px 24px rgb(0 0 0 / 6%), 0px 2px 6px rgb(0 0 0 / 4%), 0px 0px 1px rgb(0 0 0 / 4%);border-radius: 5px;width: 30px;height: 30px;">
-                    <img style="margin: auto" :src="require('@/assets/img/about/vk.png')">
+                  <div class="social-icon" @click="share('vk')">
+                    <img
+                      style="margin: auto"
+                      :src="require('@/assets/img/social/vk.svg')"
+                    />
                   </div>
-                  <div @click="share('twitter')" style="cursor: pointer;display: flex;box-shadow: 0px 16px 24px rgb(0 0 0 / 6%), 0px 2px 6px rgb(0 0 0 / 4%), 0px 0px 1px rgb(0 0 0 / 4%);border-radius: 5px;width: 30px;height: 30px;">
-                    <img style="margin: auto; width: 15px; height: 15px;" :src="require('@/assets/img/about/tw.png')">
+                  <div class="social-icon" @click="share('twitter')">
+                    <img
+                      style="margin: auto; width: 15px; height: 15px;"
+                      :src="require('@/assets/img/social/twitter.svg')"
+                    />
                   </div>
-                  <div @click="share('telegram')" style="cursor: pointer;display: flex;box-shadow: 0px 16px 24px rgb(0 0 0 / 6%), 0px 2px 6px rgb(0 0 0 / 4%), 0px 0px 1px rgb(0 0 0 / 4%);border-radius: 5px;width: 30px;height: 30px;">
-                    <img style="margin: auto;width: 15px; height: 15px;" :src="require('@/assets/img/about/tg.png')">
+                  <div class="social-icon" @click="share('telegram')">
+                    <img
+                      style="margin: auto;width: 15px; height: 15px;"
+                      :src="require('@/assets/img/social/telegram.svg')"
+                    />
                   </div>
                 </div>
               </div>
@@ -111,37 +175,71 @@
           </div>
         </section>
         <section id="for_volunteers" class="about__container">
-          <span class="about__container__title">{{ $t('about.section8') }}</span>
-          <div class="about__container__text" v-html="$t('about.section8Text')" />
+          <span class="about__container__title">{{
+            $t("about.section8")
+          }}</span>
+          <div
+            class="about__container__text"
+            v-html="
+              !viModeEnabled
+                ? $t('about.section8Text')
+                : $t('about.section8TextBlack')
+            "
+          />
         </section>
-        <section id="realization" class="about__container">
-          <span class="about__container__title">{{ $t('about.section9') }}</span>
+        <section id="realization" class="about__container realization">
+          <span class="about__container__title">{{
+            $t("about.section9")
+          }}</span>
           <div class="about__container__realization">
-            <img :src="require('@/assets/img/about/realization1.png')">
-            <img :src="require('@/assets/img/about/realization2.png')">
-            <img :src="require('@/assets/img/about/realization3.png')">
+            <img :src="require('@/assets/img/about/realization1.png')" />
+            <img :src="require('@/assets/img/about/realization2.png')" />
+            <img :src="require('@/assets/img/about/realization3.png')" />
           </div>
-          <span style="font-family: SFProDisplay;font-style: normal;font-weight: 400;font-size: 16px;line-height: 24px;color: #000000;">
-          {{ $t('about.section9Text') }} <nuxt-link :to="localePath({ name: 'contacts' })"
-          ><span style="color: #1534EC; font-weight: bold">{{ $t("mainMenu.contacts") }}</span></nuxt-link></span>
+          <span class="about__container__span-text">
+            {{ $t("about.section9Text") }}
+            <nuxt-link :to="localePath({ name: 'contacts' })"
+              ><span
+                :style="
+                  !viModeEnabled
+                    ? 'color: #1534EC; font-weight: bold'
+                    : 'font-weight: bold'
+                "
+                >{{ $t("mainMenu.contacts") }}</span
+              ></nuxt-link
+            ></span
+          >
         </section>
-        <section id="finance" class="about__container">
-          <span class="about__container__title">{{ $t('about.section10') }}</span>
+        <section id="finance" class="about__container finance">
+          <span class="about__container__title">{{
+            $t("about.section10")
+          }}</span>
           <div class="about__container__finance">
-            <img :src="require('@/assets/img/about/finance1.png')">
-            <img :src="require('@/assets/img/about/finance2.png')">
-            <img :src="require('@/assets/img/about/finance3.png')">
-            <img :src="require('@/assets/img/about/finance4.png')">
+            <img :src="require('@/assets/img/about/finance1.png')" />
+            <img :src="require('@/assets/img/about/finance2.png')" />
+            <img :src="require('@/assets/img/about/finance3.png')" />
+            <img :src="require('@/assets/img/about/finance4.png')" />
           </div>
-          <span style="font-family: SFProDisplay;font-style: normal;font-weight: 400;font-size: 16px;line-height: 24px;color: #000000;">
-          {{ $t('about.section10Text') }}
-        </span>
+          <span class="about__container__span-text">
+            {{ $t("about.section10Text") }}
+          </span>
         </section>
         <section id="support" class="about__container">
-          <span class="about__container__title">{{ $t('about.section11') }}</span>
+          <span class="about__container__title">{{
+            $t("about.section11")
+          }}</span>
           <div class="about__container__text">
-            {{ $t('about.section11Text') }} <nuxt-link :to="localePath({ name: 'contacts' })"
-          ><span style="color: #1534EC; font-weight: bold">{{ $t("mainMenu.contacts") }}</span></nuxt-link>
+            {{ $t("about.section11Text") }}
+            <nuxt-link :to="localePath({ name: 'contacts' })"
+              ><span
+                :style="
+                  !viModeEnabled
+                    ? 'color: #1534EC; font-weight: bold'
+                    : 'font-weight: bold'
+                "
+                >{{ $t("mainMenu.contacts") }}</span
+              ></nuxt-link
+            >
           </div>
         </section>
       </div>
@@ -154,17 +252,33 @@
         :scroll-offset="20"
         class="about__sidebar"
       >
-        <a class="scrollactive-item" href="#what_it_is">{{ $t('about.section1') }}</a>
-        <a class="scrollactive-item" href="#for_whom">{{ $t('about.section2') }}</a>
-        <a class="scrollactive-item" href="#how_works">{{ $t('about.section3') }}</a>
-<!--        <a class="scrollactive-item" href="#how_use_web">{{ $t('about.section4') }}</a>-->
-<!--        <a class="scrollactive-item" href="#how_use_ios">{{ $t('about.section5') }}</a>-->
-<!--        <a class="scrollactive-item" href="#how_use_android">{{ $t('about.section6') }}</a>-->
-        <a class="scrollactive-item" href="#what_available_now">{{ $t('about.section7') }}</a>
-        <a class="scrollactive-item" href="#for_volunteers">{{ $t('about.section8') }}</a>
-        <a class="scrollactive-item" href="#realization">{{ $t('about.section9') }}</a>
-        <a class="scrollactive-item" href="#finance">{{ $t('about.section10') }}</a>
-        <a class="scrollactive-item" href="#support">{{ $t('about.section11') }}</a>
+        <a class="scrollactive-item" href="#what_it_is">{{
+          $t("about.section1")
+        }}</a>
+        <a class="scrollactive-item" href="#for_whom">{{
+          $t("about.section2")
+        }}</a>
+        <a class="scrollactive-item" href="#how_works">{{
+          $t("about.section3")
+        }}</a>
+        <!--        <a class="scrollactive-item" href="#how_use_web">{{ $t('about.section4') }}</a>-->
+        <!--        <a class="scrollactive-item" href="#how_use_ios">{{ $t('about.section5') }}</a>-->
+        <!--        <a class="scrollactive-item" href="#how_use_android">{{ $t('about.section6') }}</a>-->
+        <a class="scrollactive-item" href="#what_available_now">{{
+          $t("about.section7")
+        }}</a>
+        <a class="scrollactive-item" href="#for_volunteers">{{
+          $t("about.section8")
+        }}</a>
+        <a class="scrollactive-item" href="#realization">{{
+          $t("about.section9")
+        }}</a>
+        <a class="scrollactive-item" href="#finance">{{
+          $t("about.section10")
+        }}</a>
+        <a class="scrollactive-item" href="#support">{{
+          $t("about.section11")
+        }}</a>
       </scrollactive>
     </div>
     <MainFooter />
@@ -172,11 +286,11 @@
 </template>
 
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "@/components/MainHeader";
 import ViTop from "@/components/ViTop";
 import MainFooter from "@/components/MainFooter";
 import BackBtn from "@/components/BackBtn";
-
 
 export default {
   components: { MainHeader, ViTop, MainFooter, BackBtn },
@@ -186,10 +300,9 @@ export default {
     };
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     shareLinks() {
-      const path = encodeURIComponent(
-        window.location.origin
-      );
+      const path = encodeURIComponent(window.location.origin);
 
       return {
         fb: `https://www.facebook.com/sharer.php?u=${path}`,
@@ -203,7 +316,7 @@ export default {
     share(network) {
       window.open(this.shareLinks[network]);
     },
-  }
+  },
 };
 </script>
 
@@ -211,7 +324,7 @@ export default {
 @import "@/styles/mixins.scss";
 
 .about {
-  background: #FAFAFA;
+  background: #fafafa;
   &-wrapper {
     max-width: 1200px;
     margin: auto;
@@ -235,8 +348,10 @@ export default {
     }
 
     .about__sidebar {
-      background: #FFFFFF;
-      box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      background: #ffffff;
+      box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+        0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+        0px 0px 1px rgba(0, 0, 0, 0.04);
       border-radius: 10px;
       display: grid;
       width: 270px;
@@ -260,10 +375,10 @@ export default {
         }
       }
       .about__sidebar__link-active {
-        color: #1534EC;
+        color: #1534ec;
         &::before {
           content: "";
-          background: #1534EC;
+          background: #1534ec;
           width: 3px;
           height: 25px;
           position: absolute;
@@ -274,7 +389,7 @@ export default {
             top: unset;
             left: unset;
             height: 3px;
-            width: 100%
+            width: 100%;
           }
         }
       }
@@ -293,10 +408,23 @@ export default {
     }
 
     .about__container {
-      background: #FFFFFF;
-      box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+      background: #ffffff;
+      box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+        0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+        0px 0px 1px rgba(0, 0, 0, 0.04);
       border-radius: 10px;
       padding: 25px;
+      &.realization,
+      &.finance {
+        .about__container__span-text {
+          font-family: SFProDisplay;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 24px;
+          color: #000000;
+        }
+      }
       .for-whom__img {
         @media screen and (max-width: 1023px) {
           display: none;
@@ -355,20 +483,36 @@ export default {
 
         .item {
           box-sizing: border-box;
-          box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+          box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+            0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
           border-radius: 10px;
           padding: 20px;
           display: grid;
           align-items: center;
           grid-row-gap: 10px;
           &.green {
-            border: 2px solid #27AE60;
+            border: 2px solid #27ae60;
+            .info {
+              .icon {
+                background: #27ae60;
+              }
+            }
           }
           &.yellow {
-            border: 2px solid #F2994A;
+            border: 2px solid #f2994a;
+            .info {
+              .icon {
+                background: #f2994a;
+              }
+            }
           }
           &.red {
-            border: 2px solid #EB5757;
+            border: 2px solid #eb5757;
+            .info {
+              .icon {
+                background: #eb5757;
+              }
+            }
           }
           .info {
             display: flex;
@@ -378,18 +522,25 @@ export default {
             font-weight: 500;
             font-size: 18px;
             line-height: 21px;
-            img {
+            .icon {
+              flex: none;
+              border-radius: 10px;
+              width: 30px;
+              height: 30px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
               margin-right: 10px;
             }
             .title {
               &__green {
-                color: #27AE60;
+                color: #27ae60;
               }
               &__yellow {
-                color: #F2994A;
+                color: #f2994a;
               }
               &__red {
-                color: #EB5757;
+                color: #eb5757;
               }
             }
           }
@@ -421,6 +572,13 @@ export default {
           display: grid;
           grid-template-rows: 192px auto;
           justify-items: center;
+          .social-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            box-shadow: 0px 16px 24px rgbo(0, 0, 0, 0.6),
+              0px 2px 6px rgbo(0, 0, 0, 0.4), 0px 0px 1px rgbo(0, 0, 0, 0.4);
+          }
         }
       }
       &__realization {
@@ -694,7 +852,7 @@ export default {
       display: grid;
       align-items: center;
       text-align: center;
-      background-image: url('@/assets/img/about/header.png');
+      background-image: url("@/assets/img/about/header.png");
 
       &__back {
         width: 105px;
@@ -723,7 +881,7 @@ export default {
         font-weight: 600;
         font-size: 30px;
         line-height: 36px;
-        color: #FFFFFF;
+        color: #ffffff;
       }
       .text {
         font-family: SFProDisplay;
@@ -731,11 +889,11 @@ export default {
         font-weight: 500;
         font-size: 18px;
         line-height: 24px;
-        color: #FFFFFF;
+        color: #ffffff;
       }
       @media all and (max-width: 1023px) {
         height: 547px;
-        background-image: url('@/assets/img/about/header_mobile.png');
+        background-image: url("@/assets/img/about/header_mobile.png");
       }
     }
     &-list {

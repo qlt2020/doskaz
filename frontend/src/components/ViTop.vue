@@ -968,6 +968,13 @@ body {
           }
         }
       }
+      &-wrapper {
+        .about__container {
+          &__title {
+            font-size: 32px;
+          }
+        }
+      }
     }
     .blog {
       &__content {
@@ -1393,6 +1400,13 @@ body {
           font-size: 18px;
           @media all and (max-width: 768px) {
             font-size: 16px;
+          }
+        }
+      }
+      &-wrapper {
+        .about__container {
+          &__title {
+            font-size: 36px;
           }
         }
       }
@@ -3216,6 +3230,7 @@ body {
       }
     }
     .about {
+      background: transparent;
       &__top {
         &-item {
           -webkit-box-shadow: none;
@@ -3227,6 +3242,70 @@ body {
         }
         .about__text-b:first-child {
           margin: 0;
+        }
+      }
+      &-wrapper {
+        .about__container {
+          border-radius: 0;
+          box-shadow: none;
+          border: 1px solid;
+          background: transparent;
+          &__title {
+            color: inherit;
+            &:before {
+              display: none;
+            }
+          }
+          &__text {
+            color: inherit;
+            font-size: inherit;
+          }
+          &__how-works {
+            .item {
+              &.yellow,
+              &.green,
+              &.red {
+                border-radius: 0;
+                border-color: inherit;
+                box-shadow: none;
+                .info {
+                  .title__red,
+                  .title__green,
+                  .title__yellow {
+                    color: inherit;
+                  }
+                  .icon {
+                    background: #000;
+                  }
+                }
+                .desc {
+                  color: inherit;
+                }
+              }
+            }
+          }
+          &.realization,
+          &.finance {
+            .about__container__span-text {
+              font-size: inherit;
+              color: inherit;
+              line-height: 1;
+            }
+          }
+        }
+        .about__sidebar {
+          border-radius: 0;
+          box-shadow: none;
+          border: 1px solid;
+          .scrollactive-item {
+            line-height: 1;
+          }
+          .about__sidebar__link-active {
+            color: inherit;
+            &:before {
+              display: none;
+            }
+          }
         }
       }
     }
