@@ -380,5 +380,45 @@ export default {
       }
     }
   }
+  &.md {
+    .login-form {
+      &__card {
+        .header__title,
+        .phone-form__switch,
+        .intro-files__container {
+          font-size: 17px;
+        }
+        .buttons {
+          .button {
+            &.button_google {
+              span {
+                font-size: 19px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.lrg {
+    .login-form {
+      &__card {
+        .header__title,
+        .phone-form__switch,
+        .intro-files__container {
+          font-size: 20px;
+        }
+        .buttons {
+          .button {
+            &.button_google {
+              span {
+                font-size: 22px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 </style>
