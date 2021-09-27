@@ -162,7 +162,12 @@
         </div>
       </div>
       <div class="vi__footer --bcolor">
-        <a href="" class="vi__footer-link">{{ $t("mainMenu.help") }}</a>
+        <nuxt-link :to="localePath({ name: '/' })" class="vi__footer-link">{{
+          $t("mainMenu.map")
+        }}</nuxt-link>
+        <nuxt-link :to="localePath({ name: 'help' })" class="vi__footer-link">{{
+          $t("mainMenu.help")
+        }}</nuxt-link>
         <nuxt-link
           :to="localePath({ name: 'about' })"
           class="vi__footer-link"
