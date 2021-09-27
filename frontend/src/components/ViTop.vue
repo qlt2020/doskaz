@@ -3578,6 +3578,27 @@ body {
         color: inherit;
       }
     }
+    .complaint {
+      &__item {
+        border-radius: 0;
+        .title {
+          color: inherit;
+          &:before {
+            display: none;
+          }
+        }
+        .label {
+          color: inherit;
+        }
+        .add-link {
+          color: inherit;
+          border-bottom-color: inherit;
+        }
+      }
+    }
+    .photo-input {
+      background-color: #fff;
+    }
   }
   &.sm {
   }
