@@ -572,8 +572,8 @@ final class UserController extends AbstractController
         $items = array_merge($postComments, $objectReviews);
 
         uasort($items, function ($a, $b) use ($sort, $field) {
-            $value = $a[$field] ?? 0 <=> $b[$field] ?? 0;
-            return ($sort === 'desc') ? - $value : $value;
+            $value = ($a[$field] ?? 0) <=> ($b[$field] ?? 0);
+            return ($sort === 'desc') ? (- $value) : $value;
         });
 
         $results = [];
@@ -627,7 +627,7 @@ final class UserController extends AbstractController
         }
 
         return [
-            'pages' => ceil(count($results) / $perPage),
+            'pages' => ceil(count($items) / $perPage),
             'items' => $results
         ];
     }

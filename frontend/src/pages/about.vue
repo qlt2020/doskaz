@@ -148,25 +148,41 @@
                   <div class="social-icon" @click="share('fb')">
                     <img
                       style="margin: auto"
-                      :src="require('@/assets/img/social/fcb.svg')"
+                      :src="
+                        !viModeEnabled
+                          ? require('@/assets/img/social/fcb.svg')
+                          : require('@/assets/img/social/fcb-black.svg')
+                      "
                     />
                   </div>
                   <div class="social-icon" @click="share('vk')">
                     <img
                       style="margin: auto"
-                      :src="require('@/assets/img/social/vk.svg')"
+                      :src="
+                        !viModeEnabled
+                          ? require('@/assets/img/social/vk.svg')
+                          : require('@/assets/img/social/vk-black.svg')
+                      "
                     />
                   </div>
                   <div class="social-icon" @click="share('twitter')">
                     <img
                       style="margin: auto; width: 15px; height: 15px;"
-                      :src="require('@/assets/img/social/twitter.svg')"
+                      :src="
+                        !viModeEnabled
+                          ? require('@/assets/img/social/twitter.svg')
+                          : require('@/assets/img/social/twitter-black.svg')
+                      "
                     />
                   </div>
                   <div class="social-icon" @click="share('telegram')">
                     <img
                       style="margin: auto;width: 15px; height: 15px;"
-                      :src="require('@/assets/img/social/telegram.svg')"
+                      :src="
+                        !viModeEnabled
+                          ? require('@/assets/img/social/telegram.svg')
+                          : require('@/assets/img/social/telegram-black.svg')
+                      "
                     />
                   </div>
                 </div>
@@ -573,11 +589,15 @@ export default {
           grid-template-rows: 192px auto;
           justify-items: center;
           .social-icon {
+            cursor: pointer;
             width: 30px;
             height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 5px;
-            box-shadow: 0px 16px 24px rgbo(0, 0, 0, 0.6),
-              0px 2px 6px rgbo(0, 0, 0, 0.4), 0px 0px 1px rgbo(0, 0, 0, 0.4);
+            box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06),
+              0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
           }
         }
       }

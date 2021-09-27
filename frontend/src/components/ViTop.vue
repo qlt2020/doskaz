@@ -3157,6 +3157,14 @@ body {
   }
   &.black,
   &.white {
+    .vi-header {
+      &__bottom {
+        padding: 30px 0 34px;
+        border-bottom: 2px solid;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
     .vi__auth-b {
       .select {
         position: relative;
@@ -3275,6 +3283,7 @@ body {
                     color: inherit;
                   }
                   .icon {
+                    border: 1px solid;
                     background: #000;
                   }
                 }
@@ -3292,16 +3301,28 @@ body {
               line-height: 1;
             }
           }
+          &__steps {
+            .step {
+              .social-icon {
+                box-shadow: none;
+                border-radius: 0;
+                border: 1px solid;
+                background: #fff;
+              }
+            }
+          }
         }
         .about__sidebar {
           border-radius: 0;
           box-shadow: none;
           border: 1px solid;
+          background: transparent;
           .scrollactive-item {
             line-height: 1;
           }
           .about__sidebar__link-active {
             color: inherit;
+            font-weight: bold;
             &:before {
               display: none;
             }
