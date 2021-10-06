@@ -4,7 +4,11 @@
       <nuxt-link :to="localePath({ name: 'index' })" class="main-filter__logo">
         <img src="@/assets/img/logo-new-white.png" alt="logo" />
       </nuxt-link>
-      <div v-if="!$route.name.includes('objects-id__')" class="burger-wrapper" @click="mainPageMobOpened()">
+      <div
+        v-if="!$route.name.includes('objects-id__')"
+        class="burger-wrapper"
+        @click="mainPageMobOpened()"
+      >
         <span class="burger">
           <span class="burger-line"></span>
         </span>
@@ -316,13 +320,13 @@
               <div class="object-side__close"></div>
             </div>
             <div class="more-detail__top">
-              {{ $t('objects.detailedInfo') }}
+              {{ $t("objects.detailedInfo") }}
               <a
                 :href="`/api/objects/${$route.params.id}/pdf`"
                 target="_blank"
                 class="more-detail__download"
                 download
-                >
+              >
                 {{ $t("objects.download") }}
               </a>
             </div>
@@ -1384,7 +1388,7 @@ export default {
       position: absolute;
       border-radius: 0px 12px 12px 0px;
       right: -5px;
-      top: 15px;
+      top: 20px;
       width: 35px;
       height: 55px;
       background-color: $white;
