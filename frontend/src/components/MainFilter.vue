@@ -129,9 +129,9 @@
           </svg>
         </form>
         <div
-            class="search-sub"
-            v-if="searchHighlights.length && searchFocused"
-            @click="clearCategories"
+          class="search-sub"
+          v-if="searchHighlights.length && searchFocused"
+          @click="clearCategories"
         >
           <nuxt-link
             :to="
@@ -254,7 +254,7 @@ export default {
   border: 1px solid $stroke;
   border-top: none;
   background: #ffffff;
-  width: 500px;
+  width: 100%;
   padding: 8px 0;
   z-index: 3;
   @media all and (max-width: 1023px) {
