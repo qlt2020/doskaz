@@ -2,7 +2,7 @@
   <div class="sidebar-wrapper" :class="{ opened: mobileOpened }">
     <div class="mob-menu">
       <nuxt-link :to="localePath({ name: 'index' })" class="main-filter__logo">
-        <img src="@/assets/img/logo-new-white.png" alt="logo" />
+        <img src="@/assets/img/logo-new-black.svg" alt="logo" />
       </nuxt-link>
       <div
         v-if="!$route.name.includes('objects-id__')"

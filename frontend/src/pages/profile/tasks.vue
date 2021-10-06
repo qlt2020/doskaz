@@ -24,11 +24,11 @@ import UserTasks from "~/components/user/UserTasks";
 export default {
   data() {
     return {
-      addTaskPopup: false
+      addTaskPopup: false,
     };
   },
   components: {
-    UserTasks
+    UserTasks,
   },
   watchQuery: true,
   async asyncData({ $axios, query, store }) {
@@ -36,11 +36,11 @@ export default {
       params: {
         ...query,
         page: query.page || 1,
-        cityId: store.state.settings.cityId
-      }
+        cityId: store.state.settings.cityId,
+      },
     });
     return data;
-  }
+  },
 };
 </script>
 
