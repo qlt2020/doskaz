@@ -426,14 +426,14 @@ export default {
     status: {
       full_accessible: "Доступно",
       partial_accessible: "Частично доступно",
-      not_accessible: "Не доступно",
+      not_accessible: "Недоступно",
       not_provided: "Не предусмотрено",
     },
   },
   accessibilityStatus: {
     full_accessible: "Доступно",
     partial_accessible: "Частично доступно",
-    not_accessible: "Не доступно",
+    not_accessible: "Недоступно",
     not_provided: "не предусмотрено",
     unknown: "не известно",
   },
