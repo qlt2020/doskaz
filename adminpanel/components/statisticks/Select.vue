@@ -1,5 +1,5 @@
 <template>
-    <select :multiple="options.multiple" ref="select" class="select-stat" >
+    <select :multiple="options.multiple" ref="select" class="select-stat" v-model="value">
         <template v-if="!optionsTypeObj">
             <option v-if="allOptions" value=0>Все</option>
             <option v-for="option in selectOptions" :key="option.title" :value="usersValue ? option.usersValue : option.value">{{option.title}}</option>
