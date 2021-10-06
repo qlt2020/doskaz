@@ -93,13 +93,29 @@
                 this.$store.dispatch('statisticks/complaintsList');
             },
             async changeDate(val) {
-                let from = new Date(val[0]).toISOString().split('T')[0]
-                let to = new Date(val[1]).toISOString().split('T')[0]
+                let from = this.toISOLocal(new Date(val[0])).split('T')[0];
+                let to = this.toISOLocal(new Date(val[1])).split('T')[0];
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': from});
                 this.dateFrom = from;
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateTo', 'value': to});
                 this.dateTo = to;
                 await this.$store.dispatch('statisticks/complaintsList');
+            },
+            toISOLocal(d) {
+                var z  = n =>  ('0' + n).slice(-2);
+                var zz = n => ('00' + n).slice(-3);
+                var off = d.getTimezoneOffset();
+                var sign = off < 0? '+' : '-';
+                off = Math.abs(off);
+
+                return d.getFullYear() + '-'
+                        + z(d.getMonth()+1) + '-' +
+                        z(d.getDate()) + 'T' +
+                        z(d.getHours()) + ':'  + 
+                        z(d.getMinutes()) + ':' +
+                        z(d.getSeconds()) + '.' +
+                        zz(d.getMilliseconds()) +
+                        sign + z(off/60|0) + ':' + z(off%60); 
             },
             async clearDate() {
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': ''});

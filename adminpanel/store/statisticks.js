@@ -5,7 +5,7 @@ export const state = () => ({
   complaintsCount: null,
   complaintsFilter: {
     params: {
-      year_id: 2021
+      year_id: (new Date()).getFullYear()
     }
   },
   complaintsFilteredStat: [],
@@ -20,7 +20,7 @@ export const state = () => ({
   feedbackCount: null,
   feedbackFilter: {
     params: {
-      year_id: 2020
+      year_id: (new Date()).getFullYear()
     }
   },
   feedbackFilteredStat: [],
@@ -195,6 +195,10 @@ export const actions = {
     const {data} = await this.$axios.get('/api/complaints/statistic', state.complaintsFilter)
     const complaintsCount = getCountToCategory(data.result, 'month', 'year', 'count')
 
+    const count = totalCount(data.result, 'count')
+
+    commit('SET_COMPLAINTS_COUNT', count)
+
     commit('SET_COMPLAINTS_FILTERED_STAT', complaintsCount)
   },
 
@@ -202,12 +206,17 @@ export const actions = {
       const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
+      
       commit('SET_FEEDBACK_STAT', data)
   },
 
   async getFeedbackFilter ({commit, state}) {
     const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
+
+    const count = totalCount(data.result, 'count')
+    commit('SET_FEEDBACK_COUNT', count)
+
     commit('SET_FEEDBACK_FILTERED_STAT', feedbackStat)
   },
 

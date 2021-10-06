@@ -137,7 +137,8 @@
                     class="statisticks__block"
                 >
                     <Select
-                        :value="selectedYear"
+                        v-if="currentYear"
+                        :value="currentYear"
                         :options="yearsComplaints"
                         @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
                     />
@@ -145,13 +146,14 @@
                         :statData="complaintsFiltered"
                         :fill="'#EB5757'"
                         :stroke="'#EB5757'"
-                        :title="'Количество жалоб за месяц'"
+                        :title="'Количество жалоб за год'"
                     />
                 </div>
                 <div class="statisticks__block">
 
                     <Select
-                        :value="selectedFeedbackYear"
+                        v-if="currentYear"
+                        :value="currentYear"
                         :options="yearsFeedback"
                         @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
                     />
@@ -159,7 +161,7 @@
                         :statData="feedbackFiltered"
                         :fill="'#27AE60'"
                         :stroke="'#27AE60'"
-                        :title="'Количество обращений за месяц'"
+                        :title="'Количество обращений за год'"
                     />
                 </div>
             </div>
@@ -184,10 +186,11 @@
         data() {
             return {
                 newObjects:[],
+                currentYear: null,
                 selectedCategoryObj: 'kidsTotal',
                 selectedCategoryAge: null,
-                selectedYear: 2021,
-                selectedFeedbackYear: 2020,
+                // selectedYear: 2021,
+                // selectedFeedbackYear: 2021,
                 users: {
                    kids_full_accessible: null,
                    movement_full_accessible: null
@@ -254,15 +257,25 @@
         methods: {
             async yearsCount(complaintsSelect) {
                 let yearsApi;
+                this.currentYear = (new Date()).getFullYear();
+
                 if (complaintsSelect) {
                     yearsApi = await this.complaintsStat.years
                     yearsApi.forEach(year => {
-                        this.yearsComplaints.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsComplaints.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsComplaints.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
                 } else {
                     yearsApi = await this.feedbackStat.years
                     yearsApi.forEach(year => {
-                        this.yearsFeedback.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsFeedback.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsFeedback.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
                 }
             },
