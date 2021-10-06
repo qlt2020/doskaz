@@ -6,7 +6,11 @@
           :to="localePath({ name: 'index' })"
           class="main-header__logo"
         >
-          <img :src="require(`@/assets/img/logo-new-white.png`)" alt="logo-doskaz" />
+          <!-- <img :src="require(`@/assets/img/logo-new-white.png`)" alt="logo-doskaz" /> -->
+          <img
+            :src="require(`@/assets/img/logo-new-black.svg`)"
+            alt="logo-doskaz"
+          />
           <img :src="require('@/assets/logo-black.svg')" alt class="black" />
           <img :src="require('@/assets/logo-white.svg')" alt class="white" />
         </nuxt-link>

@@ -1,9 +1,16 @@
 <template>
-  <div v-if="mobileMenu" class="main-page__mobile" :class="{ opened: mobileMenu }">
+  <div
+    v-if="mobileMenu"
+    class="main-page__mobile"
+    :class="{ opened: mobileMenu }"
+  >
     <div class="main-page__mobile-left" :class="{ opened: mobileMenu }">
       <div class="main-page__mobile-in">
         <div class="main-page__mobile-item">
-          <city-selector v-if="$route.path === '/'" class="mobile-city-selector" />
+          <city-selector
+            v-if="$route.path === '/'"
+            class="mobile-city-selector"
+          />
           <LangSelect />
         </div>
 
@@ -12,14 +19,11 @@
             :to="localePath({ name: 'index' })"
             class="main-filter__logo"
           >
-            <img :src="require(`@/assets/img/logo-new-white.png`)" alt />
+            <img :src="require(`@/assets/img/logo-new-black.svg`)" alt />
           </nuxt-link>
         </div>
 
-        <div
-            v-if="$route.path === '/'"
-            class="main-page__mobile-item"
-        >
+        <div v-if="$route.path === '/'" class="main-page__mobile-item">
           <button
             class="btn btn_white"
             type="button"
@@ -865,7 +869,7 @@ export default {
   .stat_button-wrap {
     margin-left: 10px;
   }
-  
+
   @media screen and (max-width: 991px) {
     .btn-change-type {
       position: absolute;
