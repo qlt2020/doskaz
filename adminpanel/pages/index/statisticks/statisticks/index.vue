@@ -48,8 +48,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- {{groupPopulation}} -->
-                    <!-- {{objectsStat}} -->
                     <div class="col-9">
                         <div class="statisticks__block statisticks__main-offer">
                             <Select @input="changeCategory" :options="groupPopulation" :value="selectedCategoryObj"/>
@@ -244,7 +242,6 @@
             feedbackFiltered: get('statisticks/feedbackFilteredStat'),
             usersStat: get('statisticks/usersStat'),
             groupPopulation:get('statisticks/group'),
-            // objectsCount: get('statisticks/objectsCount'),
             usersAge: get('statisticks/usersAge'),
             ageGroupPopulations() {
                 const populations = {}
