@@ -199,8 +199,14 @@
                 "
                 >{{ $t("mainMenu.contacts") }}</span
               ></nuxt-link
-            ></span
-          >
+            >
+            <br />
+            <br />
+            {{ $t("about.section9_1Text") }}
+            <br />
+            <br />
+            {{ $t("about.section9_2Text") }}
+          </span>
         </section>
         <section id="finance" class="about__container finance">
           <span class="about__container__title">{{
@@ -214,6 +220,18 @@
           </div>
           <span class="about__container__span-text">
             {{ $t("about.section10Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_1Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_2Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_3Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_4Text") }}
           </span>
         </section>
         <section id="support" class="about__container">
@@ -221,6 +239,9 @@
             $t("about.section11")
           }}</span>
           <div class="about__container__text">
+            {{ $t("about.section11_1Text") }}
+            <br />
+            <br />
             {{ $t("about.section11Text") }}
             <nuxt-link :to="localePath({ name: 'contacts' })"
               ><span
@@ -416,7 +437,8 @@ export default {
           width: 3px;
           height: 25px;
           position: absolute;
-          top: 5px;
+          top: 50%;
+          transform: translate(0, -50%);
           left: -26px;
           @media screen and (max-width: 1023px) {
             bottom: -15px;
