@@ -50,10 +50,8 @@
 </template>
 
 <script>
-
 export default {
   name: "UserPageHeader",
-
 };
 </script>
 
@@ -110,8 +108,10 @@ export default {
         align-items: center;
         position: relative;
         overflow-y: hidden;
-        overflow-x: scroll;
+        overflow-x: auto;
         max-width: 750px;
+        scrollbar-color: #c3c4c38a #fff0;
+        scrollbar-width: thin;
         &::-webkit-scrollbar {
           height: 6px;
         }

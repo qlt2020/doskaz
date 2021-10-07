@@ -125,10 +125,13 @@
     <nuxt />
     <mobile-menu></mobile-menu>
     <div class="btn-change-type" v-if="!mobileOpened && !objectTypeSelect">
-      <div>
+      <div class="button_wrap">
         <button @click="openSelectTypeObject" class="button">
           {{ $t("selectObjectType") }}
         </button>
+      </div>
+      <div class="stat_button-wrap">
+        <StatisticsBtn/>
       </div>
     </div>
   </div>
@@ -151,6 +154,7 @@ import SubscribeNotifDoneModal from "../components/modals/SubscribeNotifDoneModa
 import SelectObjectTypeModal from "@/components/modals/SelectObjectTypeModal";
 import DetectLocation from "@/components/modals/AutoDetectLocation";
 import MobileMenu from "@/components/MobileMenu";
+import StatisticsBtn from "~/components/statistics/StatisticsBtn"
 
 export default {
   data() {
@@ -182,6 +186,7 @@ export default {
     SelectObjectTypeModal,
     DetectLocation,
     MobileMenu,
+    StatisticsBtn
   },
   computed: {
     currentCategory: get("disabilitiesCategorySettings/currentCategory"),
@@ -482,7 +487,7 @@ export default {
     right: 20px;
     z-index: 10;
     &.--desktop {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: none;
       }
     }
@@ -647,7 +652,7 @@ export default {
       flex-direction: column;
     }
     &.--desktop {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         display: none;
       }
     }
@@ -693,7 +698,11 @@ export default {
   .btn-change-type {
     display: none;
   }
-  @media screen and (max-width: 991px) {
+  .stat_button-wrap {
+    margin-left: 10px;
+  }
+
+  @media screen and (max-width: 1023px) {
     .btn-change-type {
       position: absolute;
       width: 100%;
@@ -701,11 +710,11 @@ export default {
       z-index: 2;
       display: flex;
       justify-content: center;
-      div {
+      .button_wrap {
         background-color: #ffffff;
         padding: 7px;
         border-radius: 10px;
-        width: 80%;
+        width: calc(80% - 58px) ;
         display: flex;
         justify-content: center;
         button {
@@ -714,6 +723,39 @@ export default {
           font-family: Montserrat;
           font-weight: 500;
         }
+      }
+      .stat_btn {
+        position: inherit;
+        width: 58px;
+        height: 100%;
+        img {
+          margin: 0;
+        }
+        span {
+          @media all and (max-width: 1024px) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .main-filter__visual {
+    margin: 0 15px 0 auto;
+    cursor: pointer;
+    transition: opacity 0.3s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    @media screen and (max-width: 1366px) {
+      margin-left: 25px;
+      justify-content: center;
+    }
+
+    &.--desktop {
+      @media all and (max-width: 1023px) {
+        display: none;
       }
     }
   }

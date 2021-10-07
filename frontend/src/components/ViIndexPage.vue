@@ -216,15 +216,27 @@ export default {
     ),
     async search() {
       this.results = await this.$axios.$get("/api/objects/filter", {
-        params: {
-          query: this.searchQuery,
-          cityId: this.selectedCity.id,
-          disabilitiesCategory: this.selectedDisabilitiesCategory.category,
-          accessibilityLevels: Object.keys(this.accessibilityLevels).filter(
-            (key) => this.accessibilityLevels[key] === true
-          ),
-          subCategoryId: this.selectedSubCategoryId,
-        },
+        params:
+          this.selectedCity.id > 1
+            ? {
+                query: this.searchQuery,
+                cityId: this.selectedCity.id,
+                disabilitiesCategory: this.selectedDisabilitiesCategory
+                  .category,
+                accessibilityLevels: Object.keys(
+                  this.accessibilityLevels
+                ).filter((key) => this.accessibilityLevels[key] === true),
+                subCategoryId: this.selectedSubCategoryId,
+              }
+            : {
+                query: this.searchQuery,
+                disabilitiesCategory: this.selectedDisabilitiesCategory
+                  .category,
+                accessibilityLevels: Object.keys(
+                  this.accessibilityLevels
+                ).filter((key) => this.accessibilityLevels[key] === true),
+                subCategoryId: this.selectedSubCategoryId,
+              },
       });
     },
   },

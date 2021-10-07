@@ -10,7 +10,7 @@
             <span
               class="vi-set__link --fs --sm  --bcolor --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.fontSize === 'sm'
+                '--active': visualImpairedModeSettings.fontSize === 'sm',
               }"
               @click="changeFontSize('sm')"
               >A</span
@@ -18,7 +18,7 @@
             <span
               class="vi-set__link --fs --md  --bcolor --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.fontSize === 'md'
+                '--active': visualImpairedModeSettings.fontSize === 'md',
               }"
               @click="changeFontSize('md')"
               >A</span
@@ -26,7 +26,7 @@
             <span
               class="vi-set__link --fs --lrg --bcolor --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.fontSize === 'lrg'
+                '--active': visualImpairedModeSettings.fontSize === 'lrg',
               }"
               @click="changeFontSize('lrg')"
               >A</span
@@ -41,7 +41,7 @@
             <span
               class="vi-set__link --ctheme --white --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.colorTheme === 'white'
+                '--active': visualImpairedModeSettings.colorTheme === 'white',
               }"
               @click="changeColorTheme('white')"
               >Ц</span
@@ -49,7 +49,7 @@
             <span
               class="vi-set__link --ctheme --black --bcolor --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.colorTheme === 'black'
+                '--active': visualImpairedModeSettings.colorTheme === 'black',
               }"
               @click="changeColorTheme('black')"
               >Ц</span
@@ -64,7 +64,7 @@
             <span
               class="vi-set__link --ff --btn --bcolor --fcolor"
               :class="{
-                '--active': visualImpairedModeSettings.fontFamily === 'Lato'
+                '--active': visualImpairedModeSettings.fontFamily === 'Lato',
               }"
               @click="changeFontFamily('Lato')"
               >{{ $t("visualImpairedSettings.fontFamilySans") }}</span
@@ -91,12 +91,12 @@
     <div class="vi-header__bottom --bcolor --fcolor">
       <nuxt-link :to="localePath({ name: 'index' })" class="vi__logo">
         <img
-          :src="require('~/assets/logo-black.svg')"
+          :src="require('~/assets/img/logo-vi-black.svg')"
           alt=""
           v-if="visualImpairedModeSettings.colorTheme === 'white'"
         />
         <img
-          :src="require('~/assets/logo-white.svg')"
+          :src="require('~/assets/img/logo-vi-white.svg')"
           alt=""
           v-if="visualImpairedModeSettings.colorTheme === 'black'"
         />
@@ -156,14 +156,14 @@ export default {
     ...call("visualImpairedModeSettings", [
       "changeFontFamily",
       "changeFontSize",
-      "changeColorTheme"
-    ])
+      "changeColorTheme",
+    ]),
   },
   computed: {
     name: get("authentication/name"),
     user: get("authentication/user"),
-    visualImpairedModeSettings: get("visualImpairedModeSettings")
-  }
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
+  },
 };
 </script>
 

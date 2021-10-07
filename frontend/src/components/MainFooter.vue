@@ -8,7 +8,11 @@
             class="main-footer__logo"
           >
             <img
-              :src="require(`@/assets/logo_doskaz_white.svg`)"
+              :src="
+                visualImpairedModeSettings.colorTheme === 'black'
+                  ? require(`@/assets/img/logo-vi-white.svg`)
+                  : require(`@/assets/img/logo-vi-black.svg`)
+              "
               alt="logo-doskaz"
             />
           </nuxt-link>
@@ -21,7 +25,11 @@
             </div>
             <img
               class="main-footer__qlt-logo"
-              :src="require(`@/assets/qlt_logo.svg`)"
+              :src="
+                viModeEnabled
+                  ? require(`@/assets/qlt_logo.svg`)
+                  : require(`@/assets/qlt_logo.svg`)
+              "
               alt="logo-doskaz"
             />
           </a>
@@ -54,12 +62,14 @@
 
 <script>
 import { getDate } from "date-fns";
-import { call } from "vuex-pathify";
+import { call, get } from "vuex-pathify";
 export default {
   data() {
     return {};
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
     getPrivacy() {
       var date = new Date();
       return `Doskaz.kz (c) ${date.getFullYear()} Все права защищены`;
@@ -121,6 +131,11 @@ export default {
       font-family: "SFProDisplay";
       font-size: 12px;
       font-weight: 300;
+    }
+  }
+  &__logo {
+    img {
+      width: 130px;
     }
   }
 }

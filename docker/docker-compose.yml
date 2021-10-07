@@ -119,18 +119,6 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - db:/var/lib/postgresql/data
-  adminer:
-    depends_on:
-      - database
-    image: adminer:latest
-    restart: always
-    networks:
-      - default
-      - web
-    ports:
-      - 4444:8080
-    labels:
-      - traefik.enable=true
 
   imgproxy:
     image: darthsim/imgproxy:v2.10

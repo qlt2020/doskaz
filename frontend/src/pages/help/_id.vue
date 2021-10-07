@@ -102,6 +102,11 @@ import BackBtn from "~/components/BackBtn";
 export default {
   components: { FormattedDate, CommentsBlock, Comments, BackBtn },
   layout: "blog",
+  head() {
+    return {
+      title: this.$t("mainMenu.help"),
+    };
+  },
   async asyncData({ $axios, params }) {
     const article = await $axios.$get(`/api/help/${params.id}`);
     return { article };
