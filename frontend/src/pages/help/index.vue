@@ -85,6 +85,14 @@ export default {
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
   },
+  mounted() {
+    let images = document.querySelectorAll(".item-content .text p img");
+    let video = document.querySelectorAll(".item-content .text p iframe");
+    [...texts, ...images].forEach((el) => {
+      el.setAttribute("width", "100%");
+      el.setAttribute("height", "auto");
+    });
+  },
 };
 </script>
 
