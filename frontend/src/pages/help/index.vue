@@ -27,13 +27,7 @@
           <div class="item-content">
             <span class="item-title">{{ article.title }}</span>
             <!-- <span class="date">{{ article.date }}</span> -->
-            <span
-              class="text"
-              v-html="
-                `<img style='width: 745px; height: 559px;' src='https://bipbap.ru/wp-content/uploads/2017/04/3dr-19.jpg' alt=''>`
-              "
-            >
-            </span>
+            <span class="text" v-html="article.description"> </span>
             <nuxt-link
               class="detail"
               :to="
