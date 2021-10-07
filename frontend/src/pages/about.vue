@@ -143,48 +143,24 @@
               <div>
                 {{ $t("about.section7Text3") }}
                 <div
-                  style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;grid-column-gap: 5px;justify-items: center;"
+                  style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;justify-items: center;"
                 >
-                  <div class="social-icon" @click="share('fb')">
-                    <img
-                      style="margin: auto"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/fcb.svg')
-                          : require('@/assets/img/social/fcb-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('vk')">
-                    <img
-                      style="margin: auto"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/vk.svg')
-                          : require('@/assets/img/social/vk-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('twitter')">
-                    <img
-                      style="margin: auto; width: 15px; height: 15px;"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/twitter.svg')
-                          : require('@/assets/img/social/twitter-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('telegram')">
-                    <img
-                      style="margin: auto;width: 15px; height: 15px;"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/telegram.svg')
-                          : require('@/assets/img/social/telegram-black.svg')
-                      "
-                    />
-                  </div>
+                  <div
+                    class="contacts__social-link --fcb"
+                    @click="share('fb')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --twitter"
+                    @click="share('twitter')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --tg"
+                    @click="share('telegram')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --vk"
+                    @click="share('vk')"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -338,6 +314,48 @@ export default {
 
 <style lang="scss">
 @import "@/styles/mixins.scss";
+
+.contacts__social {
+  font-size: 0;
+
+  &-link {
+    vertical-align: top;
+    display: inline-block;
+    background-color: #2d9cdb;
+    border-radius: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 36px;
+    margin: 0 0 0 12px;
+    transition: opacity 0.4s;
+    cursor: pointer;
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &.--fcb {
+      background-image: url("@/assets/img/social/facebook-white.svg");
+    }
+
+    &.--twitter {
+      background-image: url("@/assets/img/social/twitter-white.svg");
+    }
+
+    &.--tg {
+      background-image: url("@/assets/img/social/tg-white.svg");
+    }
+
+    &.--vk {
+      background-image: url("@/assets/img/social/vk-white.svg");
+    }
+  }
+}
 
 .about {
   background: #fafafa;
@@ -590,8 +608,8 @@ export default {
           justify-items: center;
           .social-icon {
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;

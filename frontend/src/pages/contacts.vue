@@ -808,11 +808,11 @@ export default {
       }
 
       &.--fcb {
-        background-image: url("@/assets/icons/fb.png");
+        background-image: url("@/assets/img/social/facebook-white.svg");
       }
 
       &.--inst {
-        background-image: url("@/assets/icons/insta.png");
+        background-image: url("@/assets/img/social/insta-white.svg");
       }
     }
   }

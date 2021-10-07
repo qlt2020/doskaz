@@ -3357,7 +3357,8 @@ body {
         }
       }
       &__social {
-        a {
+        a,
+        &-link {
           border: 1px solid;
           background-color: #000;
         }
