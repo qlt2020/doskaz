@@ -27,7 +27,13 @@
           <div class="item-content">
             <span class="item-title">{{ article.title }}</span>
             <!-- <span class="date">{{ article.date }}</span> -->
-            <span class="text" v-html="article.description"> </span>
+            <span
+              class="text"
+              v-html="
+                `<img style='width: 745px; height: 559px;' src='https://bipbap.ru/wp-content/uploads/2017/04/3dr-19.jpg' alt=''>`
+              "
+            >
+            </span>
             <nuxt-link
               class="detail"
               :to="
@@ -88,9 +94,8 @@ export default {
   mounted() {
     let images = document.querySelectorAll(".item-content .text p img");
     let video = document.querySelectorAll(".item-content .text p iframe");
-    [...texts, ...images].forEach((el) => {
-      el.setAttribute("width", "100%");
-      el.setAttribute("height", "auto");
+    [...video, ...images].forEach((el) => {
+      el.remove();
     });
   },
 };
