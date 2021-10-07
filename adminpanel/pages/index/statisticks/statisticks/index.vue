@@ -29,6 +29,7 @@
                             <div class="statisticks__main-total-number --green">
                                 {{objectsCount.fullAccessible}}
                             </div>
+
                         </div>
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
@@ -47,7 +48,8 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- {{groupPopulation}} -->
+                    <!-- {{objectsStat}} -->
                     <div class="col-9">
                         <div class="statisticks__block statisticks__main-offer">
                             <Select @input="changeCategory" :options="groupPopulation" :value="selectedCategoryObj"/>
@@ -150,7 +152,6 @@
                     />
                 </div>
                 <div class="statisticks__block">
-
                     <Select
                         v-if="currentYear"
                         :value="currentYear"
@@ -187,10 +188,8 @@
             return {
                 newObjects:[],
                 currentYear: null,
-                selectedCategoryObj: 'kidsTotal',
+                selectedCategoryObj: 'kids',
                 selectedCategoryAge: null,
-                // selectedYear: 2021,
-                // selectedFeedbackYear: 2021,
                 users: {
                    kids_full_accessible: null,
                    movement_full_accessible: null
@@ -245,13 +244,28 @@
             feedbackFiltered: get('statisticks/feedbackFilteredStat'),
             usersStat: get('statisticks/usersStat'),
             groupPopulation:get('statisticks/group'),
-            objectsCount: get('statisticks/objectsCount'),
+            // objectsCount: get('statisticks/objectsCount'),
             usersAge: get('statisticks/usersAge'),
             ageGroupPopulations() {
                 const populations = {}
                 populations.options = [...this.groupPopulation.options]
                 populations.options.push({usersValue: null, title: 'Все группы'})
                 return populations
+            },
+            objectsCount() {
+                let fullAccessible = 0,
+                      notAccessible = 0,
+                      partialAccessible = 0;
+
+                this.objectsStat.forEach(item => {
+                    fullAccessible += item[`${this.selectedCategoryObj}_full_accessible`];
+                    notAccessible += item[`${this.selectedCategoryObj}_not_accessible`];
+                    partialAccessible += item[`${this.selectedCategoryObj}_partial_accessible`];
+                })
+
+                return {'fullAccessible': fullAccessible,
+                        'notAccessible': notAccessible,
+                        'partialAccessible': partialAccessible}
             }
         },
         methods: {

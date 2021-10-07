@@ -34,10 +34,10 @@ export default {
       }
       if (Array.isArray(this.statData)) {
           this.statData.forEach(item => {
-            totalCount += item[this.selectedCategory];
+            totalCount += item[`${this.selectedCategory}Total`];
             data.push({
               x: item.category_title,
-              value: item[this.selectedCategory]
+              value: item[`${this.selectedCategory}Total`]
             })
           })
       }
