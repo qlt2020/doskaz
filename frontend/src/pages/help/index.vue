@@ -85,6 +85,13 @@ export default {
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
   },
+  mounted() {
+    let images = document.querySelectorAll(".item-content .text p img");
+    let video = document.querySelectorAll(".item-content .text p iframe");
+    [...video, ...images].forEach((el) => {
+      el.remove();
+    });
+  },
 };
 </script>
 

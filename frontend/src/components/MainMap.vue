@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="map_wrapper">
     <yandex-map
       class="ymap"
       :settings="settings"
@@ -37,6 +37,7 @@ export default {
         version: "2.1",
       },
       controls: [],
+      loader: this.$loading.show(),
     };
   },
 
@@ -151,6 +152,7 @@ export default {
       });
       this.objectManager = yamap;
       map.geoObjects.add(yamap);
+      this.loader.hide();
       yamap.objects.events.add(["click"], (e) => {
         this.clickOnObject(e);
       });
@@ -214,7 +216,6 @@ export default {
       }
     },
     coordinatesAndZoom(val, prev) {
-      console.log(`value ${val?.toString()}`);
       if (!this.map) {
         return;
       }
@@ -228,7 +229,6 @@ export default {
       }
     },
     location(val) {
-      console.log(`value${val}`);
       this.setLocation(val);
     },
   },

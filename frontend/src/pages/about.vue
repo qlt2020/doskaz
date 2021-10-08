@@ -472,14 +472,6 @@ export default {
       padding: 25px;
       &.realization,
       &.finance {
-        .about__container__span-text {
-          font-family: SFProDisplay;
-          font-style: normal;
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 24px;
-          color: #000000;
-        }
       }
       .for-whom__img {
         @media screen and (max-width: 1023px) {
@@ -516,7 +508,8 @@ export default {
         }
       }
 
-      &__text {
+      &__text,
+      &__span-text {
         font-family: SFProDisplay;
         font-style: normal;
         font-weight: 400;
