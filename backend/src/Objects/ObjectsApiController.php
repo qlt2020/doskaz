@@ -1016,7 +1016,6 @@ final class ObjectsApiController extends AbstractController
         ];
     }
 
-    
     /**
      * @Route(path="/statistic", methods={"GET"})
      * @param Request $request
