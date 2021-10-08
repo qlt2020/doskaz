@@ -9,9 +9,11 @@
           >
             <img
               :src="
-                visualImpairedModeSettings.colorTheme === 'black'
-                  ? require(`@/assets/img/logo-vi-white.svg`)
-                  : require(`@/assets/img/logo-vi-black.svg`)
+                viModeEnabled
+                  ? visualImpairedModeSettings.colorTheme === 'black'
+                    ? require(`@/assets/img/logo-vi-white.svg`)
+                    : require(`@/assets/img/logo-vi-black.svg`)
+                  : require(`@/assets/img/logo-new-white.svg`)
               "
               alt="logo-doskaz"
             />
