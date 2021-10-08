@@ -1054,7 +1054,8 @@ final class ObjectsApiController extends AbstractController
             ->join('objects', 'object_categories', 'object_categories', 'objects.category_id = object_categories.id')
             ->join('object_categories', 'object_categories', 'object_categories_parent', 'object_categories.parent_id = object_categories_parent.id')
             ->leftJoin('objects', 'cities_geometry', 'cities_geometry', 'ST_Contains(cities_geometry.geometry, objects.point_value::geometry)')
-            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id');
+            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id')
+            ->andWhere('objects.deleted_at IS NULL');
 
         if ($request->query->getInt('main_category_id') != 0) {
             $query = $query
