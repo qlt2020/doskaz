@@ -18,9 +18,13 @@ export default {
     components: { ObjectsFilter, CrudList },
     computed: {
         actions() {
-            //   if(this.$store.state.authentication.user.roles.includes('ROLE_ADMIN')) {
-            //       return ['edit', 'delete']
-            //   }
+            if (
+                this.$store.state.authentication.user.roles.includes(
+                    "ROLE_ADMIN"
+                )
+            ) {
+                return ["edit", "delete"];
+            }
             return ["edit"];
         },
         fields() {
@@ -36,11 +40,11 @@ export default {
                     type: FormattedDate
                 }
             ].filter(i => {
-                return i.key === "createdBy";
-                // ? this.$store.state.authentication.user.roles.includes(
-                //       "ROLE_ADMIN"
-                //   )
-                // : true;
+                return i.key === "createdBy"
+                    ? this.$store.state.authentication.user.roles.includes(
+                          "ROLE_ADMIN"
+                      )
+                    : true;
             });
         }
     }
