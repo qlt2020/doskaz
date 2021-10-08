@@ -1,7 +1,7 @@
 <template>
   <div class="complaint">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="container">
       <div class="complaint__top">
         <h2 class="title">
@@ -34,36 +34,40 @@ import MainHeader from "~/components/MainHeader";
 import ComplaintContent from "~/components/complaint/ComplaintContent";
 import ViTop from "~/components/ViTop";
 import MainFooter from "@/components/MainFooter";
+import { get } from "vuex-pathify";
 
 export default {
   head() {
     return {
-      title: this.$t("complaint.pageTitle")
+      title: this.$t("complaint.pageTitle"),
     };
   },
   components: { ComplaintContent, MainHeader, ViTop, MainFooter },
   middleware: ["authenticated"],
+  computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
+  },
   async asyncData({ $axios, query: { objectId } }) {
     const [
       { data: initialData },
       { data: authorities },
-      { data: cities }
+      { data: cities },
     ] = await Promise.all([
       $axios.get("/api/complaints/initialData", {
         params: {
-          objectId
-        }
+          objectId,
+        },
       }),
       $axios.get("/api/complaints/authorities"),
-      $axios.get("/api/cities")
+      $axios.get("/api/cities"),
     ]);
 
     return {
       initialData,
       authorities,
-      cities
+      cities,
     };
-  }
+  },
 };
 </script>
 
@@ -104,8 +108,8 @@ export default {
         margin-right: 20px;
         cursor: pointer;
       }
-      @media screen and (max-width: 768px) {
-        line-height: 33px;
+      @media screen and (max-width: 1023px) {
+        margin-top: 70px;
       }
     }
   }

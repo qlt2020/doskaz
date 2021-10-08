@@ -1,7 +1,7 @@
 <template>
   <div class="contacts">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="container">
       <div class="contacts__top">
         <h2 class="title">{{ $t("contacts.title") }}</h2>
@@ -151,12 +151,7 @@
           {{ $t("contacts.regionalRepresentativesText") }}
         </p>
         <div class="select">
-          <DropdownBlock
-            :options="citiesForSelect"
-            :top="'auto'"
-            :bottom="'100%'"
-            v-model="city"
-          />
+          <DropdownBlock :options="citiesForSelect" v-model="city" />
         </div>
         <div class="represent__list">
           <div
@@ -222,6 +217,7 @@
 </template>
 
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "@/components/MainHeader";
 import ViTop from "@/components/ViTop";
 import mapValidationErrors from "../mapValidationErrors";
@@ -274,6 +270,7 @@ export default {
     this.city = this.cities[0].id;
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     citiesForSelect() {
       var citiesList = this.cities.map((c) => {
         return {
@@ -369,7 +366,7 @@ export default {
   background: #ffffff;
   margin-top: 80px;
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     margin-top: 55px;
     background: unset;
     padding: 0 15px;
@@ -380,7 +377,7 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
 
-  @media all and (max-width: 768px) {
+  @media all and (max-width: 1023px) {
     padding: 0 0 30px;
   }
 
@@ -391,7 +388,7 @@ export default {
     &:after {
       display: none;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       height: 60px;
       margin-top: 30px;
       &:after {
@@ -417,7 +414,7 @@ export default {
     font-size: 18px;
     line-height: 19px;
     color: #474747;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       font-size: 16px;
       line-height: 17px;
     }
@@ -430,7 +427,7 @@ export default {
     grid-column-gap: 30px;
     grid-row-gap: 20px;
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1023px) {
       grid-template-columns: unset;
       margin-top: 20px;
     }
@@ -444,7 +441,7 @@ export default {
     padding: 20px;
     display: grid;
     grid-row-gap: 20px;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       width: 100%;
       height: 213px;
     }
@@ -453,7 +450,7 @@ export default {
       display: flex;
       align-items: center;
 
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         &:not(:first-child) {
           display: grid;
           grid-row-gap: 20px;
@@ -496,8 +493,6 @@ export default {
       border-radius: 50%;
       height: 41px;
       margin-right: 10px;
-      @media all and (max-width: 768px) {
-      }
     }
 
     &-name {
@@ -534,7 +529,7 @@ export default {
   background: #fafafa;
 
   &__wrapper {
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
     }
   }
 
@@ -548,16 +543,16 @@ export default {
       line-height: 33px;
       color: #000000;
     }
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       padding: 23px 0 32px;
     }
   }
 
   &__content {
     display: grid;
-    grid-template-columns: 370px 770px;
+    grid-template-columns: 370px auto;
     grid-column-gap: 30px;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       grid-template-columns: unset;
       grid-row-gap: 25px;
     }
@@ -571,7 +566,7 @@ export default {
     display: grid;
     grid-template-rows: 2fr auto 3fr 1fr;
     height: 394px;
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       width: 100%;
       padding: 30px 15px;
     }
@@ -583,13 +578,13 @@ export default {
     border-radius: 10px;
     padding: 30px 25px;
 
-    @media all and (max-width: 768px) {
+    @media all and (max-width: 1023px) {
       width: 100%;
       padding: 30px 15px;
     }
 
     .input {
-      @media all and (max-width: 768px) {
+      @media all and (max-width: 1023px) {
         height: 60px;
         font-size: 18px;
       }
@@ -604,9 +599,6 @@ export default {
     line-height: 19px;
     color: #474747;
     margin: auto;
-
-    @media all and (max-width: 768px) {
-    }
   }
 
   &__link {
@@ -616,9 +608,6 @@ export default {
     font-size: 18px;
     line-height: 19px;
     color: #7c7c7c;
-
-    @media all and (max-width: 768px) {
-    }
 
     &:hover {
       color: $blue;
@@ -659,7 +648,7 @@ export default {
         position: absolute;
         top: 4px;
         left: -25px;
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 1023px) {
           left: -16px;
         }
       }
@@ -672,14 +661,14 @@ export default {
     display: flex;
     align-items: center;
 
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 1023px) {
       display: grid;
-      margin-top: 30px;
+      margin-top: 45px;
       grid-row-gap: 20px;
     }
 
     .select {
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         height: 60px;
         &:after {
           top: 26px;
@@ -693,7 +682,7 @@ export default {
       grid-column-gap: 30px;
       margin-top: 35px;
 
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         grid-template-columns: unset;
         grid-row-gap: 30px;
       }
@@ -708,11 +697,10 @@ export default {
       position: absolute;
       right: 0;
       top: 100%;
-      padding-top: 10px 0 16px;
       color: $red;
       line-height: 20px;
       font-size: 14px;
-      white-space: nowrap;
+      /* white-space: nowrap; */
       z-index: 2;
     }
 
@@ -766,7 +754,7 @@ export default {
         opacity: 0.7;
       }
 
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         margin-left: unset;
         width: 100%;
       }
@@ -790,7 +778,7 @@ export default {
     }
 
     .recaptcha {
-      @media screen and (max-width: 768px) {
+      @media screen and (max-width: 1023px) {
         margin: auto;
       }
     }
@@ -820,11 +808,11 @@ export default {
       }
 
       &.--fcb {
-        background-image: url("@/assets/icons/fb.png");
+        background-image: url("@/assets/img/social/facebook-white.svg");
       }
 
       &.--inst {
-        background-image: url("@/assets/icons/insta.png");
+        background-image: url("@/assets/img/social/insta-white.svg");
       }
     }
   }

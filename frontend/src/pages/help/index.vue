@@ -1,7 +1,7 @@
 <template>
-  <div class="blog">
+  <div class="blog help">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
 
     <div class="container">
       <div class="title">
@@ -48,6 +48,7 @@
   </div>
 </template>
 <script>
+import { get } from "vuex-pathify";
 import MainHeader from "@/components/MainHeader";
 import ViTop from "@/components/ViTop";
 import MainFooter from "@/components/MainFooter";
@@ -66,7 +67,7 @@ export default {
   components: { MainHeader, ViTop, MainFooter, Pagination },
   head() {
     return {
-      title: this.$t("meta.title"),
+      title: this.$t("mainMenu.help"),
       meta: [
         {
           hid: "description",
@@ -80,6 +81,16 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
+  },
+  mounted() {
+    let images = document.querySelectorAll(".item-content .text p img");
+    let video = document.querySelectorAll(".item-content .text p iframe");
+    [...video, ...images].forEach((el) => {
+      el.remove();
+    });
   },
 };
 </script>

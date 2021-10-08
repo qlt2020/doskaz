@@ -15,13 +15,21 @@
         ></div>
         <div class="user-profile__icon-edit">
           <img
-            src="~/assets/icons/delete-icon.svg"
+            :src="
+              viModeEnabled
+                ? require('~/assets/icons/delete-icon-black.svg')
+                : require('~/assets/icons/delete-icon.svg')
+            "
             alt="delete-icon"
             class="user-profile__icon-link-delete"
             v-on:click="avatarDelete"
           />
           <img
-            src="~/assets/icons/photo-icon.svg"
+            :src="
+              viModeEnabled
+                ? require('~/assets/icons/photo-icon-black.svg')
+                : require('~/assets/icons/photo-icon.svg')
+            "
             alt="photo-icon"
             class="user-profile__icon-link-photo"
             v-on:click="popupAvatarDefault"
@@ -152,6 +160,7 @@ export default {
     };
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     avatar() {
       return this.profile.avatar || require("~/assets/img/user/default.svg");
     },

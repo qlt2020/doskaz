@@ -24,7 +24,7 @@ export default {
   props: ["mobileOpened"],
   head() {
     return {
-      title: this.object.title
+      title: this.object.title,
     };
   },
   async fetch({ store, params, query, error }) {
@@ -33,7 +33,7 @@ export default {
       await store.dispatch("object/load", params.id);
       store.commit("map/SET_COORDINATES_AND_ZOOM", {
         coordinates: store.state.object.item.coordinates,
-        zoom: process.server ? 19 : query.zoom
+        zoom: process.server ? 19 : query.zoom,
       });
     } catch (e) {
       if (e.response && e.response.status) {
@@ -49,24 +49,32 @@ export default {
       return objectZones;
     },
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
-    userCategory: get("disabilitiesCategorySettings/currentCategory")
+    userCategory: get("disabilitiesCategorySettings/currentCategory"),
   },
   watch: {
     "$route.query.t"() {
       this.coordinatesAndZoom = {
         coordinates: this.object.coordinates,
-        zoom: this.$route.query.zoom
+        zoom: this.$route.query.zoom,
       };
     },
     userCategory() {
       this.reloadObject();
-    }
+    },
+  },
+  async mounted() {
+    await this.$store.dispatch("objectAdding/init");
+    await this.$store.dispatch("object/load", this.$route.params.id);
+    this.$store.commit("map/SET_COORDINATES_AND_ZOOM", {
+      coordinates: this.$store.state.object.item.coordinates,
+      zoom: this.$route.query ?  this.$route.query.zoom : 19,
+    });
   },
   destroyed() {
     this.coordinatesAndZoom = null;
   },
   methods: {
-    reloadObject: call("object/reload")
-  }
+    reloadObject: call("object/reload"),
+  },
 };
 </script>

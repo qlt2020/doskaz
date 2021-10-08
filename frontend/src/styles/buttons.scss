@@ -6,6 +6,7 @@
   align-items: center;
   transition: 0.3s ease;
   border: none;
+
   span {
     display: block;
     color: #fff;
@@ -13,9 +14,11 @@
     font-family: "Montserrat";
     font-weight: 600;
     margin: 10px;
+
     @media screen and (max-width: 991px) {
       font-size: 12px;
     }
+
     &.icon {
       margin-right: 15px;
     }
@@ -40,8 +43,87 @@
   &.btn_white {
     background: $white;
     border: 2px solid $blue;
+
     span {
       color: $black;
+    }
+  }
+}
+
+body {
+  &.white {
+    .btn {
+      border-radius: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s ease;
+      cursor: pointer;
+      height: 60px;
+      line-height: 60px;
+      color: #000000;
+      padding: 0 28px;
+      border: 1px solid #000000;
+      text-transform: uppercase;
+      background: transparent;
+      span {
+        display: block;
+        color: #000;
+      }
+      &:hover {
+        background: #000;
+        span {
+          color: #fff;
+        }
+      }
+    }
+  }
+  &.black {
+    .btn {
+      border-radius: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 0.3s ease;
+      cursor: pointer;
+      height: 60px;
+      line-height: 60px;
+      color: #fff;
+      padding: 0 28px;
+      border: 1px solid #fff;
+      text-transform: uppercase;
+      background: transparent;
+      span {
+        display: block;
+        color: #fff;
+      }
+      &:hover {
+        background: #fff;
+        span {
+          color: #000;
+        }
+      }
+    }
+  }
+  &.sm {
+    .btn {
+      span {
+        font-size: 18px;
+      }
+    }
+  }
+  &.md {
+    .btn {
+      span {
+        font-size: 22px;
+      }
+    }
+  }
+  &.lrg {
+    .btn {
+      span {
+        font-size: 26px;
+      }
     }
   }
 }

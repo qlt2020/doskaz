@@ -2,7 +2,7 @@
   <div class="pdf">
     <div class="pdf__top">
       <div class="pdf__fixed-logo">
-        <img :src="require('@/assets/img/logo-new-white.png')" />
+        <img :src="require('@/assets/img/logo-new-black.svg')" />
       </div>
       <div class="pdf__qr">
         <span class="pdf__qr-text">
@@ -103,17 +103,17 @@ import VueQrcode from "@chenfengyuan/vue-qrcode";
 
 export default {
   components: {
-    [VueQrcode.name]: VueQrcode
+    [VueQrcode.name]: VueQrcode,
   },
   async asyncData({ $axios, query, req }) {
     const [{ data: object }, { data: attributes }] = await Promise.all([
       $axios.get(`/api/objects/${query.id}`),
-      $axios.get(`/api/objects/attributes`)
+      $axios.get(`/api/objects/attributes`),
     ]);
     return {
       object,
       attributes,
-      host: "doskaz.kz"
+      host: "doskaz.kz",
     };
   },
   computed: {
@@ -122,62 +122,62 @@ export default {
         {
           key: "parking",
           title: "Парковка",
-          group: "parking"
+          group: "parking",
         },
         {
           key: "entrance1",
           title: "Входная группа",
-          group: "entrance"
+          group: "entrance",
         },
         {
           key: "entrance2",
           title: "Входная группа",
-          group: "entrance"
+          group: "entrance",
         },
         {
           key: "entrance3",
           title: "Входная группа",
-          group: "entrance"
+          group: "entrance",
         },
         {
           key: "movement",
           title: "Пути движения по объекту",
-          group: "movement"
+          group: "movement",
         },
         {
           key: "service",
           title: "Зона оказания услуги",
-          group: "service"
+          group: "service",
         },
         {
           key: "toilet",
           title: "Туалет",
-          group: "toilet"
+          group: "toilet",
         },
         {
           key: "navigation",
           title: "Навигация",
-          group: "navigation"
+          group: "navigation",
         },
         {
           key: "serviceAccessibility",
           title: "Доступность услуги",
-          group: "serviceAccessibility"
+          group: "serviceAccessibility",
         },
         {
           key: "kidsAccessibility",
           title: "Доступность и безопасность услуг для детей до 7 лет",
-          group: "kidsAccessibility"
-        }
-      ].filter(z => !!this.object.attributes.zones[z.key]);
+          group: "kidsAccessibility",
+        },
+      ].filter((z) => !!this.object.attributes.zones[z.key]);
     },
     qrLink() {
       return `https://${this.host}/objects/${this.$route.query.id}`;
     },
     formAttributes() {
       return this.attributes[this.object.attributes.form];
-    }
-  }
+    },
+  },
 };
 </script>
 

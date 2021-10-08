@@ -113,7 +113,7 @@ final class ObjectsApiController extends AbstractController
             ->from('objects')
             ->andWhere('ST_Contains(ST_MAKEENVELOPE(:x1,:y1,:x2,:y2, 4326)::geometry, point_value::geometry)')
             ->andWhere('objects.deleted_at IS NULL')
-            ->groupBy('hash' )
+            ->groupBy('hash')
             ->having('COUNT(*) > 1')
             ->setParameters([
                 'x1' => $boundary[1],
@@ -615,7 +615,7 @@ final class ObjectsApiController extends AbstractController
      */
     public function pdf(Request $request, MapObject $mapObject, Client $client)
     {
-        $request = new URLRequest($this->params->get('app.frontend_url').'/objects/pdf?id=' . $mapObject->id());
+        $request = new URLRequest($this->params->get('app.frontend_url') . '/objects/pdf?id=' . $mapObject->id());
         $request->setMargins([0, 0, 0, 0]);
         $request->setPaperSize(URLRequest::A4);
         $path = tempnam('/tmp', 'pdf');
@@ -715,8 +715,6 @@ final class ObjectsApiController extends AbstractController
         Assert::oneOf($disabilitiesCategory, AccessibilityScore::SCORE_CATEGORIES);
         $subcategoryId = $request->query->get('subCategoryId');
 
-        $cityId = $request->query->get('cityId');
-        $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
         $qb = $connection->createQueryBuilder()
             ->select([
                 'objects.id',
@@ -727,10 +725,16 @@ final class ObjectsApiController extends AbstractController
             ])
             ->from('objects')
             ->join('objects', 'object_categories', 'object_categories', 'object_categories.id = objects.category_id')
-            ->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
-            ->setParameter('id', $cityId)
             ->setMaxResults(10)
             ->andWhere('deleted_at IS NULL');
+
+        if ($request->query->has('cityId') && !empty($request->query->get('cityId'))) {
+            $cityId = $request->query->get('cityId');
+            $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
+            $qb->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
+                ->setParameter('id', $cityId);
+        }
+
         if (count($accessibilityLevels)) {
             $qb->andWhere("overall_score_$disabilitiesCategory IN (:levels)")
                 ->setParameter('levels', $accessibilityLevels, Connection::PARAM_STR_ARRAY);
@@ -1012,7 +1016,7 @@ final class ObjectsApiController extends AbstractController
         ];
     }
 
-/**
+    /**
      * @Route(path="/statistic", methods={"GET"})
      * @param Request $request
      * @param Connection $connection
@@ -1050,7 +1054,8 @@ final class ObjectsApiController extends AbstractController
             ->join('objects', 'object_categories', 'object_categories', 'objects.category_id = object_categories.id')
             ->join('object_categories', 'object_categories', 'object_categories_parent', 'object_categories.parent_id = object_categories_parent.id')
             ->leftJoin('objects', 'cities_geometry', 'cities_geometry', 'ST_Contains(cities_geometry.geometry, objects.point_value::geometry)')
-            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id');
+            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id')
+            ->andWhere('objects.deleted_at IS NULL');
 
         if ($request->query->getInt('main_category_id') != 0) {
             $query = $query
@@ -1064,7 +1069,7 @@ final class ObjectsApiController extends AbstractController
                 ->setParameter('categoryId', $request->query->getInt('category_id'));
         }
 
-        if ($request->query->getInt('city_id') != 0){
+        if ($request->query->getInt('city_id') != 0) {
             $query = $query
                 ->andWhere('cities.id = :cityId')
                 ->setParameter('cityId', $request->query->getInt('city_id'));
@@ -1111,7 +1116,7 @@ final class ObjectsApiController extends AbstractController
         $previouseMainCat = '';
         $previousSubCat = '';
         $accessibleObjectExportDecorator = new AccessibleObjectExportDecorator();
-        foreach($data as $mainCategory) {
+        foreach ($data as $mainCategory) {
             if ($mainCategory['main_category_title'] != $previouseMainCat || $mainCategory['category_title'] != $previousSubCat) {
                 $accessibleObjectExportDecorator->resetGroupFields();
             }
@@ -1119,7 +1124,7 @@ final class ObjectsApiController extends AbstractController
             $previousSubCat = $mainCategory['category_title'];
             $newData[$mainCategory['main_category_title']][$mainCategory['category_title']] = [];
             $accessibleObjectExportDecorator->setGroupFields($mainCategory);
-            foreach($groups as $group) {
+            foreach ($groups as $group) {
                 $newData[$mainCategory['main_category_title']][$mainCategory['category_title']][$group] = $accessibleObjectExportDecorator->sumGroupCategory($group);
             }
         }

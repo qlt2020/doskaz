@@ -89,7 +89,7 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.lastName }">
+        <div class="input" :class="{ error: false }">
           <input type="text" v-model.trim="profile.lastName" />
         </div>
       </div>
@@ -101,7 +101,7 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.firstName }">
+        <div class="input" :class="{ error: false }">
           <input type="text" v-model.trim="profile.firstName" />
         </div>
       </div>
@@ -113,7 +113,7 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.middleName }">
+        <div class="input" :class="{ error: false }">
           <input type="text" v-model.trim="profile.middleName" />
         </div>
       </div>
@@ -197,9 +197,9 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.email }">
+        <div class="input" :class="{ error: false }">
           <input type="email" v-model.trim="profile.email" />
-          <span class="error-msg">{{ violations.email }}</span>
+          <span class="error-msg">{{  }}</span>
         </div>
       </div>
     </div>
@@ -210,7 +210,7 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.phone }">
+        <div class="input" :class="{ error: errors.find(e => e.property === 'phoneChangeToken') }">
           <client-only>
             <input
               type="text"
@@ -223,7 +223,7 @@
               @accept="profile.phone = $event.detail.unmaskedValue"
             />
           </client-only>
-          <span class="error-msg">{{ violations.phone }}</span>
+          <span v-if="errors.find(e => e.property === 'phoneChangeToken')" class="error-msg">{{ errors.find(e => e.property === 'phoneChangeToken').message }}</span>
         </div>
       </div>
     </div>
@@ -303,7 +303,7 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: !!violations.status }">
+        <div class="input" :class="{ error: false }">
           <input
             type="text"
             v-model.trim="profile.status"
@@ -413,6 +413,7 @@ export default {
     },
     async confirmSmsCode() {
       if (!this.smsCode) {
+        this.smsErrorCode = true;
         return;
       }
       try {
@@ -437,9 +438,7 @@ export default {
       this.smsErrorCode = null;
       this.errors = [];
       const loader = this.$loading.show();
-      if (this.codeSent && this.smsCode) {
-        await this.confirmSmsCode();
-      }
+      await this.confirmSmsCode();
       if (this.smsErrorCode) {
         loader.hide();
         return;
@@ -453,8 +452,9 @@ export default {
             validateStatus: (status) => status <= 400,
           }
         );
-        if (status === 400) {
-          this.errors = data.errors.violations;
+        if (status === 400 || status === 422) {
+          this.errors = data.errors;
+          loader.hide();
           return;
         }
         this.smsErrorCode = null;
@@ -509,9 +509,6 @@ export default {
         }
       });
       return categoriesList;
-    },
-    violations() {
-      return mapValidationErrors(this.errors);
     },
     smsError() {
       const messages = {

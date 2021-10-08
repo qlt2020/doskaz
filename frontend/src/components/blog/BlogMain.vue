@@ -9,48 +9,6 @@
       </a>
     </div>
     <h2 class="title">{{ $t("blog.title") }}</h2>
-    <div
-      style="border: none; font-size: 20px; display: flex; width: 50px; height: 60px; padding-bottom: 11px; justify-content: center; align-items: center; top: -60px; left: -25px; position:absolute;"
-    >
-      <svg
-        width="50"
-        height="50"
-        viewBox="0 0 55 55"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style="position: absolute; top: 0; left: 0; z-index: 0;"
-      >
-        <rect
-          opacity="0.3"
-          x="0.734863"
-          y="0.211182"
-          width="54"
-          height="54"
-          rx="13"
-          fill="#DE1220"
-        />
-        <rect
-          opacity="0.6"
-          x="4.73486"
-          y="4.21118"
-          width="46"
-          height="46"
-          rx="10"
-          fill="#DE1220"
-        />
-        <rect
-          x="7.73486"
-          y="7.21118"
-          width="40"
-          height="40"
-          rx="10"
-          fill="#DE1220"
-        />
-      </svg>
-      <div
-        style="background-color: #fff; mask: url('/static/icons/6/restoran.svg') no-repeat center; -webkit-mask: url('/static/icons/6/restoran.svg') no-repeat center; z-index: 1; width: 18px; height: 18px; "
-      ></div>
-    </div>
     <div class="blog__content --main">
       <div class="input__wrapper">
         <form class="input" @submit.prevent="search">
@@ -522,7 +480,7 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 50px 0 30px;
+    padding: 100px 0 30px;
     position: relative;
     .input__wrapper {
       margin-bottom: 20px;
@@ -912,7 +870,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 1023px) {
   .blog {
     &__search__btn {
       display: none;
@@ -939,7 +897,7 @@ a.blog__item-link {
   }
   .blog__side {
     position: fixed;
-    top: 0;
+    top: 70px;
     right: -20%;
     left: 100%;
     bottom: 0;
@@ -1021,7 +979,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 1023px) {
   .blog__side {
     &.show {
       left: 0;
@@ -1039,7 +997,7 @@ a.blog__item-link {
   }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (max-width: 1023px) {
   .blog__item-img {
     height: 176px;
   }
