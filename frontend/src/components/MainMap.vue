@@ -68,7 +68,6 @@ export default {
       });
 
       this.map = map;
-      console.log(this.mapReady);
       /* this.map.setBounds(this.cityBounds); */
       if (this.coordinatesAndZoom) {
         this.map.setCenter(
@@ -217,7 +216,6 @@ export default {
       }
     },
     coordinatesAndZoom(val, prev) {
-      console.log(`value ${val?.toString()}`);
       if (!this.map) {
         return;
       }
@@ -231,7 +229,6 @@ export default {
       }
     },
     location(val) {
-      console.log(`value${val}`);
       this.setLocation(val);
     },
   },
