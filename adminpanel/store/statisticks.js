@@ -12,7 +12,6 @@ export const state = () => ({
   objectsStat: [],
   objectsStatPrimary: [],
   objectsStatTable: [],
-  objectsCount: {},
   objectsStatFilter: {
     params: {}
   },
@@ -277,27 +276,6 @@ export const actions = {
       return a
       },[])
       .filter(objects => objects != null || objects!='empty' || objects!='undefined')
-
-    function sumAccesibles(typeAccesibles, item) {
-      let result = item[`hearing${typeAccesibles}`]+
-                    item[`intellectual${typeAccesibles}`]+
-                    item[`kids${typeAccesibles}`]+
-                    item[`limb${typeAccesibles}`]+
-                    item[`movement${typeAccesibles}`]+
-                    item[`vision${typeAccesibles}`]
-      return result
-    }
-    let fullAccessible = 0;
-    let partialAccessible = 0;
-    let notAccessible = 0;
-
-    objectsByCategory.forEach(item => {
-      fullAccessible += sumAccesibles('_full_accessible', item)
-      partialAccessible += sumAccesibles('_partial_accessible', item)
-      notAccessible += sumAccesibles('_not_accessible', item)
-    })
-
-    commit('SET_OBJECTS_COUNT', {fullAccessible, partialAccessible, notAccessible})
     commit('SET_OBJECTS_STAT', objectsByCategory)
 
 
