@@ -1,11 +1,13 @@
 <template>
     <button 
-      @click="$router.push(localePath({ name: 'statistics' }))"
+      @click="$router.push(localePath({ name: page }))"
       class="stat_btn"
+      :style="css"
+      :class="classStyle"
     >
       <img src="@/assets/icons/stat_diagram.svg" alt="stat_diagram">
       <span>
-        Посмотреть статистику
+        {{title}}
       </span>
     </button>
 </template>
@@ -13,6 +15,20 @@
 <script>
 export default {
   name: "StatisticsBtn",
+  props: {
+    title: {
+      type: String
+    },
+    page: {
+      type: String,
+    },
+    css: {
+      type: String
+    },
+    classStyle: {
+      type: String
+    }
+  },
   methods: {}
 };
 </script>
@@ -24,13 +40,12 @@ export default {
   align-items: center;
   justify-content: center;
   bottom: 80px;
-  left: 25px;
-  width: 570px;
+  /* left: 25px; */
+  width: 275px;
   height: 43px;
   border-radius: 10px;
   border: 0;
   box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
-
   outline: none;
   background-color: #fff;
   z-index: 5;
@@ -38,7 +53,7 @@ export default {
   transition: 0.3s ease;
   @media all and (max-width: 1366px) {
     bottom: 35px;
-    width: 470px;
+    width: 225px;
   }
   span {
     color: #2D9CDB;
@@ -52,6 +67,9 @@ export default {
 
   img {
     margin-right: 14px;
+    @media all and (max-width: 1366px) {
+      margin-right: 4px;
+    }
   }
 
   &:hover {

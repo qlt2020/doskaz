@@ -246,7 +246,7 @@ import DropdownBlock from "@/components/DropdownBlock";
 import "@/plugins/bootstrap-plugin.js";
 
 export default {
-  name: "Statistics",
+  name: "StatisticsAccess",
   components: {
     MainHeader,
     ViTop,
