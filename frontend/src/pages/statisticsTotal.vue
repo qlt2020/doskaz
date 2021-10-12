@@ -2,6 +2,7 @@
   <div class="about">
     <ViTop />
     <MainHeader />
+
     <div class="container">
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
@@ -19,187 +20,191 @@
             </div>
           </div>
         </div>
-        <div class="statisticks__main" ref="to_pdf">
-           <div class="row">
-            <div class="col-8">
-                <div class="row">
-                    <div class="col-3 d-flex flex-column">
-                        <div class="statisticks__main-total statisticks__block mb-3">
-                            <div class="statisticks__main-total-title">
-                                Доступные
-                            </div>
-                            <div class="statisticks__main-total-number --green">
-                                {{objectsCount.fullAccessible}}
-                            </div>
 
-                        </div>
-                        <div class="statisticks__main-total statisticks__block mb-3">
-                            <div class="statisticks__main-total-title">
-                                Частично доступные
-                            </div>
-                            <div class="statisticks__main-total-number --orange">
-                                {{objectsCount.partialAccessible}}
-                            </div>
-                        </div>
-                        <div class="statisticks__main-total statisticks__block">
-                            <div class="statisticks__main-total-title">
-                                Недоступные
-                            </div>
-                            <div class="statisticks__main-total-number --red">
-                                {{objectsCount.notAccessible}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-9">
-                        <div class="statisticks__block statisticks__main-offer">
-                            <div class="statisticks__block-head">
-                                <div class="statisticks__block-head_title">
-                                    Количество объектов в разрезе возможностей для 
+        <client-only>
+            <div class="statisticks__main" ref="to_pdf">
+            <div class="row">
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-3 d-flex flex-column">
+                            <div class="statisticks__main-total statisticks__block mb-3">
+                                <div class="statisticks__main-total-title">
+                                    Доступные
                                 </div>
-                                <DropdownBlock 
-                                    @input="changeCategory" 
-                                    :options="groupPopulation.options" 
-                                    :value="selectedCategoryObj"
-                                    :top="'49px'"
+                                <div class="statisticks__main-total-number --green">
+                                    {{objectsCount.fullAccessible}}
+                                </div>
+
+                            </div>
+                            <div class="statisticks__main-total statisticks__block mb-3">
+                                <div class="statisticks__main-total-title">
+                                    Частично доступные
+                                </div>
+                                <div class="statisticks__main-total-number --orange">
+                                    {{objectsCount.partialAccessible}}
+                                </div>
+                            </div>
+                            <div class="statisticks__main-total statisticks__block">
+                                <div class="statisticks__main-total-title">
+                                    Недоступные
+                                </div>
+                                <div class="statisticks__main-total-number --red">
+                                    {{objectsCount.notAccessible}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="statisticks__block statisticks__main-offer">
+                                <div class="statisticks__block-head">
+                                    <div class="statisticks__block-head_title">
+                                        Количество объектов в разрезе возможностей для 
+                                    </div>
+                                    <DropdownBlock 
+                                        @input="changeCategory" 
+                                        :options="groupPopulation.options" 
+                                        :value="selectedCategoryObj"
+                                        :top="'49px'"
+                                    />
+                                </div>
+                                <AnychartDoughnut
+                                    :statData="objectsStat"
+                                    :selectedCategory="selectedCategoryObj"
                                 />
                             </div>
-                            <AnychartDoughnut
-                                :statData="objectsStat"
-                                :selectedCategory="selectedCategoryObj"
-                            />
                         </div>
                     </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-3 d-flex flex-column">
-                        <div class="statisticks__main-total statisticks__block mb-3">
-                            <div class="statisticks__main-total-title statisticks__main-total-title_diagram">
-                                Зарегистрированных пользователей
-                            </div>
-                            <div class="statisticks__main-total-number --green">
-                                {{usersStat.registered}}
-                            </div>
-                        </div>
-                        <div class="statisticks__main-total statisticks__block mb-3">
-                            <div class="statisticks__main-total-title">
-                                Количество мужчин
-                            </div>
-                            <div class="statisticks__main-total-number --blue">
-                                {{usersStat.men}}
-                            </div>
-                        </div>
-                        <div class="statisticks__main-total statisticks__block">
-                            <div class="statisticks__main-total-title">
-                                Количество женщин
-                            </div>
-                            <div class="statisticks__main-total-number --fuschia">
-                               {{usersStat.women}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-9">
-                        <div class="statisticks__block statisticks__main-offer">
-                            <div class="statisticks__block-head">
-                                <div class="statisticks__block-head_title">
-                                    Количество пользователей в разрезе категорий
+                    <div class="row mt-4">
+                        <div class="col-3 d-flex flex-column">
+                            <div class="statisticks__main-total statisticks__block mb-3">
+                                <div class="statisticks__main-total-title statisticks__main-total-title_diagram">
+                                    Зарегистрированных пользователей
+                                </div>
+                                <div class="statisticks__main-total-number --green">
+                                    {{usersStat.registered}}
                                 </div>
                             </div>
-                            <AnychartDoughnut
-                                :statData="usersStat.categories"
-                                :totalData="usersStat.registered"
-                                :categoryData="usersTitleList"
+                            <div class="statisticks__main-total statisticks__block mb-3">
+                                <div class="statisticks__main-total-title">
+                                    Количество мужчин
+                                </div>
+                                <div class="statisticks__main-total-number --blue">
+                                    {{usersStat.men}}
+                                </div>
+                            </div>
+                            <div class="statisticks__main-total statisticks__block">
+                                <div class="statisticks__main-total-title">
+                                    Количество женщин
+                                </div>
+                                <div class="statisticks__main-total-number --fuschia">
+                                {{usersStat.women}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="statisticks__block statisticks__main-offer">
+                                <div class="statisticks__block-head">
+                                    <div class="statisticks__block-head_title">
+                                        Количество пользователей в разрезе категорий
+                                    </div>
+                                </div>
+                                <AnychartDoughnut
+                                    :statData="usersStat.categories"
+                                    :totalData="usersStat.registered"
+                                    :categoryData="usersTitleList"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4" v-if="usersAge">
+                    <div class="statisticks__block statisticks__block-fix-width">
+                        <div class="statisticks__block-head">
+                            <div class="statisticks__block-head_title">
+                                Количество объектов в разрезе возможностей для 
+                            </div>
+                            <DropdownBlock 
+                                @input="changeCategory(arguments[0], true)"
+                                :options="ageGroupPopulations.options" 
+                                :value="selectedCategoryAge" 
+                                class="mtop"
                             />
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4" v-if="usersAge">
-                <div class="statisticks__block statisticks__block-fix-width">
-                    <div class="statisticks__block-head">
-                        <div class="statisticks__block-head_title">
-                            Количество объектов в разрезе возможностей для 
-                        </div>
-                        <DropdownBlock 
-                            @input="changeCategory(arguments[0], true)"
-                            :options="ageGroupPopulations.options" 
-                            :value="selectedCategoryAge" 
-                            class="mtop"
+                        <AnychartDoughnut
+                            :statData="usersAge"
+                            :categoryData="usersAgeList"
+                            :title="'Диаграмма по возрасту в разрезе категорий'"
+                            :selectedCategory="selectedCategoryObj"
+                            :totalData="usersStat.registered"
+                            :rowPie="true"
                         />
                     </div>
-                    <AnychartDoughnut
-                        :statData="usersAge"
-                        :categoryData="usersAgeList"
-                        :title="'Диаграмма по возрасту в разрезе категорий'"
-                        :selectedCategory="selectedCategoryObj"
-                        :totalData="usersStat.registered"
-                        :rowPie="true"
-                    />
                 </div>
             </div>
-           </div>
-            <div class="row statisticks__main-row mt-5" style="height: 320px">
-            <div class="col-2 d-flex flex-column justify-content-start">
-                <div class="statisticks__main-total statisticks__block mb-3">
-                    <div class="statisticks__main-total-title">
-                        Количество жалоб
+                <div class="row statisticks__main-row mt-5" style="height: 320px">
+                <div class="col-2 d-flex flex-column justify-content-start">
+                    <div class="statisticks__main-total statisticks__block mb-3">
+                        <div class="statisticks__main-total-title">
+                            Количество жалоб
+                        </div>
+                        <div class="statisticks__main-total-number --red" v-if="complaintsCount">
+                            {{complaintsCount.count}}
+                        </div>
                     </div>
-                    <div class="statisticks__main-total-number --red" v-if="complaintsCount">
-                        {{complaintsCount.count}}
+                    <div class="statisticks__main-total statisticks__block">
+                        <div class="statisticks__main-total-title">
+                            Количество обращений
+                        </div>
+                        <div class="statisticks__main-total-number --green" v-if="feedbackCount">
+                            {{feedbackCount.count}}
+                        </div>
                     </div>
                 </div>
-                <div class="statisticks__main-total statisticks__block">
-                    <div class="statisticks__main-total-title">
-                        Количество обращений
-                    </div>
-                    <div class="statisticks__main-total-number --green" v-if="feedbackCount">
-                        {{feedbackCount.count}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-10 d-flex justify-content-between" >
-                <div
-                    style="margin-right: 20px"
-                    class="statisticks__block"
-                >
-                <div class="statisticks__block-head" v-if="yearsComplaints.options.length">
-                    <div class="statisticks__block-head_title">
-                        Количество жалоб за год
-                    </div>
-                    <DropdownBlock
-                        v-if="selectedComplaints"
-                        :value="selectedComplaints"
-                        :options="yearsComplaints.options"
-                        @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
-                    />
-                </div>
-                    <AnychartColumn
-                        :statData="complaintsFiltered"
-                        :fill="'#EB5757'"
-                        :stroke="'#EB5757'"
-                    />
-                </div>
-                <div class="statisticks__block">
-                    <div class="statisticks__block-head" v-if="yearsFeedback.options.length">
+                <div class="col-10 d-flex justify-content-between" >
+                    <div
+                        style="margin-right: 20px"
+                        class="statisticks__block"
+                    >
+                    <div class="statisticks__block-head" v-if="yearsComplaints.options.length">
                         <div class="statisticks__block-head_title">
-                            Количество обращений за год
+                            Количество жалоб за год
                         </div>
                         <DropdownBlock
-                            v-if="selectedFeedback"
-                            :value="selectedFeedback"
-                            :options="yearsFeedback.options"
-                            @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
+                            v-if="selectedComplaints"
+                            :value="selectedComplaints"
+                            :options="yearsComplaints.options"
+                            @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
                         />
                     </div>
-                    <AnychartColumn
-                        :statData="feedbackFiltered"
-                        :fill="'#27AE60'"
-                        :stroke="'#27AE60'"
-                        :title="'Количество обращений за год'"
-                    />
+                        <AnychartColumn
+                            :statData="complaintsFiltered"
+                            :fill="'#EB5757'"
+                            :stroke="'#EB5757'"
+                        />
+                    </div>
+                    <div class="statisticks__block">
+                        <div class="statisticks__block-head" v-if="yearsFeedback.options.length">
+                            <div class="statisticks__block-head_title">
+                                Количество обращений за год
+                            </div>
+                            <DropdownBlock
+                                v-if="selectedFeedback"
+                                :value="selectedFeedback"
+                                :options="yearsFeedback.options"
+                                @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
+                            />
+                        </div>
+                        <AnychartColumn
+                            :statData="feedbackFiltered"
+                            :fill="'#27AE60'"
+                            :stroke="'#27AE60'"
+                            :title="'Количество обращений за год'"
+                        />
+                    </div>
                 </div>
             </div>
-           </div>
-        </div>
+            </div>
+        </client-only>
+
       </div>
     </div>
     <MainFooter />
@@ -216,11 +221,10 @@ import DropdownBlock from "@/components/DropdownBlock";
 import AnychartColumn from '@/components/statistics/AnychartColumn.vue';
 import AnychartDoughnut from '@/components/statistics/AnychartDoughnut.vue';
 import {format} from "date-fns";
-import html2pdf from "html2pdf.js";
-
 
 export default {
   name: "StatisticsTotal",
+  ssr: false,
   components: {
     MainHeader,
     ViTop,
@@ -371,18 +375,23 @@ export default {
         }
     },
     exportAll() {
-        let date = format(new Date(), 'd.MM.yyyy')
-        html2pdf(this.$refs.to_pdf, {
-            margin: 2,
-            filename: `${date}_Статистика.pdf`,
-            html2canvas: {
-                letterRendering: true,
-                ignoreElements: (el) => {return el.id === 'export_btn'}
-            },
-            jsPDF:    {
-                format: 'a4',
-                orientation: 'landscape'
-            }
+        let html2pdf;
+        import('html2pdf.js').then(pdfModule => {
+            html2pdf = pdfModule.default
+
+            let date = format(new Date(), 'd.MM.yyyy')
+            html2pdf(this.$refs.to_pdf, {
+                margin: 2,
+                filename: `${date}_Статистика.pdf`,
+                html2canvas: {
+                    letterRendering: true,
+                    ignoreElements: (el) => {return el.id === 'export_btn'}
+                },
+                jsPDF: {
+                    format: 'a4',
+                    orientation: 'landscape'
+                }
+            })
         })
     },
   },

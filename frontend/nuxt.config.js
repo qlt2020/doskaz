@@ -49,7 +49,6 @@ export default {
     { src: "~plugins/authenticated.js" },
     { src: "~plugins/vuex-persist.js", ssr: false },
     { src: "~plugins/scrollactive.js" },
-    { src: "~plugins/html2pdf.js",  ssr: false },
   ],
   buildModules: ["@nuxtjs/google-analytics", "@nuxtjs/yandex-metrika"],
   css: [
@@ -149,9 +148,5 @@ export default {
         config.devtool = "source-map";
       }
     },
-    vendor: [
-      'html2pdf'
-    ],
-    transpile: ['html2pdf']
   },
 };
