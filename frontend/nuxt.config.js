@@ -149,5 +149,10 @@ export default {
         config.devtool = "source-map";
       }
     },
+    vendor: [
+      'html2pdf'
+    ],
+    transpile: ['html2pdf']
+
   },
 };
