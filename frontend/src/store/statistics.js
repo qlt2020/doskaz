@@ -28,7 +28,7 @@ export const state = () => ({
   },
   group: {
     options:[
-      {value: 'withChild', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
+      {value: 'kids', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
       {value: 'movement', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
       {value: 'babyCarriage', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
       {value: 'vision', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
