@@ -149,6 +149,5 @@ export default {
       'html2pdf'
     ],
     transpile: ['html2pdf']
-
   },
 };

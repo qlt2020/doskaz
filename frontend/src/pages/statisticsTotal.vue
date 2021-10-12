@@ -213,13 +213,10 @@ import MainFooter from "@/components/MainFooter";
 import BackBtn from "@/components/BackBtn";
 import { get } from "vuex-pathify";
 import DropdownBlock from "@/components/DropdownBlock";
-
 import AnychartColumn from '@/components/statistics/AnychartColumn.vue';
 import AnychartDoughnut from '@/components/statistics/AnychartDoughnut.vue';
 import {format} from "date-fns";
-// import { jsPDF } from "jspdf";
-// import html2pdf from "html2pdf.js";
-// import "@/plugins/html2pdf.js";
+import html2pdf from "html2pdf.js";
 
 
 export default {
@@ -374,18 +371,6 @@ export default {
         }
     },
     exportAll() {
-    //   const doc = new jsPDF({ unit: 'in', format: 'a3', orientation: 'l' });
-    //   const div = this.$refs.to_pdf;
-    //   console.log(div);
-    //   doc.text(this.$refs.to_pdf, 1, 1);
-    //   doc.save("two-by-four.pdf");
-
-    /////
-    // console.log(html2pdf);
-
-    // if (process.client) {
-    //     import html2pdf from "html2pdf.js";
-
         let date = format(new Date(), 'd.MM.yyyy')
         html2pdf(this.$refs.to_pdf, {
             margin: 2,
@@ -394,43 +379,12 @@ export default {
                 letterRendering: true,
                 ignoreElements: (el) => {return el.id === 'export_btn'}
             },
-                jsPDF:    {
-                format: 'a3',
+            jsPDF:    {
+                format: 'a4',
                 orientation: 'landscape'
-                }
+            }
         })
-
-    // }
-
-    //   let date = format(new Date(), 'd.MM.yyyy')
-    //   html2pdf(this.$refs.to_pdf, {
-    //       margin: 2,
-    //       filename: `${date}_Статистика.pdf`,
-    //       html2canvas: {
-    //           letterRendering: true,
-    //           ignoreElements: (el) => {return el.id === 'export_btn'}
-    //       },
-    //         jsPDF:    {
-    //         format: 'a3',
-    //         orientation: 'landscape'
-    //         }
-    //   })
-////
-
-    //   let element = this.$refs.to_pdf
-    //     let opt = {
-    //     filename: 'grid.pdf',
-    //     margin:   10,
-    //     jsPDF:    {
-    //         format: 'a4',
-    //         orientation: 'landscape'
-    //     }
-    //     }
-    //   html2pdf().set({opt}).from(element).save();
-
     },
-
-
   },
 };
 </script>
