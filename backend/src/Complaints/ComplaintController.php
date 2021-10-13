@@ -37,7 +37,6 @@ use TheCodingMachine\Gotenberg\RequestException;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
- * @IsGranted("ROLE_USER")
  * @Route(path="/api/complaints")
  */
 final class ComplaintController extends AbstractController
@@ -45,6 +44,7 @@ final class ComplaintController extends AbstractController
     private $projectDir;
 
     /**
+     * @IsGranted("ROLE_USER")
      * ComplaintController constructor.
      * @param $projectDir
      */
@@ -56,6 +56,7 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(path="/validate", methods={"POST"})
+     * @IsGranted("ROLE_USER")
      * @param ComplaintData $complaintData
      */
     /*
@@ -76,6 +77,7 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(methods={"POST"})
+     * @IsGranted("ROLE_USER")
      * @param ComplaintData $complaintData
      * @param ComplaintRepository $complaintRepository
      * @param Flusher $flusher
@@ -110,6 +112,7 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(path="/authorities", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      * @param Connection $connection
      * @return mixed[]
      * @Get(
@@ -165,6 +168,7 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(path="/{id}/pdf", methods={"GET"}, requirements={"id" = "\d+"})
+     * @IsGranted("ROLE_USER")
      * @param $id
      * @param ComplaintPdfExporter $complaintPdfExporter
      * @param Request $request
@@ -190,6 +194,7 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(path="/{id}/doc", methods={"GET"}, requirements={"id" = "\d+"})
+     * @IsGranted("ROLE_USER")
      * @param $id
      * @param Connection $connection
      * @param ComplaintDocExporter $complaintDocExporter
@@ -323,7 +328,6 @@ final class ComplaintController extends AbstractController
 
     /**
      * @Route(path="/statistic", methods={"GET"})
-     * @IsGranted("ROLE_USER")
      * @Get(
      *     path="/api/complaints/statistic",
      *     summary="Статистика по жалобам",
