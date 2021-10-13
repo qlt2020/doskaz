@@ -28,6 +28,18 @@ export default {
       rowPie: {
         default: false,
         type: Boolean
+      },
+      legendWidth: {
+        default: '40%',
+        type: String
+      },
+      legendPosition: {
+        default: 'right',
+        type: String
+      },
+      legendHeight: {
+        default: '200px',
+        type: String
       }
     },
   name: 'AnychartDoughnut',
@@ -148,11 +160,10 @@ export default {
               "useHtml": false,
               "inverted": false,
               "itemsLayout": "verticalExpandable",
-              "width": this.rowPie ? "130px" : '40%',
-              // itemsFormat: "% Change: {%value}",
-              "height": '200px',
+              "width": this.legendWidth,
+              "height": this.legendHeight,
               "maxHeight": null,
-              "position": this.rowPie ? "bottom" : "right",
+              "position": this.legendPosition,
               "positionMode": "outside",
               "drag": false,
               "itemsFormat": null,

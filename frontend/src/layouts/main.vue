@@ -131,7 +131,18 @@
         </button>
       </div>
       <div class="stat_button-wrap">
-        <StatisticsBtn/>
+        <StatisticsBtn 
+          :page="'statisticsTotal'"
+          :class="'btn_left'"
+          :title="'Общая статистика'"
+          :style="'margin-right: 5px'"
+        />
+        <StatisticsBtn
+          :page="'statisticsAccess'"
+          :class="'btn_right'"
+          :title="'Статистика по доступности объектов'"
+        />
+
       </div>
     </div>
   </div>
@@ -700,6 +711,7 @@ export default {
   }
   .stat_button-wrap {
     margin-left: 10px;
+    display: flex;
   }
 
   @media screen and (max-width: 1023px) {
@@ -728,10 +740,12 @@ export default {
         position: inherit;
         width: 58px;
         height: 100%;
+        
         img {
           margin: 0;
         }
         span {
+          text-align: start;
           @media all and (max-width: 1024px) {
             display: none;
           }

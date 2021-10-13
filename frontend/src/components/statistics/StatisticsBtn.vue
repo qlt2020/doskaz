@@ -5,8 +5,9 @@
       :style="css"
       :class="classStyle"
     >
-      <img src="@/assets/icons/stat_diagram.svg" alt="stat_diagram">
-      <span>
+      <img v-if="page === 'statisticsAccess'" src="@/assets/icons/stat_diagram.svg" alt="stat_diagram">
+      <img v-if="page === 'statisticsTotal'" src="@/assets/icons/stat_pie.svg" alt="stat_pie">
+      <span style="text-align: start;">
         {{title}}
       </span>
     </button>
@@ -51,6 +52,7 @@ export default {
   z-index: 5;
   cursor: pointer;
   transition: 0.3s ease;
+
   @media all and (max-width: 1366px) {
     bottom: 35px;
     width: 225px;
