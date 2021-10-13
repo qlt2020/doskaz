@@ -7,15 +7,17 @@
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
-            class="statisticks__header-title statisticks__main-total-title col-6"
+            class="statisticks__header-title statisticks__main-total-title col-md-6 col-9"
           >
             Статистика
           </div>
-          <div class="col-6">
+          <div class="col-md-6  col-3">
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportAll" id="export_btn">
                 <i class="fas fa-download" style="color:#fff"></i>
-                Скачать
+                <span>
+                    Скачать
+                </span>
               </button>
             </div>
           </div>
@@ -57,7 +59,7 @@
                             <div class="statisticks__block statisticks__main-offer">
                                 <div class="statisticks__block-head">
                                     <div class="statisticks__block-head_title">
-                                        Количество объектов в разрезе возможностей для 
+                                        Количество объектов в разрезе возможностей для категории
                                     </div>
                                     <DropdownBlock 
                                         @input="changeCategory" 
@@ -77,7 +79,7 @@
                         <div class="col-3 d-flex flex-column">
                             <div class="statisticks__main-total statisticks__block mb-3">
                                 <div class="statisticks__main-total-title statisticks__main-total-title_diagram">
-                                    Зарегистрированных пользователей
+                                    Количество пользователей
                                 </div>
                                 <div class="statisticks__main-total-number --green">
                                     {{usersStat.registered}}
@@ -120,7 +122,7 @@
                     <div class="statisticks__block statisticks__block-fix-width">
                         <div class="statisticks__block-head">
                             <div class="statisticks__block-head_title">
-                                Количество объектов в разрезе возможностей для 
+                                Диаграмма по возрасту в разрезе категории
                             </div>
                             <DropdownBlock 
                                 @input="changeCategory(arguments[0], true)"
@@ -140,7 +142,7 @@
                     </div>
                 </div>
             </div>
-                <div class="row statisticks__main-row mt-5" style="height: 320px">
+            <div class="row statisticks__main-row mt-5" style="height: 320px">
                 <div class="col-2 d-flex flex-column justify-content-start">
                     <div class="statisticks__main-total statisticks__block mb-3">
                         <div class="statisticks__main-total-title">
@@ -269,7 +271,6 @@ export default {
           {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
           {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
           {value: 'undefined', title: 'Неизвестно'},
-          {value: 'justview', title: 'Просто посмотреть'},
           ],
       yearsComplaints: {options:[]},
       yearsFeedback: {options:[]},
@@ -420,7 +421,11 @@ export default {
 }
 
 .statisticks .statisticks__header-title {
-    font-size: 22px;
+    font-weight: 700;
+    font-size: 28px;
+    font-family: "SFProDisplay";
+    margin: 0;
+    color: #000000;
 }
 
 .statisticks  .statisticks__block-fix-width .select-stat {
@@ -430,6 +435,9 @@ export default {
 .statisticks .button {
   border-radius: 10px;
   height: 54px;
+  span {
+      color: #ffffff;
+  }
 }
 
 .statisticks__block {
@@ -447,19 +455,20 @@ export default {
 
 .statisticks__block-head {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     margin-bottom: 10px;
 }
 .statisticks__block-head_title {
     font-family: SFProDisplay;
     font-weight: 500;
     font-size: 17px;
-    margin-right: 10px;
+    margin-bottom: 15px;
 }
 
-.statisticks__block-fix-width {
+/* .statisticks__block-fix-width {
     min-width: 350px;
-}
+} */
 
 .statisticks__block-fix-width .statisticks__block-head {
     flex-direction: column;
@@ -535,5 +544,35 @@ export default {
 
 .--fuschia {
     color: #F178B6;
+}
+
+::v-deep .dropdown__block__selected {
+    box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+@media all and (max-width: 1200px) {
+
+
+}
+
+@media all and (max-width: 1024px) {
+    .statisticks {
+        padding: 90px 0 40px;
+    }
+}
+
+@media all and (max-width: 768px) {
+
+
+
+    .statisticks .statisticks__header-title {
+        font-size: 22px;
+    }
+    .statisticks .button {
+        width: 54px;
+        span {
+        display: none;
+        }
+    }
 }
 </style>

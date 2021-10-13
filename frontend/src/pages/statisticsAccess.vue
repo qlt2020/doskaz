@@ -6,15 +6,15 @@
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
-            class="statisticks__header-title statisticks__main-total-title col-6"
+            class="statisticks__header-title statisticks__main-total-title col-md-6 col-9"
           >
             Статистика по доступности объектов
           </div>
-          <div class="col-6">
+          <div class="col-md-6  col-3">
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportList">
                 <i class="fas fa-download" style="color:#fff"></i>
-                Скачать
+                <span>Скачать</span>
               </button>
             </div>
           </div>
@@ -81,7 +81,7 @@
             small
             caption-top
             responsive
-            sticky-header="70vh"
+            :sticky-header="true"
             :no-border-collapse="true"
             class="table"
           >
@@ -126,7 +126,7 @@
                 </template>
               </b-tr>
             </b-thead>
-            <b-tbody head-variant="light" sticky-header v-if="objectsStat">
+            <b-tbody head-variant="light" v-if="objectsStat">
               <template v-for="(item, index) in objectsStat">
                 <b-tr :key="item.category_title + index">
                   <b-th
@@ -393,6 +393,9 @@ export default {
 .statisticks .button {
   border-radius: 10px;
   height: 54px;
+  span {
+    color: #ffffff;
+  }
 }
 
 .statisticks .table {
@@ -473,7 +476,11 @@ export default {
 }
 
 .statisticks .statisticks__header-title {
-  font-size: 22px;
+    font-weight: 700;
+    font-size: 28px;
+    font-family: "SFProDisplay";
+    margin: 0;
+    color: #000000;
 }
 
 .statisticks__block-fix-width {
@@ -510,4 +517,47 @@ export default {
 .statisticks .statisticks__main .--red {
   color: #eb5757 !important;
 }
+
+.b-table-sticky-header {
+  max-height: 60vh;
+}
+
+@media all and (max-width: 768px) {
+  .statisticks {
+    padding: 90px 0 30px;
+  }
+
+  .statisticks .button {
+    width: 54px;
+    span {
+      display: none;
+    }
+  }
+
+  .statisticks .statisticks__filter {
+    margin-bottom: 10px;
+  }
+  
+  .statisticks .statisticks__header-title {
+    font-size: 22px;
+  }
+
+  .statisticks .table .table_header {
+    position: inherit;
+  }
+  .b-table-sticky-header > .table.b-table > thead > tr > th {
+    position: inherit;
+  }
+
+
+  .b-table-sticky-header > .table.b-table > thead > tr > .b-table-sticky-column, 
+  .b-table-sticky-header > .table.b-table > tbody > tr > .b-table-sticky-column, 
+  .b-table-sticky-header > .table.b-table > tfoot > tr > .b-table-sticky-column, 
+  .table-responsive > .table.b-table > thead > tr > .b-table-sticky-column, 
+  .table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column, 
+  .table-responsive > .table.b-table > tfoot > tr > .b-table-sticky-column {
+    position: inherit;
+  }
+}
+
 </style>
