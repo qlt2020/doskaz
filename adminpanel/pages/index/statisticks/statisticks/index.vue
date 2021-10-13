@@ -215,7 +215,6 @@
                     {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
                     {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
                     {value: 'undefined', title: 'Неизвестно'},
-                    {value: 'justview', title: 'Просто посмотреть'},
                     ],
                 yearsComplaints: {options:[]},
                 yearsFeedback: {options:[]}

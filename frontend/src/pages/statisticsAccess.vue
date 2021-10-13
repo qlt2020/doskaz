@@ -6,11 +6,16 @@
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
-            class="statisticks__header-title statisticks__main-total-title col-md-6 col-9"
+            class="statisticks__header-title statisticks__main-total-title col-md-7 col-9"
           >
+            <img
+              :src="require('@/assets/icons/back-arrow.svg')"
+              @click="$router.back()"
+              class="title-back_arrow"
+            />
             Статистика по доступности объектов
           </div>
-          <div class="col-md-6  col-3">
+          <div class="col-md-5 col-3">
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportList">
                 <i class="fas fa-download" style="color:#fff"></i>
@@ -532,6 +537,10 @@ export default {
     span {
       display: none;
     }
+  }
+
+  .statisticks .statisticks__header-title {
+    font-size: 22px;
   }
 
   .statisticks .statisticks__filter {

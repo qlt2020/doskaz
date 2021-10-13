@@ -5,7 +5,7 @@
       <StatisticsBtn
         :page="'statisticsAccess'"
         :class="'btn_right'"
-        :title="'Статистика по объектам'"
+        :title="'Статистика по доступности объектов'"
       />
       <StatisticsBtn 
         :page="'statisticsTotal'"

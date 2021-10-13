@@ -202,7 +202,7 @@ export const actions = {
   },
 
   async loadFeedback({commit}) {
-      const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
+      const {data} = await this.$axios.get('/api/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
       
@@ -210,7 +210,7 @@ export const actions = {
   },
 
   async getFeedbackFilter ({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
+    const {data} = await this.$axios.get('/api/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
 
     const count = totalCount(data.result, 'count')
@@ -368,6 +368,7 @@ export const actions = {
     }
 
     return this.$axios.get('/api/dashboard/users/statistics').then(res => {
+      delete res.data.categories['justview']
       commit('SET_USERS_STAT', res.data)
     })
   },
