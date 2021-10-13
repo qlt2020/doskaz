@@ -106,8 +106,7 @@ export default {
     max-height: inherit;
     background: white;
     border-radius: 0px 0px 10px 10px;
-    padding: 25px;
-    gap: 20px;
+    padding: 15px 0;
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -122,16 +121,19 @@ export default {
       background: transparentize(#d1e0ea, 0.5);
     }
     span {
+      padding: 10px 25px;
       &.selected {
-        color: #2d9cdb;
+        background: rgba(0, 141, 222, 0.16078);
+        font-weight: 500;
         i {
-          font-size: 10px;
-          color: #2d9cdb;
+          font-size: 14px;
+          color: #000;
         }
       }
       &:hover {
         cursor: pointer;
         font-weight: 500;
+        background: rgba(0, 141, 222, 0.16078);
       }
       &:nth-child(19) {
         border-bottom: 2px #a5a5a5 solid;

@@ -143,48 +143,24 @@
               <div>
                 {{ $t("about.section7Text3") }}
                 <div
-                  style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;grid-column-gap: 5px;justify-items: center;"
+                  style="margin: auto;margin-top: 15%;width: fit-content;display: grid;align-items: center;grid-template-columns: auto auto auto auto;justify-items: center;"
                 >
-                  <div class="social-icon" @click="share('fb')">
-                    <img
-                      style="margin: auto"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/fcb.svg')
-                          : require('@/assets/img/social/fcb-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('vk')">
-                    <img
-                      style="margin: auto"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/vk.svg')
-                          : require('@/assets/img/social/vk-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('twitter')">
-                    <img
-                      style="margin: auto; width: 15px; height: 15px;"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/twitter.svg')
-                          : require('@/assets/img/social/twitter-black.svg')
-                      "
-                    />
-                  </div>
-                  <div class="social-icon" @click="share('telegram')">
-                    <img
-                      style="margin: auto;width: 15px; height: 15px;"
-                      :src="
-                        !viModeEnabled
-                          ? require('@/assets/img/social/telegram.svg')
-                          : require('@/assets/img/social/telegram-black.svg')
-                      "
-                    />
-                  </div>
+                  <div
+                    class="contacts__social-link --fcb"
+                    @click="share('fb')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --twitter"
+                    @click="share('twitter')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --tg"
+                    @click="share('telegram')"
+                  ></div>
+                  <div
+                    class="contacts__social-link --vk"
+                    @click="share('vk')"
+                  ></div>
                 </div>
               </div>
             </div>
@@ -223,8 +199,14 @@
                 "
                 >{{ $t("mainMenu.contacts") }}</span
               ></nuxt-link
-            ></span
-          >
+            >
+            <br />
+            <br />
+            {{ $t("about.section9_1Text") }}
+            <br />
+            <br />
+            {{ $t("about.section9_2Text") }}
+          </span>
         </section>
         <section id="finance" class="about__container finance">
           <span class="about__container__title">{{
@@ -238,6 +220,18 @@
           </div>
           <span class="about__container__span-text">
             {{ $t("about.section10Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_1Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_2Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_3Text") }}
+            <br />
+            <br />
+            {{ $t("about.section10_4Text") }}
           </span>
         </section>
         <section id="support" class="about__container">
@@ -245,6 +239,9 @@
             $t("about.section11")
           }}</span>
           <div class="about__container__text">
+            {{ $t("about.section11_1Text") }}
+            <br />
+            <br />
             {{ $t("about.section11Text") }}
             <nuxt-link :to="localePath({ name: 'contacts' })"
               ><span
@@ -339,6 +336,48 @@ export default {
 <style lang="scss">
 @import "@/styles/mixins.scss";
 
+.contacts__social {
+  font-size: 0;
+
+  &-link {
+    vertical-align: top;
+    display: inline-block;
+    background-color: #2d9cdb;
+    border-radius: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 36px;
+    width: 36px;
+    margin: 0 0 0 12px;
+    transition: opacity 0.4s;
+    cursor: pointer;
+
+    &:first-child {
+      margin: 0;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+
+    &.--fcb {
+      background-image: url("@/assets/img/social/facebook-white.svg");
+    }
+
+    &.--twitter {
+      background-image: url("@/assets/img/social/twitter-white.svg");
+    }
+
+    &.--tg {
+      background-image: url("@/assets/img/social/tg-white.svg");
+    }
+
+    &.--vk {
+      background-image: url("@/assets/img/social/vk-white.svg");
+    }
+  }
+}
+
 .about {
   background: #fafafa;
   &-wrapper {
@@ -398,7 +437,8 @@ export default {
           width: 3px;
           height: 25px;
           position: absolute;
-          top: 5px;
+          top: 50%;
+          transform: translate(0, -50%);
           left: -26px;
           @media screen and (max-width: 1023px) {
             bottom: -15px;
@@ -432,14 +472,6 @@ export default {
       padding: 25px;
       &.realization,
       &.finance {
-        .about__container__span-text {
-          font-family: SFProDisplay;
-          font-style: normal;
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 24px;
-          color: #000000;
-        }
       }
       .for-whom__img {
         @media screen and (max-width: 1023px) {
@@ -476,7 +508,8 @@ export default {
         }
       }
 
-      &__text {
+      &__text,
+      &__span-text {
         font-family: SFProDisplay;
         font-style: normal;
         font-weight: 400;
@@ -590,8 +623,8 @@ export default {
           justify-items: center;
           .social-icon {
             cursor: pointer;
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;

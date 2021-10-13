@@ -15,7 +15,7 @@
           :to="localePath({ name: 'index' })"
           class="main-filter__logo"
         >
-          <img :src="require(`@/assets/img/logo-new-white.png`)" alt />
+          <img :src="require(`@/assets/img/logo-new-black.svg`)" alt />
         </nuxt-link>
         <button
           class="button button_white"
@@ -129,9 +129,9 @@
           </svg>
         </form>
         <div
-            class="search-sub"
-            v-if="searchHighlights.length && searchFocused"
-            @click="clearCategories"
+          class="search-sub"
+          v-if="searchHighlights.length && searchFocused"
+          @click="clearCategories"
         >
           <nuxt-link
             :to="
@@ -254,7 +254,7 @@ export default {
   border: 1px solid $stroke;
   border-top: none;
   background: #ffffff;
-  width: 500px;
+  width: 100%;
   padding: 8px 0;
   z-index: 3;
   @media all and (max-width: 1023px) {
@@ -529,7 +529,7 @@ export default {
           width: 100%;
           height: 1px;
           position: absolute;
-          bottom: 0px;
+          bottom: -5px;
           left: 0;
           margin: 5px;
           background: rgba(233, 233, 233, 0.5);
@@ -550,15 +550,14 @@ export default {
       }
 
       &.selected {
-        color: #2d9cdb;
+        background: rgba(0, 141, 222, 0.16078);
         i {
-          font-size: 10px;
-          color: #2d9cdb;
+          font-size: 14px;
         }
       }
       &:hover {
-        background: $light-gray;
-        font-weight: 700;
+        background: rgba(0, 141, 222, 0.16078);
+        font-weight: 500;
       }
     }
     .modal-bd {
@@ -593,6 +592,8 @@ export default {
       font-style: normal;
       font-weight: normal;
       font-size: 14px;
+      padding: 0;
+      line-height: 10px;
     }
     .input {
       /* margin-right: 10px; */

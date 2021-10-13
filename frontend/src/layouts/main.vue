@@ -165,7 +165,7 @@ import SubscribeNotifDoneModal from "../components/modals/SubscribeNotifDoneModa
 import SelectObjectTypeModal from "@/components/modals/SelectObjectTypeModal";
 import DetectLocation from "@/components/modals/AutoDetectLocation";
 import MobileMenu from "@/components/MobileMenu";
-import StatisticsBtn from "~/components/statistics/StatisticsBtn"
+import StatisticsBtn from "~/components/statistics/StatisticsBtn";
 
 export default {
   data() {
@@ -197,7 +197,7 @@ export default {
     SelectObjectTypeModal,
     DetectLocation,
     MobileMenu,
-    StatisticsBtn
+    StatisticsBtn,
   },
   computed: {
     currentCategory: get("disabilitiesCategorySettings/currentCategory"),
@@ -217,6 +217,13 @@ export default {
   },
   beforeDestroy() {
     this.$nuxt.$off("mainPageMobOpened");
+  },
+  mounted() {
+    if (this.$route.query.cat == "null") {
+      // console.log(this.$router);
+      this.selectCategory("hearing");
+      this.$router.replace({ ...this.$route, query: {} });
+    }
   },
   methods: {
     showDetectModal() {
@@ -238,6 +245,7 @@ export default {
     mobileOpenedFalse: function(count) {
       this.mobileOpened = false;
     },
+    ...call("disabilitiesCategorySettings", ["selectCategory", "init"]),
     enableVisualImpairedMode: call("visualImpairedModeSettings/enable"),
     ...call("map", ["toggleCategory", "toggleAccessibilityLevel"]),
     async updateUserCategory(category) {
@@ -726,7 +734,7 @@ export default {
         background-color: #ffffff;
         padding: 7px;
         border-radius: 10px;
-        width: calc(80% - 58px) ;
+        width: calc(80% - 58px);
         display: flex;
         justify-content: center;
         button {
