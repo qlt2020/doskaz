@@ -392,6 +392,7 @@ export const actions = {
     }
 
     return this.$axios.get('/api/dashboard/users/statistics').then(res => {
+      delete res.data.categories['justview']
       commit('SET_USERS_STAT', res.data)
     })
   },
