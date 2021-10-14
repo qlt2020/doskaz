@@ -93,12 +93,12 @@
       <div class="vi-header__bottom --bcolor --fcolor">
         <nuxt-link :to="localePath({ name: 'index' })" class="vi__logo">
           <img
-            :src="require('~/assets/logo-black.svg')"
+            :src="require('~/assets/img/logo-vi-black.svg')"
             alt=""
             v-if="visualImpairedModeSettings.colorTheme === 'white'"
           />
           <img
-            :src="require('~/assets/logo-white.svg')"
+            :src="require('~/assets/img/logo-vi-white.svg')"
             alt=""
             v-if="visualImpairedModeSettings.colorTheme === 'black'"
           />
@@ -3357,7 +3357,8 @@ body {
         }
       }
       &__social {
-        a {
+        a,
+        &-link {
           border: 1px solid;
           background-color: #000;
         }

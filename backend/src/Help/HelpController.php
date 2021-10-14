@@ -58,9 +58,13 @@ class HelpController extends AbstractController
      *     @Response(response=200, description="")
      * )
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return $this->repository->show($id);
+        $user = $this->getUser();
+        $roles = null;
+        if ($user != null)
+            $roles = $this->getUser()->getRoles();
+        return $this->repository->show($id, $request, $roles);
     }
 
     /**

@@ -5,14 +5,13 @@ export const state = () => ({
   complaintsCount: null,
   complaintsFilter: {
     params: {
-      year_id: 2021
+      year_id: (new Date()).getFullYear()
     }
   },
   complaintsFilteredStat: [],
   objectsStat: [],
   objectsStatPrimary: [],
   objectsStatTable: [],
-  objectsCount: {},
   objectsStatFilter: {
     params: {}
   },
@@ -20,7 +19,7 @@ export const state = () => ({
   feedbackCount: null,
   feedbackFilter: {
     params: {
-      year_id: 2020
+      year_id: (new Date()).getFullYear()
     }
   },
   feedbackFilteredStat: [],
@@ -42,17 +41,17 @@ export const state = () => ({
   complaintsList: [],
   group: {
     options:[
-      {value: 'kidsTotal', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
-      {value: 'movementTotal', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
-      {value: 'babyCarriageTotal', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
-      {value: 'visionTotal', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
-      {value: 'limbTotal', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
-      {value: 'temporalTotal', title: 'Временно травмированные люди', usersValue: 'temporal'},
-      {value: 'missingLimbsTotal', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
-      {value: 'pregnantTotal', title: 'Беременные женщины', usersValue: 'pregnant'},
-      {value: 'agedPeopleTotal', title: 'Пожилые люди', usersValue: 'agedPeople'},
-      {value: 'hearingTotal', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
-      {value: 'intellectualTotal', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
+      {value: 'kids', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
+      {value: 'movement', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
+      {value: 'babyCarriage', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
+      {value: 'vision', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
+      {value: 'limb', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
+      {value: 'temporal', title: 'Временно травмированные люди', usersValue: 'temporal'},
+      {value: 'missingLimbs', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
+      {value: 'pregnant', title: 'Беременные женщины', usersValue: 'pregnant'},
+      {value: 'agedPeople', title: 'Пожилые люди', usersValue: 'agedPeople'},
+      {value: 'hearing', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
+      {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
     ],
   },
   propertyList: {
@@ -195,19 +194,28 @@ export const actions = {
     const {data} = await this.$axios.get('/api/complaints/statistic', state.complaintsFilter)
     const complaintsCount = getCountToCategory(data.result, 'month', 'year', 'count')
 
+    const count = totalCount(data.result, 'count')
+
+    commit('SET_COMPLAINTS_COUNT', count)
+
     commit('SET_COMPLAINTS_FILTERED_STAT', complaintsCount)
   },
 
   async loadFeedback({commit}) {
-      const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
+      const {data} = await this.$axios.get('/api/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
+      
       commit('SET_FEEDBACK_STAT', data)
   },
 
   async getFeedbackFilter ({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
+    const {data} = await this.$axios.get('/api/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
+
+    const count = totalCount(data.result, 'count')
+    commit('SET_FEEDBACK_COUNT', count)
+
     commit('SET_FEEDBACK_FILTERED_STAT', feedbackStat)
   },
 
@@ -268,27 +276,6 @@ export const actions = {
       return a
       },[])
       .filter(objects => objects != null || objects!='empty' || objects!='undefined')
-
-    function sumAccesibles(typeAccesibles, item) {
-      let result = item[`hearing${typeAccesibles}`]+
-                    item[`intellectual${typeAccesibles}`]+
-                    item[`kids${typeAccesibles}`]+
-                    item[`limb${typeAccesibles}`]+
-                    item[`movement${typeAccesibles}`]+
-                    item[`vision${typeAccesibles}`]
-      return result
-    }
-    let fullAccessible = 0;
-    let partialAccessible = 0;
-    let notAccessible = 0;
-
-    objectsByCategory.forEach(item => {
-      fullAccessible += sumAccesibles('_full_accessible', item)
-      partialAccessible += sumAccesibles('_partial_accessible', item)
-      notAccessible += sumAccesibles('_not_accessible', item)
-    })
-
-    commit('SET_OBJECTS_COUNT', {fullAccessible, partialAccessible, notAccessible})
     commit('SET_OBJECTS_STAT', objectsByCategory)
 
 
@@ -381,6 +368,7 @@ export const actions = {
     }
 
     return this.$axios.get('/api/dashboard/users/statistics').then(res => {
+      delete res.data.categories['justview']
       commit('SET_USERS_STAT', res.data)
     })
   },

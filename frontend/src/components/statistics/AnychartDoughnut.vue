@@ -5,7 +5,43 @@
 <script>
 import Anychart from 'anychart'
 export default {
-  props: ['statData', 'title', 'Anychart', 'selectedCategory', 'totalData', 'categoryData', 'rowPie'],
+  props: {
+      statData: {
+        type: [Array, Object]
+      }, 
+      title: {
+        default: '',
+        type: String
+      },
+      Anychart, 
+      selectedCategory: {
+        default: '',
+        type: String
+      },
+      totalData: {
+        default: 0,
+        type: Number
+      }, 
+      categoryData: {
+        type: [Array, Object]
+      },
+      rowPie: {
+        default: false,
+        type: Boolean
+      },
+      legendWidth: {
+        default: '40%',
+        type: String
+      },
+      legendPosition: {
+        default: 'right',
+        type: String
+      },
+      legendHeight: {
+        default: '200px',
+        type: String
+      }
+    },
   name: 'AnychartDoughnut',
   data() {
     return {
@@ -59,22 +95,22 @@ export default {
                 "text": totalCount,
                 "position": this.rowPie ? "center" : "left-center",
                 "anchor": "center",
-                "offsetX": this.rowPie ? "0%" : "30%",
-                "offsetY": this.rowPie ? "-8%" : "6%",
+                "offsetX": this.rowPie ? "-1%" : "30%",
+                "offsetY": this.rowPie ? "-17%" : "0%",
               },
             ],
-            "title": {
-              text: this.title,
-              align: 'left',
-              fontSize: 18,
-              fontFamily: 'SFProDisplay',
-              fontColor: '#323136',
-              fontWeight: 500,
-              margin: {
-                left: this.rowPie ? 20 : 30,
-                bottom: this.rowPie ? 60 : 10
-              }
-            },
+            // "title": {
+            //   text: this.title,
+            //   align: 'left',
+            //   fontSize: 18,
+            //   fontFamily: 'SFProDisplay',
+            //   fontColor: '#323136',
+            //   fontWeight: 500,
+            //   margin: {
+            //     left: this.rowPie ? 20 : 30,
+            //     bottom: this.rowPie ? 60 : 10
+            //   }
+            // },
             "autoRedraw": true,
             "animation": {
               "enabled": true,
@@ -124,11 +160,10 @@ export default {
               "useHtml": false,
               "inverted": false,
               "itemsLayout": "verticalExpandable",
-              "width": this.rowPie ? "130px" : '40%',
-              // itemsFormat: "% Change: {%value}",
-              "height": '200px',
+              "width": this.legendWidth,
+              "height": this.legendHeight,
               "maxHeight": null,
-              "position": this.rowPie ? "bottom" : "right",
+              "position": this.legendPosition,
               "positionMode": "outside",
               "drag": false,
               "itemsFormat": null,

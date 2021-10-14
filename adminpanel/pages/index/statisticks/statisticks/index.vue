@@ -24,15 +24,16 @@
                     <div class="col-3 d-flex flex-column">
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
-                                Доступные по всем категориям
+                                Доступные
                             </div>
                             <div class="statisticks__main-total-number --green">
                                 {{objectsCount.fullAccessible}}
                             </div>
+
                         </div>
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
-                                Частично доступные по всем категориям
+                                Частично доступные
                             </div>
                             <div class="statisticks__main-total-number --orange">
                                 {{objectsCount.partialAccessible}}
@@ -40,14 +41,13 @@
                         </div>
                         <div class="statisticks__main-total statisticks__block">
                             <div class="statisticks__main-total-title">
-                                Недоступные по всем категориям
+                                Недоступные
                             </div>
                             <div class="statisticks__main-total-number --red">
                                 {{objectsCount.notAccessible}}
                             </div>
                         </div>
                     </div>
-
                     <div class="col-9">
                         <div class="statisticks__block statisticks__main-offer">
                             <Select @input="changeCategory" :options="groupPopulation" :value="selectedCategoryObj"/>
@@ -137,7 +137,8 @@
                     class="statisticks__block"
                 >
                     <Select
-                        :value="selectedYear"
+                        v-if="currentYear"
+                        :value="currentYear"
                         :options="yearsComplaints"
                         @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
                     />
@@ -145,13 +146,13 @@
                         :statData="complaintsFiltered"
                         :fill="'#EB5757'"
                         :stroke="'#EB5757'"
-                        :title="'Количество жалоб за месяц'"
+                        :title="'Количество жалоб за год'"
                     />
                 </div>
                 <div class="statisticks__block">
-
                     <Select
-                        :value="selectedFeedbackYear"
+                        v-if="currentYear"
+                        :value="currentYear"
                         :options="yearsFeedback"
                         @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
                     />
@@ -159,7 +160,7 @@
                         :statData="feedbackFiltered"
                         :fill="'#27AE60'"
                         :stroke="'#27AE60'"
-                        :title="'Количество обращений за месяц'"
+                        :title="'Количество обращений за год'"
                     />
                 </div>
             </div>
@@ -184,10 +185,9 @@
         data() {
             return {
                 newObjects:[],
-                selectedCategoryObj: 'kidsTotal',
+                currentYear: null,
+                selectedCategoryObj: 'kids',
                 selectedCategoryAge: null,
-                selectedYear: 2021,
-                selectedFeedbackYear: 2020,
                 users: {
                    kids_full_accessible: null,
                    movement_full_accessible: null
@@ -215,7 +215,6 @@
                     {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
                     {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
                     {value: 'undefined', title: 'Неизвестно'},
-                    {value: 'justview', title: 'Просто посмотреть'},
                     ],
                 yearsComplaints: {options:[]},
                 yearsFeedback: {options:[]}
@@ -242,27 +241,51 @@
             feedbackFiltered: get('statisticks/feedbackFilteredStat'),
             usersStat: get('statisticks/usersStat'),
             groupPopulation:get('statisticks/group'),
-            objectsCount: get('statisticks/objectsCount'),
             usersAge: get('statisticks/usersAge'),
             ageGroupPopulations() {
                 const populations = {}
                 populations.options = [...this.groupPopulation.options]
                 populations.options.push({usersValue: null, title: 'Все группы'})
                 return populations
+            },
+            objectsCount() {
+                let fullAccessible = 0,
+                      notAccessible = 0,
+                      partialAccessible = 0;
+
+                this.objectsStat.forEach(item => {
+                    fullAccessible += item[`${this.selectedCategoryObj}_full_accessible`];
+                    notAccessible += item[`${this.selectedCategoryObj}_not_accessible`];
+                    partialAccessible += item[`${this.selectedCategoryObj}_partial_accessible`];
+                })
+
+                return {'fullAccessible': fullAccessible,
+                        'notAccessible': notAccessible,
+                        'partialAccessible': partialAccessible}
             }
         },
         methods: {
             async yearsCount(complaintsSelect) {
                 let yearsApi;
+                this.currentYear = (new Date()).getFullYear();
+
                 if (complaintsSelect) {
                     yearsApi = await this.complaintsStat.years
                     yearsApi.forEach(year => {
-                        this.yearsComplaints.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsComplaints.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsComplaints.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
                 } else {
                     yearsApi = await this.feedbackStat.years
                     yearsApi.forEach(year => {
-                        this.yearsFeedback.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsFeedback.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsFeedback.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
                 }
             },
