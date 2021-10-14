@@ -63,6 +63,7 @@
             @focus="searchFocused = true"
             @input="search({ query: $event.target.value, cityId })"
             v-model="query"
+            @keypress.enter.prevent
           />
           <svg
             class="mobile-filter"
@@ -225,6 +226,12 @@ export default {
     category: sync("disabilitiesCategorySettings/category"),
     popupOpen: sync("disabilitiesCategorySettings/popupOpen"),
     mobileMenu: get("settings/mobileMenu"),
+  },
+  watch: {
+    cityId: function(cityId) {
+      this.query = ''
+      this.search({ query: this.query, cityId })
+    }
   },
   methods: {
     ...call("map", ["clearCategories"]),
