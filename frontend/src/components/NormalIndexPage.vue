@@ -46,7 +46,7 @@ export default {
 
 <style scoped lang="scss">
   .stat_button-wrap {
-    @media all and (max-width: 1024px) {
+    @media all and (max-width: 1023px) {
       display: none;
     }
   }

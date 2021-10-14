@@ -257,6 +257,21 @@ export default {
   width: 100%;
   padding: 8px 0;
   z-index: 3;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $tr;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparentize(#c4c4c4, 0.5);
+  }
+  @media all and (min-width: 1024px) {
+    max-height: 420px;
+  }
   @media all and (max-width: 1023px) {
     top: 50px;
     width: calc(100% + 1px);
