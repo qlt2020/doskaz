@@ -1,7 +1,7 @@
 <template>
   <div class="blog__inside">
     <BackBtn />
-    <div class="blog__main">
+    <div class="blog__main" v-if="article">
       <div class="blog__content">
         <div class="blog__content-top blog__head">
           <div class="blog__content-top__text">
@@ -61,7 +61,8 @@
         <div class="blog__sidebar__title blog__head">
           <!-- {{ $t("blog.similarPosts") }} -->
         </div>
-        <ul class="blog__material">
+
+        <!-- <ul class="blog__material">
           <li
             class="blog__material-item"
             v-for="post in similarPosts"
@@ -87,7 +88,8 @@
               </div>
             </nuxt-link>
           </li>
-        </ul>
+        </ul> -->
+
       </div>
     </div>
   </div>

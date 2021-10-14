@@ -23,7 +23,6 @@
             <img :src="article.image" alt="" />
             <div class="item-category">{{ article.category_name }}</div>
           </div>
-
           <div class="item-content">
             <span class="item-title">{{ article.title }}</span>
             <!-- <span class="date">{{ article.date }}</span> -->
