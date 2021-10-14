@@ -24,7 +24,7 @@
                     <div class="col-3 d-flex flex-column">
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
-                                Доступные по всем категориям
+                                Доступные
                             </div>
                             <div class="statisticks__main-total-number --green">
                                 {{objectsCount.fullAccessible}}
@@ -33,7 +33,7 @@
                         </div>
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
-                                Частично доступные по всем категориям
+                                Частично доступные
                             </div>
                             <div class="statisticks__main-total-number --orange">
                                 {{objectsCount.partialAccessible}}
@@ -41,7 +41,7 @@
                         </div>
                         <div class="statisticks__main-total statisticks__block">
                             <div class="statisticks__main-total-title">
-                                Недоступные по всем категориям
+                                Недоступные
                             </div>
                             <div class="statisticks__main-total-number --red">
                                 {{objectsCount.notAccessible}}
@@ -215,7 +215,6 @@
                     {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
                     {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
                     {value: 'undefined', title: 'Неизвестно'},
-                    {value: 'justview', title: 'Просто посмотреть'},
                     ],
                 yearsComplaints: {options:[]},
                 yearsFeedback: {options:[]}

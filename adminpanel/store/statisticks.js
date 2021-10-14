@@ -12,7 +12,6 @@ export const state = () => ({
   objectsStat: [],
   objectsStatPrimary: [],
   objectsStatTable: [],
-  objectsCount: {},
   objectsStatFilter: {
     params: {}
   },
@@ -203,7 +202,7 @@ export const actions = {
   },
 
   async loadFeedback({commit}) {
-      const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
+      const {data} = await this.$axios.get('/api/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
       
@@ -211,7 +210,7 @@ export const actions = {
   },
 
   async getFeedbackFilter ({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
+    const {data} = await this.$axios.get('/api/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
 
     const count = totalCount(data.result, 'count')
@@ -277,27 +276,6 @@ export const actions = {
       return a
       },[])
       .filter(objects => objects != null || objects!='empty' || objects!='undefined')
-
-    function sumAccesibles(typeAccesibles, item) {
-      let result = item[`hearing${typeAccesibles}`]+
-                    item[`intellectual${typeAccesibles}`]+
-                    item[`kids${typeAccesibles}`]+
-                    item[`limb${typeAccesibles}`]+
-                    item[`movement${typeAccesibles}`]+
-                    item[`vision${typeAccesibles}`]
-      return result
-    }
-    let fullAccessible = 0;
-    let partialAccessible = 0;
-    let notAccessible = 0;
-
-    objectsByCategory.forEach(item => {
-      fullAccessible += sumAccesibles('_full_accessible', item)
-      partialAccessible += sumAccesibles('_partial_accessible', item)
-      notAccessible += sumAccesibles('_not_accessible', item)
-    })
-
-    commit('SET_OBJECTS_COUNT', {fullAccessible, partialAccessible, notAccessible})
     commit('SET_OBJECTS_STAT', objectsByCategory)
 
 
@@ -390,6 +368,7 @@ export const actions = {
     }
 
     return this.$axios.get('/api/dashboard/users/statistics').then(res => {
+      delete res.data.categories['justview']
       commit('SET_USERS_STAT', res.data)
     })
   },

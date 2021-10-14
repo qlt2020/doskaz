@@ -93,11 +93,8 @@
                 this.$store.dispatch('statisticks/complaintsList');
             },
             async changeDate(val) {
-                console.log(val);
                 let from = this.toISOLocal(new Date(val[0])).split('T')[0];
                 let to = this.toISOLocal(new Date(val[1])).split('T')[0];
-                console.log(from);
-                console.log(to);
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': from});
                 this.dateFrom = from;
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateTo', 'value': to});

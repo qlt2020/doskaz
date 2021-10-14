@@ -2,7 +2,16 @@
   <div>
     <sidebar :posts="posts" :events="events" />
     <div class="stat_button-wrap">
-      <StatisticsBtn/>
+      <StatisticsBtn
+        :page="'statisticsAccess'"
+        :class="'btn_right'"
+        :title="'Статистика по доступности объектов'"
+      />
+      <StatisticsBtn 
+        :page="'statisticsTotal'"
+        :class="'btn_left'"
+        :title="'Общая статистика'"
+      />
     </div>
     <post-submit-message />
     <post-addition-message />
@@ -41,4 +50,15 @@ export default {
       display: none;
     }
   }
+  .btn_left {
+    left: 25px;
+  }
+  .btn_right {
+    left: 320px;
+    @media all and (max-width: 1366px) {
+      left: 270px;
+
+    }
+  }
+
 </style>
