@@ -355,7 +355,7 @@ export default {
   blogLink: "Go to section",
   privacyPolicy: "Confidence policy",
   termsOfUse: "User agreement",
-  privacyAgreement: "Соглашения о неразглашении",
+  privacyAgreement: "Non-disclosure agreements",
   communityGuidelines: "Community guidelines",
   events: {
     objectAdded: {
