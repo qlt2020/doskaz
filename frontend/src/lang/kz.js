@@ -23,6 +23,7 @@ export default {
   login: {
     linkTitle: "Кіру",
     pageTitle: "Кіру",
+    logoutTitle: "Шығу",
     popupTitle: "Өз қалаңызды жақындатыңыз",
     phoneLoginAdvice: "Немесе ұялы телефонның нөмірімен кіріңіз",
     profileFillingAdvice: "Тіркелуді жалғастырып, өз профиліңізді толтырыңыз",

@@ -24,7 +24,7 @@ export default {
   login: {
     linkTitle: "Enter",
     pageTitle: "Entry",
-    logoutTitle: "Logout",
+    logoutTitle: "Log out",
     popupTitle: "Make your city closer",
     phoneLoginAdvice: "Or enter from a telephone",
     profileFillingAdvice: "Continue registration and fill into your profile",
