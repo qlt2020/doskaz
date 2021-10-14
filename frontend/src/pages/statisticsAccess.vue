@@ -3,6 +3,7 @@
     <ViTop />
     <MainHeader />
     <div class="container">
+      <loading :is-full-page="true" :active="!isLoading" />
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
@@ -250,6 +251,9 @@ import { get } from "vuex-pathify";
 import DropdownBlock from "@/components/DropdownBlock";
 import "@/plugins/bootstrap-plugin.js";
 
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+
 export default {
   name: "StatisticsAccess",
   components: {
@@ -258,6 +262,7 @@ export default {
     MainFooter,
     BackBtn,
     DropdownBlock,
+    Loading
   },
   data() {
     return {
@@ -311,6 +316,7 @@ export default {
     await this.$store.dispatch("statistics/getObjectsStatTable");
   },
   computed: {
+    isLoading: get('statistics/isLoading'),
     objectsStat: get("statistics/getObjectsStatTable"),
     groupsTable() {
       if (this.selectedGroup == "all") {
@@ -475,6 +481,7 @@ export default {
 
 .statisticks {
   padding: 40px 0;
+  min-height: calc(100vh - 195px);
   @media all and (max-width: 1024px) {
     padding: 90px 0;
   }

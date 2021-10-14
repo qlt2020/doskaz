@@ -2,8 +2,8 @@
   <div class="about">
     <ViTop />
     <MainHeader />
-
     <div class="container">
+    <loading :is-full-page="true" :active="!isLoading" />
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
@@ -239,6 +239,10 @@ import AnychartColumn from '@/components/statistics/AnychartColumn.vue';
 import AnychartDoughnut from '@/components/statistics/AnychartDoughnut.vue';
 import {format} from "date-fns";
 
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+
+
 export default {
   name: "StatisticsTotal",
   ssr: false,
@@ -248,7 +252,8 @@ export default {
     MainFooter,
     DropdownBlock,
     AnychartColumn, 
-    AnychartDoughnut
+    AnychartDoughnut,
+    Loading
   },
   data() {
     return {
@@ -293,7 +298,7 @@ export default {
           {value: 'undefined', title: 'Неизвестно'},
           ],
       yearsComplaints: {options:[]},
-      yearsFeedback: {options:[]},
+      yearsFeedback: {options:[]}
     };
   },
   async mounted() {
@@ -321,6 +326,7 @@ export default {
     await this.$store.dispatch('statistics/getUsersAge');
   },
   computed: {
+    isLoading: get('statistics/isLoading'),
     complaintsCount: get('statistics/complaintsCount'),
     complaintsFiltered: get('statistics/complaintsFilteredStat'),
     complaintsStat: get('statistics/complaintsStat'),
@@ -333,7 +339,7 @@ export default {
     usersAge: get('statistics/usersAge'),
     ageGroupPopulations() {
         const populations = {}
-        populations.options = [...this.groupPopulation.options]
+        populations.options = JSON.parse(JSON.stringify(this.groupPopulation.options))
         populations.options.push({value: null, title: 'Все группы'})
         populations.options.map(item => {
             if (item.value === 'kids') {
@@ -395,6 +401,7 @@ export default {
             this.$store.dispatch(`statistics/${action}`);
     },
     changeCategory(value, filterApi) {
+        console.log(value)
         if (filterApi) {
             if (value === '') {
                 this.selectedCategoryAge = null
