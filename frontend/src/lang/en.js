@@ -672,10 +672,24 @@ Anonymous requests are not considered.
       "You can become a volunteer <a style='font-weight: bold' href='/login'>here</a>",
     section9Text:
       "The project is carried out by a consortium of public organizations. See the Contacts page.",
+    section9_1Text:
+      "Eurasia Foundation of Central Asia (EFCA) is a non-governmental organization founded in the region in 2005. EFCA mobilizes public and private resources to help citizens take an active part in building their own future by strengthening local communities and improving their civic and economic well-being.",
+    section9_2Text:
+      "Tandau Foundation has been operating since 2003. The mission of the organization is to create conditions for realization of potential and interests of socially vulnerable groups of the population through deploying training, information, advocacy and consulting programs.",
     section10Text:
       "The project is financed by the Delegation of the European Union to the Republic of Kazakhstan, the US Diplomatic Mission in Kazakhstan, the United Nations Children's Fund (UNICEF), Astana Hub International Technopark of IT Startups in Central Asia.",
+    section10_1Text:
+      "The European Union is made up of 28 Member States who have decided to link together their know-how, resources and destinies, having built a zone of stability, democracy and sustainable development whilst maintaining cultural diversity, tolerance and individual freedoms. The European Union is determined to share its achievements and values with countries and peoples beyond its borders.",
+    section10_2Text:
+      "The mission of the United States Embassy in Kazakhstan is to support the development of Kazakhstani democratic institutions and civil society by competitively awarding small grants to Kazakhstani nonprofit, non-governmental organizations.",
+    section10_3Text:
+      "The United Nations Children’s Fund (UNICEF) works in the field of protecting the rights of children, namely, on prevention and protection of children from violence. UNICEF pays special attention to children from the most vulnerable groups, children with disabilities, as well as children in boarding schools.",
+    section10_4Text:
+      "An international technology park for IT startups in Central Asia “Astana Hub” is intended to become the core and engine to develop the innovation ecosystem in Kazakhstan and an internationally recognized hub developing technology business.",
     section11Text:
       "If the website does not work correctly, please leave a message on the Contacts page.",
+    section11_1Text:
+      "During implementation of any project, problems of various levels of complexity can always arise that require prompt solutions. If you encounter such a problem, if you find errors in the text of the content, if you do not agree with the information about the objects, if the website does not work correctly, please inform us about it. We will tackle the issues quickly and efficiently!",
     accessible: "Accessible",
     partialAccessible: "Partially accessible",
     notAccessible: "Not accessible",

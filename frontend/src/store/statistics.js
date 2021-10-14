@@ -1,6 +1,7 @@
 import {make} from "vuex-pathify";
 
 export const state = () => ({
+  isLoading: true,
   complaintsStat: [],
   complaintsCount: null,
   complaintsFilter: {
@@ -155,15 +156,21 @@ function totalCount(data, count) {
 
 export const actions = {
   async loadComplaints({commit}) {
+    commit('SET_IS_LOADING', false)
+
     const {data} = await this.$axios.get('/api/complaints/statistic', {})
 
     const count = totalCount(data.result, 'count')
     commit('SET_COMPLAINTS_COUNT', count)
 
     commit('SET_COMPLAINTS_STAT', data)
+    commit('SET_IS_LOADING', true)
+
   },
 
   async getComplaintsFilter({commit, state}) {
+    commit('SET_IS_LOADING', false)
+
     const {data} = await this.$axios.get('/api/complaints/statistic', state.complaintsFilter)
     const complaintsCount = getCountToCategory(data.result, 'month', 'year', 'count')
 
@@ -172,17 +179,25 @@ export const actions = {
     commit('SET_COMPLAINTS_COUNT', count)
 
     commit('SET_COMPLAINTS_FILTERED_STAT', complaintsCount)
+    commit('SET_IS_LOADING', true)
+
   },
 
   async loadFeedback({commit}) {
+      commit('SET_IS_LOADING', false)
+
       const {data} = await this.$axios.get('/api/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
       
       commit('SET_FEEDBACK_STAT', data)
+      commit('SET_IS_LOADING', true)
+
   },
 
   async getFeedbackFilter ({commit, state}) {
+    commit('SET_IS_LOADING', false)
+
     const {data} = await this.$axios.get('/api/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
 
@@ -190,9 +205,13 @@ export const actions = {
     commit('SET_FEEDBACK_COUNT', count)
 
     commit('SET_FEEDBACK_FILTERED_STAT', feedbackStat)
+    commit('SET_IS_LOADING', true)
+
   },
 
   async getObjectsStat({commit, state}) {
+    commit('SET_IS_LOADING', false)
+
     const listProperty = state.propertyList
 
     const {data} = await this.$axios.get('/api/objects/statistic', state.objectsStatFilter);
@@ -250,9 +269,11 @@ export const actions = {
       },[])
       .filter(objects => objects != null || objects!='empty' || objects!='undefined')
     commit('SET_OBJECTS_STAT', objectsByCategory)
+    commit('SET_IS_LOADING', true)
   },
 
   async getObjectsStatTable({commit, state}) {
+    commit('SET_IS_LOADING', false)
     
     const listProperty = state.propertyList
 
@@ -384,6 +405,8 @@ export const actions = {
     objectsByCategory.unshift(total)
 
     commit('SET_OBJECTS_STAT_TABLE', objectsByCategory)
+    commit('SET_IS_LOADING', true)
+
   },
 
   async getUsersStat({commit, state}) {
@@ -398,11 +421,15 @@ export const actions = {
   },
 
   async getUsersAge({commit, state}) {
+    commit('SET_IS_LOADING', false)
+
     return this.$axios.get('/api/dashboard/users/age-statistics', {
       params: {
         category: state.usersAgeFilter
       }}).then(res => {
           commit('SET_USERS_AGE', res.data[0])
+          commit('SET_IS_LOADING', true)
+
         })
       },
 }
