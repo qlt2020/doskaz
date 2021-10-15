@@ -30,7 +30,10 @@ class HelpRepository
 
     public function show($id, Request $request, array $roles = null){
         $item = $this->query($id, $request, $roles)->execute()->fetchAll();
-        return new JsonResponse(['item' => $item ], 200);
+        if (count($item) == 0) {
+            return new JsonResponse('Not found', 404);
+        }
+        return new JsonResponse($item[0], 200);
     }
 
     public function store(HelpData $data)

@@ -3,7 +3,7 @@
     <div
       class="dropdown__block__selected dropdown__block__item"
       @click="!active ? null : toggleDropdown($event)"
-      :class="{ opened: isOpened }"
+      :class="{ opened: isOpened, to_print: toPrint}"
       :style="!active ? `opacity: 0.7` : ``"
     >
       <span>{{ selectedTitle }}</span>
@@ -72,6 +72,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    toPrint: {
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
@@ -177,6 +181,9 @@ export default {
     border-radius: 6px;
     border: 1px solid transparent;
     border-bottom: none;
+    &.to_print {
+      box-shadow: none;
+    }
     &.opened + .dropdown__block__list {
       display: block;
     }

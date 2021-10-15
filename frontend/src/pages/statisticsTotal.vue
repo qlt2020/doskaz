@@ -29,7 +29,7 @@
         </div>
 
         <client-only>
-            <div class="statisticks__main" ref="to_pdf">
+            <div class="statisticks__main" ref="to_pdf" :class="{to_print: prepToPdf}">
                 <div class="row statisticks__main-head">
                     <div class="col-12 col-lg-8">
                         <div class="row">
@@ -67,6 +67,7 @@
                                             {{$t('statistics.statisticsTotal.objectsTotal')}}
                                         </div>
                                         <DropdownBlock 
+                                            :toPrint="prepToPdf"
                                             @input="changeCategory" 
                                             :options="groupPopulation.options" 
                                             :value="selectedCategoryObj"
@@ -74,6 +75,7 @@
                                         />
                                     </div>
                                     <AnychartDoughnut
+                                        style="height: 270px"
                                         :statData="objectsStat"
                                         :selectedCategory="selectedCategoryObj"
                                         :rowPie="rowPieTabled"
@@ -138,6 +140,7 @@
                                     {{$t('statistics.statisticsTotal.usersAge')}}
                                 </div>
                                 <DropdownBlock 
+                                    :toPrint="prepToPdf"
                                     @input="changeCategory(arguments[0], true)"
                                     :options="ageGroupPopulations.options" 
                                     :value="selectedCategoryAge" 
@@ -186,6 +189,7 @@
                                 {{$t('statistics.statisticsTotal.complaintsYears')}}
                             </div>
                             <DropdownBlock
+                                :toPrint="prepToPdf"
                                 v-if="selectedComplaints"
                                 :value="selectedComplaints"
                                 :options="yearsComplaints.options"
@@ -204,6 +208,7 @@
                                     {{$t('statistics.statisticsTotal.feedbackYears')}}
                                 </div>
                                 <DropdownBlock
+                                    :toPrint="prepToPdf"
                                     v-if="selectedFeedback"
                                     :value="selectedFeedback"
                                     :options="yearsFeedback.options"
@@ -260,6 +265,7 @@ export default {
       rowPieTabled: false, 
       newObjects:[],
       currentYear: null,
+      prepToPdf: false,
       selectedComplaints: null,
       selectedFeedback: null,
       selectedCategoryObj: 'kids',
@@ -429,24 +435,31 @@ export default {
         }
     },
     exportAll() {
-        let html2pdf;
-        import('html2pdf.js').then(pdfModule => {
-            html2pdf = pdfModule.default
-
-            let date = format(new Date(), 'd.MM.yyyy')
-            html2pdf(this.$refs.to_pdf, {
-                margin: 2,
-                filename: `${date}_Статистика.pdf`,
-                html2canvas: {
-                    letterRendering: true,
-                    ignoreElements: (el) => {return el.id === 'export_btn'}
-                },
-                jsPDF: {
-                    format: 'a4',
-                    orientation: 'landscape'
-                }
+        this.prepToPdf = true
+        if(this.prepToPdf) {
+            let html2pdf;
+            import('html2pdf.js').then(pdfModule => {
+                html2pdf = pdfModule.default
+                let date = format(new Date(), 'd.MM.yyyy')
+                html2pdf(this.$refs.to_pdf, {
+                    margin: 2,
+                    filename: `${date}_Статистика.pdf`,
+                    html2canvas: {
+                        letterRendering: true,
+                        ignoreElements: (el) => {return el.id === 'export_btn'}
+                    },
+                    jsPDF: {
+                        format: 'ledger',
+                        orientation: 'p'
+                    }
+                })
             })
-        })
+            setTimeout(() => {
+                this.prepToPdf = false
+            }, 500);
+            
+        }
+        
     },
   },
 };
@@ -460,7 +473,13 @@ export default {
 .statisticks {
     padding: 40px 0 90px;
 }
-
+.statisticks__main {
+    &.to_print {
+            .statisticks__block {
+                box-shadow: none;
+            }
+        }
+}
 .statisticks .height100 {
     height: 100%;
 }
@@ -504,7 +523,6 @@ export default {
 .statisticks__block {
     position: relative;
     border-radius: 10px;
-    box-shadow: 0px, 2px rgba(0, 0, 0, 0.04);
     background-color: white;
     width: 100%;
     padding: 15px;
