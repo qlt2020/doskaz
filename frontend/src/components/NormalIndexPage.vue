@@ -5,12 +5,12 @@
       <StatisticsBtn
         :page="'statisticsAccess'"
         :class="'btn_right'"
-        :title="'Статистика по доступности объектов'"
+        :title="$t('statistics.access')"
       />
       <StatisticsBtn 
         :page="'statisticsTotal'"
         :class="'btn_left'"
-        :title="'Общая статистика'"
+        :title="$t('statistics.total')"
       />
     </div>
     <post-submit-message />
