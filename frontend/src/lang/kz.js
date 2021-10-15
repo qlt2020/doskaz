@@ -21,6 +21,7 @@ export default {
     termsOfUse: "Құпиялылық саясатымен",
   },
   login: {
+    logoutTitle: "Шығу",
     linkTitle: "Кіру",
     pageTitle: "Кіру",
     popupTitle: "Өз қалаңызды жақындатыңыз",
