@@ -213,10 +213,18 @@
             $t("about.section10")
           }}</span>
           <div class="about__container__finance">
-            <img :src="require('@/assets/img/about/finance1.png')" />
-            <img :src="require('@/assets/img/about/finance2.png')" />
-            <img :src="require('@/assets/img/about/finance3.png')" />
-            <img :src="require('@/assets/img/about/finance4.png')" />
+            <div class="about__container__finance-wrap">
+              <img :src="require('@/assets/img/about/finance1.png')" />
+            </div>
+            <div class="about__container__finance-wrap">
+              <img :src="require('@/assets/img/about/finance2.png')" />
+            </div>
+            <div class="about__container__finance-wrap">
+              <img :src="require('@/assets/img/about/finance3.png')" />
+            </div>
+            <div class="about__container__finance-wrap">
+              <img :src="require('@/assets/img/about/finance4.png')" />
+            </div>
           </div>
           <span class="about__container__span-text">
             {{ $t("about.section10Text") }}
@@ -263,6 +271,7 @@
         :highlight-first-item="true"
         :always-track="true"
         :scroll-offset="20"
+        @itemchanged="scrollInSlide"
         class="about__sidebar"
       >
         <a class="scrollactive-item" href="#what_it_is">{{
@@ -312,6 +321,16 @@ export default {
       title: this.$t("mainMenu.about"),
     };
   },
+  data() {
+    return {
+      mobileWidth: false
+    }
+  },
+  mounted() {
+      if (document.documentElement.clientWidth <= 1024) {
+        this.mobileWidth = true
+      }
+  },
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
     shareLinks() {
@@ -329,6 +348,13 @@ export default {
     share(network) {
       window.open(this.shareLinks[network]);
     },
+    scrollInSlide(e, currentItem) {
+      if (this.mobileWidth) {
+        $('#slide_scroll').animate({
+          scrollLeft: currentItem.offsetLeft - 50
+        }, 100)
+      }
+    }
   },
 };
 </script>
@@ -387,6 +413,7 @@ export default {
     margin-bottom: 50px;
     display: flex;
     @media screen and (max-width: 1023px) {
+      position: relative;
       display: grid;
       margin-top: unset;
       margin-bottom: unset;
@@ -460,7 +487,23 @@ export default {
         font-size: 16px;
         line-height: 13px;
         border-radius: unset;
-      }
+        position: sticky;
+        top: 58px;
+        z-index: 999;
+          &::-webkit-scrollbar {
+            height: 6px;
+          }
+
+          &::-webkit-scrollbar-track {
+            background: $tr;
+            border-radius: 10px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: transparentize(#c4c4c4, 0.5);
+            border-radius: 10px;
+          }
+        }
     }
 
     .about__container {
@@ -648,6 +691,17 @@ export default {
         margin-bottom: 30px;
         @media screen and (max-width: 1023px) {
           flex-wrap: wrap;
+        }
+        &-wrap {
+          margin-bottom: 20px;
+          img {
+            @media screen and (max-width: 1023px) {
+              width: 100%;
+            }
+          }
+          @media screen and (max-width: 1023px) {
+            width: 160px;
+          }
         }
       }
     }
