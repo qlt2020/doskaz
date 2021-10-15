@@ -14,14 +14,14 @@
                 @click="$router.back()"
                 class="title-back_arrow"
             />
-            Статистика
+            {{$t('statistics.statistics')}}
           </div>
           <div class="col-md-6  col-3">
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportAll" id="export_btn">
                 <i class="fas fa-download" style="color:#fff"></i>
                 <span>
-                    Скачать
+                    {{$t('objects.download')}}
                 </span>
               </button>
             </div>
@@ -36,16 +36,16 @@
                             <div class="col-md-3 statisticks__main-count d-flex">
                                 <div class="statisticks__main-total statisticks__block mb-3">
                                     <div class="statisticks__main-total-title">
-                                        Доступные
+                                        {{$t('statistics.statisticsTotal.accessible')}}
                                     </div>
-                                    <div class="statisticks__main-total-number --green">
+                                    <div class="statistics-total-number --green">
                                         {{objectsCount.fullAccessible}}
                                     </div>
 
                                 </div>
                                 <div class="statisticks__main-total statisticks__block mb-3">
                                     <div class="statisticks__main-total-title">
-                                        Частично доступные
+                                        {{$t('statistics.statisticsTotal.partialAccessible')}}
                                     </div>
                                     <div class="statisticks__main-total-number --orange">
                                         {{objectsCount.partialAccessible}}
@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="statisticks__main-total statisticks__block">
                                     <div class="statisticks__main-total-title">
-                                        Недоступные
+                                        {{$t('statistics.statisticsTotal.notAccessible')}}
                                     </div>
                                     <div class="statisticks__main-total-number --red">
                                         {{objectsCount.notAccessible}}
@@ -64,7 +64,7 @@
                                 <div class="statisticks__block statisticks__main-offer">
                                     <div class="statisticks__block-head">
                                         <div class="statisticks__block-head_title">
-                                            Количество объектов в разрезе возможностей для категории
+                                            {{$t('statistics.statisticsTotal.objectsTotal')}}
                                         </div>
                                         <DropdownBlock 
                                             @input="changeCategory" 
@@ -88,7 +88,7 @@
                             <div class="col-md-3 d-flex statisticks__main-count">
                                 <div class="statisticks__main-total statisticks__block mb-3">
                                     <div class="statisticks__main-total-title statisticks__main-total-title_diagram">
-                                        Количество пользователей
+                                        {{$t('statistics.statisticsTotal.usersCount')}}
                                     </div>
                                     <div class="statisticks__main-total-number --green">
                                         {{usersStat.registered}}
@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="statisticks__main-total statisticks__block mb-3">
                                     <div class="statisticks__main-total-title">
-                                        Количество мужчин
+                                        {{$t('statistics.statisticsTotal.mensTotal')}}
                                     </div>
                                     <div class="statisticks__main-total-number --blue">
                                         {{usersStat.men}}
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="statisticks__main-total statisticks__block">
                                     <div class="statisticks__main-total-title">
-                                        Количество женщин
+                                        {{$t('statistics.statisticsTotal.womenTotal')}}
                                     </div>
                                     <div class="statisticks__main-total-number --fuschia">
                                     {{usersStat.women}}
@@ -115,7 +115,7 @@
                                 <div class="statisticks__block statisticks__main-offer statisticks__main-offer-two">
                                     <div class="statisticks__block-head">
                                         <div class="statisticks__block-head_title">
-                                            Количество пользователей в разрезе категорий
+                                            {{$t('statistics.statisticsTotal.usersTotal')}}
                                         </div>
                                     </div>
                                     <AnychartDoughnut
@@ -135,7 +135,7 @@
                         <div class="statisticks__block statisticks__block-fix-width">
                             <div class="statisticks__block-head">
                                 <div class="statisticks__block-head_title">
-                                    Диаграмма по возрасту в разрезе категории
+                                    {{$t('statistics.statisticsTotal.usersAge')}}
                                 </div>
                                 <DropdownBlock 
                                     @input="changeCategory(arguments[0], true)"
@@ -147,7 +147,6 @@
                             <AnychartDoughnut
                                 :statData="usersAge"
                                 :categoryData="usersAgeList"
-                                :title="'Диаграмма по возрасту в разрезе категорий'"
                                 :selectedCategory="selectedCategoryObj"
                                 :totalData="usersStat.registered"
                                 :rowPie="rowPie"
@@ -162,7 +161,7 @@
                     <div class="statisticks__main-feedback col-lg-2 d-flex justify-content-start">
                         <div class="statisticks__main-feedback_total statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
-                                Количество жалоб
+                                {{$t('statistics.statisticsTotal.complaintsTotal')}}
                             </div>
                             <div class="statisticks__main-total-number --red" v-if="complaintsCount">
                                 {{complaintsCount.count}}
@@ -170,7 +169,7 @@
                         </div>
                         <div class="statisticks__main-feedback_total statisticks__main-total statisticks__block">
                             <div class="statisticks__main-total-title">
-                                Количество обращений
+                                {{$t('statistics.statisticsTotal.feedbackTotal')}}
                             </div>
                             <div class="statisticks__main-total-number --green" v-if="feedbackCount">
                                 {{feedbackCount.count}}
@@ -184,7 +183,7 @@
                         >
                         <div class="statisticks__block-head" v-if="yearsComplaints.options.length">
                             <div class="statisticks__block-head_title">
-                                Количество жалоб за год
+                                {{$t('statistics.statisticsTotal.complaintsYears')}}
                             </div>
                             <DropdownBlock
                                 v-if="selectedComplaints"
@@ -202,7 +201,7 @@
                         <div class="statisticks__block">
                             <div class="statisticks__block-head" v-if="yearsFeedback.options.length">
                                 <div class="statisticks__block-head_title">
-                                    Количество обращений за год
+                                    {{$t('statistics.statisticsTotal.feedbackYears')}}
                                 </div>
                                 <DropdownBlock
                                     v-if="selectedFeedback"
@@ -275,30 +274,45 @@ export default {
       },
       usersAgeList:
           [
-              {value: 'from_18_to_23', title: 'От 18 до 23 лет'},
-              {value: 'from_23_to_28', title: 'От 23 до 28 лет'},
-              {value: 'from_28_to_33', title: 'От 28 до 33 лет'},
-              {value: 'from_33_to_38', title: 'От 33 до 38 лет'},
-              {value: 'from_38_to_43', title: 'От 38 до 43 лет'},
-              {value: 'from_43_to_50', title: 'От 43 до 50 лет'},
-              {value: 'from_50_to_100', title: 'От 50 и выше'},
+              {value: 'from_18_to_23', title: this.$t('statistics.statisticsTotal.from_18_to_23')},
+              {value: 'from_23_to_28', title: this.$t('statistics.statisticsTotal.from_23_to_28')},
+              {value: 'from_28_to_33', title: this.$t('statistics.statisticsTotal.from_28_to_33')},
+              {value: 'from_33_to_38', title: this.$t('statistics.statisticsTotal.from_33_to_38')},
+              {value: 'from_38_to_43', title: this.$t('statistics.statisticsTotal.from_38_to_43')},
+              {value: 'from_43_to_50', title: this.$t('statistics.statisticsTotal.from_43_to_50')},
+              {value: 'from_50_to_100', title: this.$t('statistics.statisticsTotal.from_50_to_100')},
           ],
       usersTitleList: [
-          {value: 'withchild', title: 'Семьи с детьми до семи лет'},
-          {value: 'movement', title: 'Люди передвигающиеся на кресло коляске'},
-          {value: 'babycarriage', title: 'Люди с детскими колясками'},
-          {value: 'vision', title: 'Люди с инвалидностью по зрению'},
-          {value: 'limb', title: 'Люди с нарушениями опорно-двигательного аппарата'},
-          {value: 'temporal', title: 'Временно травмированные люди'},
-          {value: 'missinglimbs', title: 'Люди с отсутствующими конечностями'},
-          {value: 'pregnant', title: 'Беременные женщины'},
-          {value: 'agedpeople', title: 'Пожилые люди'},
-          {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
-          {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
-          {value: 'undefined', title: 'Неизвестно'},
+          {value: 'withchild', title: this.$t('statistics.statisticsTotal.withchild')},
+          {value: 'movement', title: this.$t('statistics.statisticsTotal.movement')},
+          {value: 'babycarriage', title: this.$t('statistics.statisticsTotal.babycarriage')},
+          {value: 'vision', title: this.$t('statistics.statisticsTotal.vision')},
+          {value: 'limb', title: this.$t('statistics.statisticsTotal.limb')},
+          {value: 'temporal', title: this.$t('statistics.statisticsTotal.temporal')},
+          {value: 'missinglimbs', title: this.$t('statistics.statisticsTotal.missinglimbs')},
+          {value: 'pregnant', title: this.$t('statistics.statisticsTotal.pregnant')},
+          {value: 'agedpeople', title: this.$t('statistics.statisticsTotal.agedpeople')},
+          {value: 'hearing', title: this.$t('statistics.statisticsTotal.hearing')},
+          {value: 'intellectual', title: this.$t('statistics.statisticsTotal.intellectual')},
+          {value: 'undefined', title: this.$t('statistics.statisticsTotal.undefined')},
           ],
       yearsComplaints: {options:[]},
-      yearsFeedback: {options:[]}
+      yearsFeedback: {options:[]},
+      groupPopulation: {
+        options:[
+            {value: 'kids', title: this.$t('statistics.statisticsTotal.withchild')},
+            {value: 'movement', title: this.$t('statistics.statisticsTotal.movement')},
+            {value: 'babycarriage', title: this.$t('statistics.statisticsTotal.babycarriage')},
+            {value: 'vision', title: this.$t('statistics.statisticsTotal.vision')},
+            {value: 'limb', title: this.$t('statistics.statisticsTotal.limb')},
+            {value: 'temporal', title: this.$t('statistics.statisticsTotal.temporal')},
+            {value: 'missinglimbs', title: this.$t('statistics.statisticsTotal.missinglimbs')},
+            {value: 'pregnant', title: this.$t('statistics.statisticsTotal.pregnant')},
+            {value: 'agedpeople', title: this.$t('statistics.statisticsTotal.agedpeople')},
+            {value: 'hearing', title: this.$t('statistics.statisticsTotal.hearing')},
+            {value: 'intellectual', title: this.$t('statistics.statisticsTotal.intellectual')},
+        ],
+      }
     };
   },
   async mounted() {
@@ -335,7 +349,6 @@ export default {
     feedbackCount: get('statistics/feedbackCount'),
     feedbackFiltered: get('statistics/feedbackFilteredStat'),
     usersStat: get('statistics/usersStat'),
-    groupPopulation:get('statistics/group'),
     usersAge: get('statistics/usersAge'),
     ageGroupPopulations() {
         const populations = {}
