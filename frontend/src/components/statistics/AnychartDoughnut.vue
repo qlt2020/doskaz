@@ -175,6 +175,7 @@ export default {
               "iconTextSpacing": 5,
               "align": "center",
               "paginator": {
+                "fontSize": 16,
                 "layout": "vertical",
                 "padding": {
                   "left": 10,
