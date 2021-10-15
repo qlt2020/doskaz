@@ -358,7 +358,7 @@ export default {
   blogLink: "Бөлімге өту",
   privacyPolicy: "Құпиялылық саясаты",
   termsOfUse: "Пайдаланушы келісімі",
-  privacyAgreement: "Соглашения о неразглашении",
+  privacyAgreement: "Жарияламау туралы келісімдер",
   communityGuidelines: "Қоғамдастық нұсқаулығы",
   events: {
     objectAdded: {
