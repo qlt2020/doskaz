@@ -117,22 +117,22 @@
                   <b-th
                     class="statisticks__table-subtitle --green"
                     :key="categories + key + index + 17"
-                    >Общее</b-th
+                    >{{$t('statistics.general')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --green"
                     :key="categories + key + index + 1"
-                    >Доступно</b-th
+                    >{{$t('accessibilityScore.status.full_accessible')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --orange text-nowrap"
                     :key="categories + key + index + 4"
-                    >Частично доступно</b-th
+                    >{{$t('accessibilityScore.status.partial_accessible')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --red"
                     :key="categories + key + index + 25"
-                    >Недоступно</b-th
+                    >{{$t('accessibilityScore.status.not_accessible')}}</b-th
                   >
                 </template>
               </b-tr>

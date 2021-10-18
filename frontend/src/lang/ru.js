@@ -781,6 +781,8 @@ export default {
     },
     all: "Все",
     allCountry: "Весь Казахстан",
-    object: 'Объект'
+    object: 'Объект',
+    general: 'Общее',
+    
   }
 };

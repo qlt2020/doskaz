@@ -486,7 +486,7 @@ export default {
     ageGroupPopulations() {
         const populations = {}
         populations.options = JSON.parse(JSON.stringify(this.groupPopulation.options))
-        populations.options.push({value: null, title: 'Все группы'})
+        populations.options.push({value: null, title: this.$t('statistics.statisticsTotal.allGroups')})
         populations.options.map(item => {
             if (item.value === 'kids') {
                 item.value = 'withChild'
