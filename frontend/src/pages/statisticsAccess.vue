@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled"/>
     <div class="container">
       <loading :is-full-page="true" :active="!isLoading" />
       <div class="statisticks">
@@ -20,7 +20,12 @@
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportList">
                 <i class="fas fa-download" style="color:#fff"></i>
-                <span>{{$t('objects.download')}}</span>
+                <span
+                  :class="
+                    !viModeEnabled
+                      ? 'button-white'
+                      : ''"
+                >{{$t('objects.download')}}</span>
               </button>
             </div>
           </div>
@@ -316,6 +321,7 @@ export default {
     await this.$store.dispatch("statistics/getObjectsStatTable");
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     isLoading: get('statistics/isLoading'),
     objectsStat: get("statistics/getObjectsStatTable"),
     groupsTable() {
@@ -404,9 +410,10 @@ export default {
 .statisticks .button {
   border-radius: 10px;
   height: 54px;
-  span {
+}
+
+.statisticks .button-white {
     color: #ffffff;
-  }
 }
 
 .statisticks .table {

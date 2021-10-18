@@ -2496,6 +2496,25 @@ body {
         border: 1px solid #fff;
       }
     }
+    .statisticks__block {
+      background-color: #000000;
+      border: 1px solid #ffffff;
+    }
+
+    .table.b-table > thead > tr > .table-b-table-default, .table.b-table > tbody > tr > .table-b-table-default, .table.b-table > tfoot > tr > .table-b-table-default{
+      background-color: #000;
+      color: inherit;
+    }
+
+    .statisticks tbody {
+      color: #ffffff;
+      background-color: #000;
+    }
+
+    .table .thead-light th {
+      background-color: #000;
+    }
+
   }
   &.white {
     background: #ffffff;
@@ -3159,6 +3178,9 @@ body {
     .represent__item {
       background: #fff;
     }
+    .table .thead-light th {
+      background-color: #ffffff;
+    }
   }
   &.black,
   &.white {
@@ -3604,6 +3626,23 @@ body {
     }
     .photo-input {
       background-color: #fff;
+    }
+    .statisticks .statisticks__table-subtitle {
+      font-size: inherit;
+      color: inherit;
+    }
+    .statisticks .statisticks__main .--green {
+      color: inherit !important;
+    }
+    .statisticks .statisticks__main .--red {
+      color: inherit !important;
+    }
+    .statisticks .statisticks__main .--orange {
+      color: inherit !important;
+    }
+    .statisticks .table .thead-light th {
+      color: inherit;
+
     }
   }
   &.sm {
