@@ -20,7 +20,7 @@ class CurrentTaskDataProvider
         $this->translator = $translator;
     }
 
-    public function forUser(int $userId, int $cityId = 0, string $lang): ?CurrentTaskData
+    public function forUser(int $userId, string $lang, int $cityId = 0): ?CurrentTaskData
     {
         $profile = $this->translator->trans('Заполните профиль', [], 'attributes', $lang);
         $verification = $this->translator->trans('Верифицируйте 1 объект', [], 'attributes', $lang);

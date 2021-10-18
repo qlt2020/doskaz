@@ -24,7 +24,7 @@ class UserTasksFinder
 
     public function findForUser(int $userId, int $cityId, int $page, string $sort, string $lang, int $perPage = 10): array
     {
-        $currentTask = $this->currentTaskDataProvider->forUser($userId, $cityId, $lang);
+        $currentTask = $this->currentTaskDataProvider->forUser($userId, $lang, $cityId);
 
         $profile = $this->translator->trans('Заполните профиль', [], 'attributes', $lang);
         $verification = $this->translator->trans('Верифицируйте 1 объект', [], 'attributes', $lang);
