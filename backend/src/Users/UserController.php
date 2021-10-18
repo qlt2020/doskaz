@@ -52,6 +52,7 @@ use Webmozart\Assert\Assert;
 use Symfony\Component\Filesystem\Filesystem;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route(path="/api")
@@ -909,12 +910,19 @@ final class UserController extends AbstractController
      *     ),
      * )
      * @param Connection $connection
+     * @param Request $request
      * @return mixed[]
      */
-    public function awards(Connection $connection)
+    public function awards(Connection $connection, Request $request, TranslatorInterface $translator)
     {
+        $lang = $request->getLocale();
+ 
         return $connection->createQueryBuilder()
-            ->addSelect('id', 'title', 'type')
+            ->addSelect('id', 'type')
+            ->addSelect("CASE WHEN title = 'Добавлено 3 объекта' then '{$translator->trans('Добавлено 3 объекта', [], 'attributes', $lang)}'
+                        when title = 'Добавлено 8 объектов' then '{$translator->trans('Добавлено 8 объектов', [], 'attributes', $lang)}'
+                        when title = 'Добавлено 15 объектов' then '{$translator->trans('Добавлено 15 объектов', [], 'attributes', $lang)}'
+                        else title end as title")
             ->from('awards')
             ->orderBy('issued_at', 'desc')
             ->where('awards.user_id = :userId')
