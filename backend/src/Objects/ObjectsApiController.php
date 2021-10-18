@@ -655,27 +655,14 @@ final class ObjectsApiController extends AbstractController
         if (empty($request->query->get('query'))) {
             return [];
         }
-        $cityId = $request->query->get('cityId');
-        $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
-        return $connection->createQueryBuilder()
-            ->select([
-                'objects.id',
-                'objects.title',
-                'objects.address',
-                'object_categories.title as category',
-                'object_categories.icon',
-            ])
-            ->from('objects')
-            ->join('objects', 'object_categories', 'object_categories', 'object_categories.id = objects.category_id')
-            ->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
-            ->andWhere('SIMILARITY(CONCAT(objects.title, \' \', objects.address, \' \', object_categories.title, \' \', objects.other_names), :search) > 0')
-            ->andWhere('deleted_at IS NULL')
-            ->setParameter('search', $request->query->get('query', ''))
-            ->setParameter('id', $cityId)
-            ->setMaxResults(10)
-            ->orderBy('SIMILARITY(concat(objects.title, \' \', objects.address, \' \', object_categories.title), :search)', 'desc')
-            ->execute()
-            ->fetchAll();
+        $raw = "SELECT id, title, address, category, icon FROM (SELECT objects.id as id, objects.title as title, objects.address as address, oc.title as category, oc.icon as icon, setweight(to_tsvector(objects.title), 'A') || setweight(to_tsvector(objects.address), 'A') || setweight(to_tsvector(oc.title), 'B') || setweight(to_tsvector(coalesce(objects.other_names, '')), 'C') as vector, concat(objects.title, ' ', objects.address, ' ', oc.title) as one_string FROM objects JOIN object_categories oc on objects.category_id = oc.id WHERE ST_CONTAINS((SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))), objects.point_value::geometry) AND deleted_at is NULL) o_search WHERE (o_search.vector @@ websearch_to_tsquery(:query) OR similarity(one_string, :query) > 0.1) ORDER BY ts_rank(o_search.vector, websearch_to_tsquery(:query)) DESC, similarity(one_string, :query) DESC LIMIT 10;";
+
+        $q = $connection->prepare($raw);
+        $q->bindValue('id', $request->query->get('cityId'));
+        $q->bindValue('query', $request->query->get('query', ''));
+        $q->execute();
+
+        return $q->fetchAll();
     }
 
     /**
