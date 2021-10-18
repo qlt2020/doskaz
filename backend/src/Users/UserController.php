@@ -147,7 +147,7 @@ final class UserController extends AbstractController
             $fullName->first,
             $fullName->last,
             $fullName->middle,
-            $currentTaskProvider->forUser($user['id'], $request->query->getInt('cityId', 0)),
+            $currentTaskProvider->forUser($user['id'], $request->getLocale(), $request->query->getInt('cityId', 0)),
             [
                 'current' => $level->value() ?? 0,
                 'currentPoints' => $level->points() ?? 0,
@@ -763,7 +763,7 @@ final class UserController extends AbstractController
      */
     public function tasks(Request $request, UserTasksFinder $userTasksFinder)
     {
-        return $userTasksFinder->findForUser($this->getUser()->id(), $request->query->getInt('cityId', 0), $request->query->getInt('page', 1), $request->query->get('sort', 'createdAt desc'));
+        return $userTasksFinder->findForUser($this->getUser()->id(), $request->query->getInt('cityId', 0), $request->query->getInt('page', 1), $request->query->get('sort', 'createdAt desc'), $request->getLocale());
     }
 
     /**
