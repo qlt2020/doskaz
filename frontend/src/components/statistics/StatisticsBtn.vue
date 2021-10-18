@@ -64,7 +64,7 @@ export default {
     color: #2D9CDB;
     font-family: 'Montserrat';
     font-weight: 600;
-    font-size: 14px;
+    font-size: 13px;
       @media all and (max-width: 1023px) {
         display: none;
       }

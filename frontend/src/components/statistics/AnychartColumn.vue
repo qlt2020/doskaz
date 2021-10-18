@@ -21,26 +21,16 @@ export default {
       stroke: {
         default: '#EB5757',
         type: String
+      },
+      month: {
+        default: {},
+        type: Object
       }
       },
   name: 'AnychartColumn',
   data() {
     return {
       chart: null,
-        month: {
-          1: this.$t('statistics.statisticsTotal.january'),
-          2: this.$t('statistics.statisticsTotal.february'),
-          3: this.$t('statistics.statisticsTotal.march'),
-          4: this.$t('statistics.statisticsTotal.april'),
-          5: this.$t('statistics.statisticsTotal.may'),
-          6: this.$t('statistics.statisticsTotal.june'),
-          7: this.$t('statistics.statisticsTotal.july'),
-          8: this.$t('statistics.statisticsTotal.august'),
-          9: this.$t('statistics.statisticsTotal.september'),
-          10: this.$t('statistics.statisticsTotal.october'),
-          11: this.$t('statistics.statisticsTotal.november'),
-          12: this.$t('statistics.statisticsTotal.december'),
-        }
     }
   },
   mounted() {
