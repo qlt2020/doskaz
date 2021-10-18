@@ -316,7 +316,7 @@ export default {
     };
   },
   async mounted() {
-    await this.$store.commit("statistics/filterObjectsReset");
+    this.$store.commit("statistics/filterObjectsReset");
     this.$store.dispatch("objectAdding/init");
     await this.$store.dispatch("statistics/getObjectsStatTable");
   },

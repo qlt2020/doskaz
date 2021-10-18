@@ -460,7 +460,7 @@ export default {
         this.legendWidth = "100%"
         this.legendHeight = "100px"
     }
-
+    this.$store.commit("statistics/filterObjectsReset");
     await this.$store.dispatch('statistics/loadComplaints');
     await this.$store.dispatch('statistics/loadFeedback');
     await this.yearsCount(true);
