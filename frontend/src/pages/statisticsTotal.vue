@@ -40,7 +40,10 @@
                           <div class="title">
                             {{ $t("statistics.statisticsTotal.accessible") }}
                           </div>
-                          <div class="value --green">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--green' : ''"
+                          >
                             {{ objectsCount.fullAccessible }}
                           </div>
                         </div>
@@ -50,7 +53,10 @@
                               $t("statistics.statisticsTotal.partialAccessible")
                             }}
                           </div>
-                          <div class="value --orange">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--orange' : ''"
+                          >
                             {{ objectsCount.partialAccessible }}
                           </div>
                         </div>
@@ -58,7 +64,10 @@
                           <div class="title">
                             {{ $t("statistics.statisticsTotal.notAccessible") }}
                           </div>
-                          <div class="value --red">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--red' : ''"
+                          >
                             {{ objectsCount.notAccessible }}
                           </div>
                         </div>
@@ -77,11 +86,26 @@
                           />
                         </div>
                         <AnychartDoughnut
+                          v-if="!viModeEnabled"
                           style="height: 270px"
                           :statData="objectsStat"
                           :selectedCategory="selectedCategoryObj"
                           :rowPie="rowPieTabled"
                         />
+                        <div class="statisticks__impaired" v-if="viModeEnabled">
+                          <div
+                            class="statisticks__impaired-item"
+                            v-for="item in objectsStat"
+                            :key="item.title"
+                          >
+                            <div class="statisticks__impaired-title">
+                              {{ item.category_title }}
+                            </div>
+                            <div class="statisticks__impaired-value">
+                              {{ item[`${selectedCategoryObj}Total`] }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -92,7 +116,10 @@
                           <div class="title">
                             {{ $t("statistics.statisticsTotal.usersCount") }}
                           </div>
-                          <div class="value --green">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--green' : ''"
+                          >
                             {{ usersStat.registered }}
                           </div>
                         </div>
@@ -100,7 +127,10 @@
                           <div class="title">
                             {{ $t("statistics.statisticsTotal.mensTotal") }}
                           </div>
-                          <div class="value --orange">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--blue' : ''"
+                          >
                             {{ usersStat.men }}
                           </div>
                         </div>
@@ -108,7 +138,10 @@
                           <div class="title">
                             {{ $t("statistics.statisticsTotal.womenTotal") }}
                           </div>
-                          <div class="value --red">
+                          <div
+                            class="value"
+                            :class="!viModeEnabled ? '--fuschia' : ''"
+                          >
                             {{ usersStat.women }}
                           </div>
                         </div>
@@ -120,16 +153,31 @@
                           </div>
                         </div>
                         <AnychartDoughnut
+                          v-if="!viModeEnabled"
                           :statData="usersStat.categories"
                           :totalData="usersStat.registered"
                           :categoryData="usersTitleList"
                           :rowPie="rowPieTabled"
                         />
+                        <div class="statisticks__impaired" v-if="viModeEnabled">
+                          <div
+                            class="statisticks__impaired-item"
+                            v-for="(item, index) in usersStat.categories"
+                            :key="item.title"
+                          >
+                            <div class="statisticks__impaired-title">
+                              {{ $t(`statistics.statisticsTotal.${index}`) }}
+                            </div>
+                            <div class="statisticks__impaired-value">
+                              {{ item }}
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="dia">
+                <div class="dia" v-if="usersAge">
                   <div class="statistics-head">
                     <div class="statistics-title">
                       {{ $t("statistics.statisticsTotal.usersAge") }}
@@ -143,6 +191,7 @@
                     />
                   </div>
                   <AnychartDoughnut
+                    v-if="!viModeEnabled"
                     :statData="usersAge"
                     :categoryData="usersAgeList"
                     :selectedCategory="selectedCategoryObj"
@@ -150,6 +199,20 @@
                     :rowPie="rowPie"
                     :legendPosition="legendPosition"
                   />
+                  <div class="statisticks__impaired" v-if="viModeEnabled">
+                    <div
+                      class="statisticks__impaired-item"
+                      v-for="(item, index) in usersAge"
+                      :key="item + index"
+                    >
+                      <div class="statisticks__impaired-title">
+                        {{ $t(`statistics.statisticsTotal.${index}`) }}
+                      </div>
+                      <div class="statisticks__impaired-value">
+                        {{ item }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="statistics-complants">
@@ -158,7 +221,11 @@
                     <div class="title">
                       {{ $t("statistics.statisticsTotal.complaintsTotal") }}
                     </div>
-                    <div class="value --red">
+                    <div
+                      class="value"
+                      :class="!viModeEnabled ? '--red' : ''"
+                      v-if="complaintsCount"
+                    >
                       {{ complaintsCount.count }}
                     </div>
                   </div>
@@ -166,7 +233,11 @@
                     <div class="title">
                       {{ $t("statistics.statisticsTotal.feedbackTotal") }}
                     </div>
-                    <div class="value --green">
+                    <div
+                      class="value"
+                      :class="!viModeEnabled ? '--green' : ''"
+                      v-if="feedbackCount"
+                    >
                       {{ feedbackCount.count }}
                     </div>
                   </div>
@@ -194,10 +265,26 @@
                     />
                   </div>
                   <AnychartColumn
+                    v-if="!viModeEnabled"
                     :statData="complaintsFiltered"
                     :fill="'#EB5757'"
                     :stroke="'#EB5757'"
+                    :month="month"
                   />
+                  <div class="statisticks__impaired" v-if="viModeEnabled">
+                    <div
+                      class="statisticks__impaired-item"
+                      v-for="(item, index) in complaintsFiltered"
+                      :key="item.id + index"
+                    >
+                      <div class="statisticks__impaired-title">
+                        {{ month[item.id] }}
+                      </div>
+                      <div class="statisticks__impaired-value">
+                        {{ item.count }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="dia">
                   <div
@@ -221,11 +308,27 @@
                       "
                     />
                     <AnychartColumn
+                      v-if="!viModeEnabled"
                       :statData="feedbackFiltered"
                       :fill="'#27AE60'"
                       :stroke="'#27AE60'"
                       :title="'Количество обращений за год'"
+                      :month="month"
                     />
+                    <div class="statisticks__impaired" v-if="viModeEnabled">
+                      <div
+                        class="statisticks__impaired-item"
+                        v-for="(item, index) in feedbackFiltered"
+                        :key="item.id + index"
+                      >
+                        <div class="statisticks__impaired-title">
+                          {{ month[item.id] }}
+                        </div>
+                        <div class="statisticks__impaired-value">
+                          {{ item.count }}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
