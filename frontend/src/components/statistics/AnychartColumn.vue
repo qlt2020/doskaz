@@ -23,7 +23,9 @@ export default {
         type: String
       },
       month: {
-        default: {},
+        default() {
+          return {}
+        },
         type: Object
       }
       },

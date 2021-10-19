@@ -757,7 +757,7 @@ export default {
     };
   },
   async mounted() {
-    /* if (document.documentElement.clientWidth <= 991) {
+    if (document.documentElement.clientWidth <= 991) {
       this.rowPie = false;
       this.legendPosition = "right";
     }
@@ -768,8 +768,9 @@ export default {
       this.legendPositionTabled = "bottom";
       this.legendWidth = "100%";
       this.legendHeight = "100px";
-    } */
+    }
 
+    this.$store.commit("statistics/filterObjectsReset");
     await this.$store.dispatch("statistics/loadComplaints");
     await this.$store.dispatch("statistics/loadFeedback");
     await this.yearsCount(true);
