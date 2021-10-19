@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled" />
     <div class="container">
       <loading :is-full-page="true" :active="!isLoading" />
       <div class="statisticks">
@@ -20,7 +20,7 @@
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportAll" id="export_btn">
                 <i class="fas fa-download" style="color:#fff"></i>
-                <span>
+                <span :class="!viModeEnabled ? 'button-white' : ''">
                   {{ $t("objects.download") }}
                 </span>
               </button>
@@ -81,7 +81,6 @@
                           :statData="objectsStat"
                           :selectedCategory="selectedCategoryObj"
                           :rowPie="rowPieTabled"
-                          
                         />
                       </div>
                     </div>
@@ -125,7 +124,6 @@
                           :totalData="usersStat.registered"
                           :categoryData="usersTitleList"
                           :rowPie="rowPieTabled"
-                          
                         />
                       </div>
                     </div>
@@ -151,7 +149,6 @@
                     :totalData="usersStat.registered"
                     :rowPie="rowPie"
                     :legendPosition="legendPosition"
-                    
                   />
                 </div>
               </div>
@@ -234,7 +231,7 @@
               </div>
             </div>
           </div>
-<!-- visible -->
+          <!-- visible -->
           <div class="statisticks__main">
             <div class="row statisticks__main-head">
               <div class="col-12 col-lg-8">
@@ -246,7 +243,10 @@
                       <div class="statisticks__main-total-title">
                         {{ $t("statistics.statisticsTotal.accessible") }}
                       </div>
-                      <div class="statistics-total-number --green">
+                      <div
+                        class="statisticks__main-total-number statistics-total-number"
+                        :class="!viModeEnabled ? '--green' : ''"
+                      >
                         {{ objectsCount.fullAccessible }}
                       </div>
                     </div>
@@ -256,7 +256,10 @@
                       <div class="statisticks__main-total-title">
                         {{ $t("statistics.statisticsTotal.partialAccessible") }}
                       </div>
-                      <div class="statisticks__main-total-number --orange">
+                      <div
+                        class="statisticks__main-total-number"
+                        :class="!viModeEnabled ? '--orange' : ''"
+                      >
                         {{ objectsCount.partialAccessible }}
                       </div>
                     </div>
@@ -264,7 +267,10 @@
                       <div class="statisticks__main-total-title">
                         {{ $t("statistics.statisticsTotal.notAccessible") }}
                       </div>
-                      <div class="statisticks__main-total-number --red">
+                      <div
+                        class="statisticks__main-total-number"
+                        :class="!viModeEnabled ? '--red' : ''"
+                      >
                         {{ objectsCount.notAccessible }}
                       </div>
                     </div>
@@ -284,6 +290,7 @@
                         />
                       </div>
                       <AnychartDoughnut
+                        v-if="!viModeEnabled"
                         style="height: 270px"
                         :statData="objectsStat"
                         :selectedCategory="selectedCategoryObj"
@@ -292,6 +299,20 @@
                         :legendWidth="this.legendWidth"
                         :legendHeight="this.legendHeight"
                       />
+                      <div class="statisticks__impaired" v-if="viModeEnabled">
+                        <div
+                          class="statisticks__impaired-item"
+                          v-for="item in objectsStat"
+                          :key="item.title"
+                        >
+                          <div class="statisticks__impaired-title">
+                            {{ item.category_title }}
+                          </div>
+                          <div class="statisticks__impaired-value">
+                            {{ item[`${selectedCategoryObj}Total`] }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -305,7 +326,10 @@
                       >
                         {{ $t("statistics.statisticsTotal.usersCount") }}
                       </div>
-                      <div class="statisticks__main-total-number --green">
+                      <div
+                        class="statisticks__main-total-number"
+                        :class="!viModeEnabled ? '--green' : ''"
+                      >
                         {{ usersStat.registered }}
                       </div>
                     </div>
@@ -315,7 +339,10 @@
                       <div class="statisticks__main-total-title">
                         {{ $t("statistics.statisticsTotal.mensTotal") }}
                       </div>
-                      <div class="statisticks__main-total-number --blue">
+                      <div
+                        class="statisticks__main-total-number"
+                        :class="!viModeEnabled ? '--blue' : ''"
+                      >
                         {{ usersStat.men }}
                       </div>
                     </div>
@@ -323,7 +350,10 @@
                       <div class="statisticks__main-total-title">
                         {{ $t("statistics.statisticsTotal.womenTotal") }}
                       </div>
-                      <div class="statisticks__main-total-number --fuschia">
+                      <div
+                        class="statisticks__main-total-number"
+                        :class="!viModeEnabled ? '--fuschia' : ''"
+                      >
                         {{ usersStat.women }}
                       </div>
                     </div>
@@ -338,6 +368,7 @@
                         </div>
                       </div>
                       <AnychartDoughnut
+                        v-if="!viModeEnabled"
                         :statData="usersStat.categories"
                         :totalData="usersStat.registered"
                         :categoryData="usersTitleList"
@@ -346,6 +377,20 @@
                         :legendWidth="this.legendWidth"
                         :legendHeight="this.legendHeight"
                       />
+                      <div class="statisticks__impaired" v-if="viModeEnabled">
+                        <div
+                          class="statisticks__impaired-item"
+                          v-for="(item, index) in usersStat.categories"
+                          :key="item.title"
+                        >
+                          <div class="statisticks__impaired-title">
+                            {{ $t(`statistics.statisticsTotal.${index}`) }}
+                          </div>
+                          <div class="statisticks__impaired-value">
+                            {{ item }}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -365,6 +410,7 @@
                     />
                   </div>
                   <AnychartDoughnut
+                    v-if="!viModeEnabled"
                     :statData="usersAge"
                     :categoryData="usersAgeList"
                     :selectedCategory="selectedCategoryObj"
@@ -374,6 +420,20 @@
                     :legendWidth="this.legendWidth"
                     :legendHeight="this.legendHeight"
                   />
+                  <div class="statisticks__impaired" v-if="viModeEnabled">
+                    <div
+                      class="statisticks__impaired-item"
+                      v-for="(item, index) in usersAge"
+                      :key="item + index"
+                    >
+                      <div class="statisticks__impaired-title">
+                        {{ $t(`statistics.statisticsTotal.${index}`) }}
+                      </div>
+                      <div class="statisticks__impaired-value">
+                        {{ item }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -388,7 +448,8 @@
                     {{ $t("statistics.statisticsTotal.complaintsTotal") }}
                   </div>
                   <div
-                    class="statisticks__main-total-number --red"
+                    class="statisticks__main-total-number"
+                    :class="!viModeEnabled ? '--red' : ''"
                     v-if="complaintsCount"
                   >
                     {{ complaintsCount.count }}
@@ -401,7 +462,8 @@
                     {{ $t("statistics.statisticsTotal.feedbackTotal") }}
                   </div>
                   <div
-                    class="statisticks__main-total-number --green"
+                    class="statisticks__main-total-number"
+                    :class="!viModeEnabled ? '--green' : ''"
                     v-if="feedbackCount"
                   >
                     {{ feedbackCount.count }}
@@ -434,10 +496,26 @@
                     />
                   </div>
                   <AnychartColumn
+                    v-if="!viModeEnabled"
                     :statData="complaintsFiltered"
                     :fill="'#EB5757'"
                     :stroke="'#EB5757'"
+                    :month="month"
                   />
+                  <div class="statisticks__impaired" v-if="viModeEnabled">
+                    <div
+                      class="statisticks__impaired-item"
+                      v-for="(item, index) in complaintsFiltered"
+                      :key="item.id + index"
+                    >
+                      <div class="statisticks__impaired-title">
+                        {{ month[item.id] }}
+                      </div>
+                      <div class="statisticks__impaired-value">
+                        {{ item.count }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="statisticks__block">
                   <div
@@ -462,11 +540,27 @@
                     />
                   </div>
                   <AnychartColumn
+                    v-if="!viModeEnabled"
                     :statData="feedbackFiltered"
                     :fill="'#27AE60'"
                     :stroke="'#27AE60'"
                     :title="'Количество обращений за год'"
+                    :month="month"
                   />
+                  <div class="statisticks__impaired" v-if="viModeEnabled">
+                    <div
+                      class="statisticks__impaired-item"
+                      v-for="(item, index) in feedbackFiltered"
+                      :key="item.id + index"
+                    >
+                      <div class="statisticks__impaired-title">
+                        {{ month[item.id] }}
+                      </div>
+                      <div class="statisticks__impaired-value">
+                        {{ item.count }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -612,7 +706,7 @@ export default {
             title: this.$t("statistics.statisticsTotal.movement"),
           },
           {
-            value: "babycarriage",
+            value: "babyCarriage",
             title: this.$t("statistics.statisticsTotal.babycarriage"),
           },
           {
@@ -625,7 +719,7 @@ export default {
             title: this.$t("statistics.statisticsTotal.temporal"),
           },
           {
-            value: "missinglimbs",
+            value: "missingLimbs",
             title: this.$t("statistics.statisticsTotal.missinglimbs"),
           },
           {
@@ -633,7 +727,7 @@ export default {
             title: this.$t("statistics.statisticsTotal.pregnant"),
           },
           {
-            value: "agedpeople",
+            value: "agedPeople",
             title: this.$t("statistics.statisticsTotal.agedpeople"),
           },
           {
@@ -645,6 +739,20 @@ export default {
             title: this.$t("statistics.statisticsTotal.intellectual"),
           },
         ],
+      },
+      month: {
+        1: this.$t("statistics.statisticsTotal.january"),
+        2: this.$t("statistics.statisticsTotal.february"),
+        3: this.$t("statistics.statisticsTotal.march"),
+        4: this.$t("statistics.statisticsTotal.april"),
+        5: this.$t("statistics.statisticsTotal.may"),
+        6: this.$t("statistics.statisticsTotal.june"),
+        7: this.$t("statistics.statisticsTotal.july"),
+        8: this.$t("statistics.statisticsTotal.august"),
+        9: this.$t("statistics.statisticsTotal.september"),
+        10: this.$t("statistics.statisticsTotal.october"),
+        11: this.$t("statistics.statisticsTotal.november"),
+        12: this.$t("statistics.statisticsTotal.december"),
       },
     };
   },
@@ -673,6 +781,7 @@ export default {
     await this.$store.dispatch("statistics/getUsersAge");
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
     isLoading: get("statistics/isLoading"),
     complaintsCount: get("statistics/complaintsCount"),
     complaintsFiltered: get("statistics/complaintsFilteredStat"),
@@ -688,7 +797,10 @@ export default {
       populations.options = JSON.parse(
         JSON.stringify(this.groupPopulation.options)
       );
-      populations.options.push({ value: null, title: "Все группы" });
+      populations.options.push({
+        value: null,
+        title: this.$t("statistics.statisticsTotal.allGroups"),
+      });
       populations.options.map((item) => {
         if (item.value === "kids") {
           item.value = "withChild";
@@ -761,7 +873,6 @@ export default {
       this.$store.dispatch(`statistics/${action}`);
     },
     changeCategory(value, filterApi) {
-      console.log(value);
       if (filterApi) {
         if (value === "") {
           this.selectedCategoryAge = null;
@@ -857,9 +968,10 @@ export default {
 .statisticks .button {
   border-radius: 10px;
   height: 54px;
-  span {
-    color: #ffffff;
-  }
+}
+
+.statisticks .button-white {
+  color: #ffffff;
 }
 
 .statisticks__block {
@@ -884,7 +996,6 @@ export default {
 .statisticks__block-head_title {
   font-family: SFProDisplay;
   font-weight: 500;
-  font-size: 17px;
   margin-bottom: 15px;
 }
 
@@ -908,7 +1019,6 @@ export default {
 }
 
 .statisticks__main-total-title {
-  font-size: 16px;
   line-height: 18px;
   font-weight: 600;
   font-family: SFProDisplay;
@@ -921,7 +1031,7 @@ export default {
 }
 .statisticks__main-total-number {
   font-size: SFProDisplay;
-  font-size: 20px;
+  /* font-size: 20px; */
   font-weight: 500;
 }
 
@@ -945,22 +1055,27 @@ export default {
 
 .--green {
   color: #27ae60;
+  font-size: 20px;
 }
 
 .--red {
   color: #eb5757;
+  font-size: 20px;
 }
 
 .--orange {
   color: #f2994a;
+  font-size: 20px;
 }
 
 .--blue {
   color: #2d9cdb;
+  font-size: 20px;
 }
 
 .--fuschia {
   color: #f178b6;
+  font-size: 20px;
 }
 
 ::v-deep .dropdown__block__selected {
@@ -973,6 +1088,25 @@ export default {
 
 ::v-deep .dropdown__block__list {
   min-width: 100%;
+}
+
+.statisticks__impaired {
+  display: flex;
+  flex-direction: column;
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid;
+    margin-bottom: 10px;
+  }
+  &-title {
+    margin-right: 10px;
+    font-weight: 500;
+    word-break: break-all;
+  }
+  &-value {
+    font-weight: 600;
+  }
 }
 
 @media all and (max-width: 1024px) {
