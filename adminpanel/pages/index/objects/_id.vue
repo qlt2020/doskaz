@@ -22,7 +22,8 @@
                     Сохранить
                 </button>
                 <a
-                    :href="`/objects/${$route.params.id}?cat=null`"
+                    @click="resetCockieCategory"
+                    :href="`/objects/${$route.params.id}`"
                     target="_blank"
                     class="btn btn-link"
                     >Просмотр на сайте</a
@@ -81,7 +82,13 @@ export default {
             store.dispatch("objectAdding/init")
         ]);
     },
+    async mounted() {
+        await this.$store.dispatch('nuxtServerInit');
+    },
     methods: {
+        async resetCockieCategory() {
+            this.$store.dispatch('settings/selectUserCategory', null);
+        },
         submitForm: call("crud/edit/submit"),
         async submit() {
             try {
