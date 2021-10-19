@@ -87,6 +87,7 @@ export default {
     },
     methods: {
         async resetCockieCategory() {
+            await this.$store.dispatch('nuxtServerInit');
             this.$store.dispatch('settings/selectUserCategory', null);
         },
         submitForm: call("crud/edit/submit"),
