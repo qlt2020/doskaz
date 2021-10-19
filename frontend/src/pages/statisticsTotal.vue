@@ -874,8 +874,9 @@ export default {
     }
 
     this.$store.commit("statistics/filterObjectsReset");
-    await this.$store.dispatch("statistics/loadComplaints");
-    await this.$store.dispatch("statistics/loadFeedback");
+    await this.$store.dispatch('statistics/loadComplaints');
+    await this.$store.dispatch('statistics/loadFeedback');
+
     await this.yearsCount(true);
     this.$store.dispatch("statistics/getComplaintsFilter");
     await this.$store.dispatch("statistics/getObjectsStat");
