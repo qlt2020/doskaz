@@ -40,7 +40,6 @@ use App\Users\User;
 use App\Objects\Services\ExportToExcelService;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Objects\AccessibleObjectExportDecorator;
-use App\Objects\Command\UpdateCategoryEnTranslations;
 
 /**
  * @Route(path="/api/objects")
