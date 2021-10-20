@@ -150,7 +150,7 @@
                     :key="item.category_title + index + 5"
                     class="statistics_table_stroke"
                     :stickyColumn="true"
-                    >{{ item.category_title }}</b-th
+                    >{{  $t(item.category_title)   }}</b-th
                   >
 
                   <template v-for="(group, groupName, index) in groupsTable">
