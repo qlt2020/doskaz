@@ -1061,6 +1061,7 @@ final class ObjectsApiController extends AbstractController
         }
 
         $lang = $request->getLocale();
+        $lang = 'en';
         if ($lang != 'ru') {
             $query = $query
             ->addSelect('ct_one.content as category_title')
@@ -1072,8 +1073,7 @@ final class ObjectsApiController extends AbstractController
             ->setParameter('locale_one', $lang)
             ->setParameter('locale_two', $lang)
             ->groupBy('object_categories_parent.id, object_categories.id, cities.id, ct_one.content, ct_two.content');
-        }
-        else {
+        } else {
             $query = $query
             ->addSelect('object_categories_parent.title as main_category_title')
             ->addSelect('object_categories.title as category_title')
