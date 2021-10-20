@@ -1,5 +1,5 @@
 <template >
-  <div v-if="loaded" class="main-page" :class="{ opened: mobileOpened }">
+  <div class="main-page" :class="{ opened: mobileOpened }">
     <IntroForm />
     <div class="main-page__map">
       <client-only>
@@ -213,11 +213,6 @@ export default {
   },
   created() {
     this.$nuxt.$on("mainPageMobOpened", this.mobileOpenedTrue);
-    let self = this;
-    self.$nextTick(function() {
-      self.loaded = true;
-    })
-
   },
   beforeDestroy() {
     this.$nuxt.$off("mainPageMobOpened");
