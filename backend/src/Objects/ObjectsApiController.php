@@ -1061,7 +1061,6 @@ final class ObjectsApiController extends AbstractController
         }
 
         $lang = $request->getLocale();
-        $lang = 'en';
         if ($lang != 'ru') {
             $query = $query
             ->addSelect('ct_one.content as category_title')
