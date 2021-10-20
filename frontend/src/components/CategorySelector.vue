@@ -77,6 +77,7 @@ export default {
 .checked_subcategory {
   background: #2d9cdb !important;
   font-weight: bold !important;
+  border-radius: 10px;
   .category__text {
     color: #ffffff !important;
   }
@@ -306,7 +307,7 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr;
       flex-wrap: wrap;
-      gap: 10px 0px;
+      gap: 10px;
       justify-content: flex-start;
 
       &::-webkit-scrollbar {
@@ -400,6 +401,7 @@ export default {
 
       .icon-back {
         width: 40px;
+        min-width: 40px;
         background: #2d9cdb;
         border-radius: 10px;
         height: 40px;
@@ -442,10 +444,10 @@ export default {
       font-weight: 500;
       color: #000000;
       padding: 0 10px;
-      width: 230px;
+      /* width: 230px; */
       @media all and (max-width: 1366px) {
         font-size: 10px;
-        width: 180px;
+        line-height: 13px;
       }
       @media all and (max-width: 768px) {
         font-size: 10px;

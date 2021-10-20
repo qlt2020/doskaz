@@ -339,16 +339,17 @@
               >
                 <h3 class="more-detail__item-title">{{ zone.title }}</h3>
                 <template v-for="(group, index) in attributesList[zone.group]">
-                  <h4 class="more-detail__line-title" v-if="group.title">
+                  <h4 class="more-detail__line-title" v-if="group.title" :key="index">
                     {{ group.title }}
                   </h4>
                   <template v-for="(sub, index2) in group.subGroups">
-                    <h4 class="more-detail__line-title" v-if="sub.title">
+                    <h4 class="more-detail__line-title" v-if="sub.title" :key="index2">
                       {{ sub.title }}
                     </h4>
                     <div
                       class="more-detail__line"
                       v-for="attribute in sub.attributes"
+                      :key="attribute"
                       :class="{
                         yes:
                           object.attributes.zones[zone.key][
@@ -1388,7 +1389,7 @@ export default {
       position: absolute;
       border-radius: 0px 12px 12px 0px;
       right: -5px;
-      top: 20px;
+      top: 30px;
       width: 35px;
       height: 55px;
       background-color: $white;
