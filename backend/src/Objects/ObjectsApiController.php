@@ -1013,9 +1013,7 @@ final class ObjectsApiController extends AbstractController
     {
         $query = $connection->createQueryBuilder()
             ->select('COUNT(objects.id) as objects_count')
-            ->addSelect('object_categories_parent.title as main_category_title')
             ->addSelect('object_categories_parent.id as main_category_id')
-            ->addSelect('object_categories.title as category_title')
             ->addSelect('object_categories.id as category_id')
             ->addSelect('cities.id as city_id')
             ->addSelect('cities.name as city_name')
@@ -1062,8 +1060,27 @@ final class ObjectsApiController extends AbstractController
                 ->setParameter('cityId', $request->query->getInt('city_id'));
         }
 
+        $lang = $request->getLocale();
+        $lang = 'en';
+        if ($lang != 'ru') {
+            $query = $query
+            ->addSelect('ct_one.content as category_title')
+            ->addSelect('ct_two.content as main_category_title')
+            ->leftJoin('object_categories', 'category_translations', 'ct_one', 'object_categories.id = CAST(ct_one.foreign_key as integer)')
+            ->leftJoin('object_categories_parent', 'category_translations', 'ct_two', 'object_categories_parent.id = CAST(ct_two.foreign_key as integer)')            
+            ->andWhere('ct_one.locale = :locale_one')
+            ->andWhere('ct_two.locale = :locale_two')
+            ->setParameter('locale_one', $lang)
+            ->setParameter('locale_two', $lang)
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id, ct_one.content, ct_two.content');
+        } else {
+            $query = $query
+            ->addSelect('object_categories_parent.title as main_category_title')
+            ->addSelect('object_categories.title as category_title')
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id');
+        }
+
         $query = $query
-            ->groupBy('object_categories_parent.id, object_categories.id, cities.id')
             ->execute()
             ->fetchAll();
 
