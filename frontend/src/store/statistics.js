@@ -401,7 +401,7 @@ export const actions = {
         prev[property] +=curr[property]
       })
       return prev
-    }, {...listProperty, category_id: 0, category_title: 'Общее'})
+    }, {...listProperty, category_id: 0, category_title: 'statistics.general'})
     objectsByCategory.unshift(total)
 
     commit('SET_OBJECTS_STAT_TABLE', objectsByCategory)
