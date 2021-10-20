@@ -1,8 +1,9 @@
 <template>
   <div class="about">
     <ViTop />
-    <MainHeader />
+    <MainHeader v-if="!viModeEnabled"/>
     <div class="container">
+      <loading :is-full-page="true" :active="!isLoading" />
       <div class="statisticks">
         <div class="statisticks__header row mb-4 align-items-center">
           <div
@@ -13,13 +14,18 @@
               @click="$router.back()"
               class="title-back_arrow"
             />
-            Статистика по доступности объектов
+            {{$t('statistics.access')}}
           </div>
           <div class="col-md-5 col-3">
             <div class="d-flex justify-content-end align-items-center">
               <button class="button b_green" @click="exportList">
                 <i class="fas fa-download" style="color:#fff"></i>
-                <span>Скачать</span>
+                <span
+                  :class="
+                    !viModeEnabled
+                      ? 'button-white'
+                      : ''"
+                >{{$t('objects.download')}}</span>
               </button>
             </div>
           </div>
@@ -30,7 +36,7 @@
               :options="[
                 {
                   value: 0,
-                  title: 'Весь Казахстан',
+                  title: this.$t('statistics.allCountry')
                 },
                 ...citiesList,
               ]"
@@ -43,7 +49,7 @@
               :options="[
                 {
                   value: 'all',
-                  title: 'Все',
+                  title: this.$t('statistics.all')
                 },
                 ...group,
               ]"
@@ -55,7 +61,7 @@
               :options="[
                 {
                   value: 0,
-                  title: 'Все',
+                  title: this.$t('statistics.all')
                 },
                 ...categories,
               ]"
@@ -71,7 +77,7 @@
               :options="[
                 {
                   value: 0,
-                  title: 'Все',
+                  title: this.$t('statistics.all')
                 },
                 ...subCategoriesOptions.subCategories,
               ]"
@@ -93,7 +99,7 @@
             <b-thead head-variant="light" class="table_header">
               <b-tr v-if="groupsTable">
                 <b-th colspan="1">№</b-th>
-                <b-th colspan="1" :stickyColumn="true">Объект</b-th>
+                <b-th colspan="1" :stickyColumn="true">{{$t('statistics.object')}}</b-th>
                 <b-th
                   colspan="4"
                   v-for="categories in groupsTable"
@@ -111,22 +117,22 @@
                   <b-th
                     class="statisticks__table-subtitle --green"
                     :key="categories + key + index + 17"
-                    >Общее</b-th
+                    >{{$t('statistics.general')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --green"
                     :key="categories + key + index + 1"
-                    >Доступно</b-th
+                    >{{$t('accessibilityScore.status.full_accessible')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --orange text-nowrap"
                     :key="categories + key + index + 4"
-                    >Частично доступно</b-th
+                    >{{$t('accessibilityScore.status.partial_accessible')}}</b-th
                   >
                   <b-th
                     class="statisticks__table-subtitle --red"
                     :key="categories + key + index + 25"
-                    >Недоступно</b-th
+                    >{{$t('accessibilityScore.status.not_accessible')}}</b-th
                   >
                 </template>
               </b-tr>
@@ -144,7 +150,7 @@
                     :key="item.category_title + index + 5"
                     class="statistics_table_stroke"
                     :stickyColumn="true"
-                    >{{ item.category_title }}</b-th
+                    >{{  $t(item.category_title)   }}</b-th
                   >
 
                   <template v-for="(group, groupName, index) in groupsTable">
@@ -250,6 +256,9 @@ import { get } from "vuex-pathify";
 import DropdownBlock from "@/components/DropdownBlock";
 import "@/plugins/bootstrap-plugin.js";
 
+import Loading from "vue-loading-overlay";
+import "vue-loading-overlay/dist/vue-loading.css";
+
 export default {
   name: "StatisticsAccess",
   components: {
@@ -258,42 +267,43 @@ export default {
     MainFooter,
     BackBtn,
     DropdownBlock,
+    Loading
   },
   data() {
     return {
       usersTitleList: {
         options: {
-          movement: "Люди передвигающиеся на кресло коляске",
-          vision: "Люди с инвалидностью по зрению",
-          limb: "Люди с нарушениями опорно-двигательного аппарата",
-          hearing: "Люди с инвалидностью по слуху",
-          temporal: "Временно травмированные люди",
-          babyCarriage: "Люди с детскими колясками",
-          missingLimbs: "Люди с отсутствующими конечностями",
-          pregnant: "Беременные женщины",
-          intellectual: "Люди с интеллектуальной инвалидностью",
-          agedPeople: "Пожилые люди",
-          kids: "Семьи с детьми до семи лет",
+          movement: this.$t('statistics.statisticsTotal.movement'),
+          vision: this.$t('statistics.statisticsTotal.vision'),
+          limb: this.$t('statistics.statisticsTotal.limb'),
+          hearing: this.$t('statistics.statisticsTotal.hearing'),
+          temporal: this.$t('statistics.statisticsTotal.temporal'),
+          babyCarriage: this.$t('statistics.statisticsTotal.babycarriage'),
+          missingLimbs: this.$t('statistics.statisticsTotal.missinglimbs'),
+          pregnant: this.$t('statistics.statisticsTotal.pregnant'),
+          intellectual: this.$t('statistics.statisticsTotal.intellectual'),
+          agedPeople: this.$t('statistics.statisticsTotal.agedpeople'),
+          kids: this.$t('statistics.statisticsTotal.withchild'),
         },
       },
       group: [
-        { value: "movement", title: "Люди, передвигающиеся на кресло-коляске" },
-        { value: "vision", title: "Люди с инвалидностью по зрению" },
+        { value: "movement", title: this.$t('statistics.statisticsTotal.movement') },
+        { value: "vision", title: this.$t('statistics.statisticsTotal.vision') },
         {
           value: "limb",
-          title: "Люди с нарушениями опорно-двигательного аппарата",
+          title: this.$t('statistics.statisticsTotal.limb'),
         },
-        { value: "hearing", title: "Люди с инвалидностью по слуху" },
-        { value: "temporal", title: "Временно травмированные люди" },
-        { value: "babyCarriage", title: "Люди с детскими колясками" },
-        { value: "missingLimbs", title: "Люди с отсутствующими конечностями" },
-        { value: "pregnant", title: "Беременные женщины" },
+        { value: "hearing", title: this.$t('statistics.statisticsTotal.hearing') },
+        { value: "temporal", title: this.$t('statistics.statisticsTotal.temporal') },
+        { value: "babyCarriage", title: this.$t('statistics.statisticsTotal.babycarriage') },
+        { value: "missingLimbs", title: this.$t('statistics.statisticsTotal.missinglimbs') },
+        { value: "pregnant", title: this.$t('statistics.statisticsTotal.pregnant') },
         {
           value: "intellectual",
-          title: "Люди с интеллектуальной инвалидностью",
+          title: this.$t('statistics.statisticsTotal.intellectual'),
         },
-        { value: "agedPeople", title: "Пожилые люди" },
-        { value: "kids", title: "Семьи с детьми до 7 лет" },
+        { value: "agedPeople", title: this.$t('statistics.statisticsTotal.agedpeople') },
+        { value: "kids", title: this.$t('statistics.statisticsTotal.withchild') },
       ],
       selectedCity: 0,
       selectedCategory: 0,
@@ -306,11 +316,13 @@ export default {
     };
   },
   async mounted() {
-    await this.$store.commit("statistics/filterObjectsReset");
+    this.$store.commit("statistics/filterObjectsReset");
     this.$store.dispatch("objectAdding/init");
     await this.$store.dispatch("statistics/getObjectsStatTable");
   },
   computed: {
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
+    isLoading: get('statistics/isLoading'),
     objectsStat: get("statistics/getObjectsStatTable"),
     groupsTable() {
       if (this.selectedGroup == "all") {
@@ -398,9 +410,10 @@ export default {
 .statisticks .button {
   border-radius: 10px;
   height: 54px;
-  span {
+}
+
+.statisticks .button-white {
     color: #ffffff;
-  }
 }
 
 .statisticks .table {
@@ -475,6 +488,7 @@ export default {
 
 .statisticks {
   padding: 40px 0;
+  min-height: calc(100vh - 195px);
   @media all and (max-width: 1024px) {
     padding: 90px 0;
   }

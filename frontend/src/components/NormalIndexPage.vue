@@ -5,12 +5,12 @@
       <StatisticsBtn
         :page="'statisticsAccess'"
         :class="'btn_right'"
-        :title="'Статистика по доступности объектов'"
+        :title="$t('statistics.access')"
       />
       <StatisticsBtn 
         :page="'statisticsTotal'"
         :class="'btn_left'"
-        :title="'Общая статистика'"
+        :title="$t('statistics.total')"
       />
     </div>
     <post-submit-message />
@@ -46,7 +46,7 @@ export default {
 
 <style scoped lang="scss">
   .stat_button-wrap {
-    @media all and (max-width: 1024px) {
+    @media all and (max-width: 1023px) {
       display: none;
     }
   }

@@ -216,6 +216,7 @@ export default {
     position: fixed;
     z-index: 123;
     width: 100%;
+    background: white;
     .container {
       background: white;
     }

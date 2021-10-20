@@ -655,27 +655,14 @@ final class ObjectsApiController extends AbstractController
         if (empty($request->query->get('query'))) {
             return [];
         }
-        $cityId = $request->query->get('cityId');
-        $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
-        return $connection->createQueryBuilder()
-            ->select([
-                'objects.id',
-                'objects.title',
-                'objects.address',
-                'object_categories.title as category',
-                'object_categories.icon',
-            ])
-            ->from('objects')
-            ->join('objects', 'object_categories', 'object_categories', 'object_categories.id = objects.category_id')
-            ->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
-            ->andWhere('SIMILARITY(CONCAT(objects.title, \' \', objects.address, \' \', object_categories.title, \' \', objects.other_names), :search) > 0')
-            ->andWhere('deleted_at IS NULL')
-            ->setParameter('search', $request->query->get('query', ''))
-            ->setParameter('id', $cityId)
-            ->setMaxResults(10)
-            ->orderBy('SIMILARITY(concat(objects.title, \' \', objects.address, \' \', object_categories.title), :search)', 'desc')
-            ->execute()
-            ->fetchAll();
+        $raw = "SELECT id, title, address, category, icon FROM (SELECT objects.id as id, objects.title as title, objects.address as address, oc.title as category, oc.icon as icon, setweight(to_tsvector(objects.title), 'A') || setweight(to_tsvector(objects.address), 'A') || setweight(to_tsvector(oc.title), 'B') || setweight(to_tsvector(coalesce(objects.other_names, '')), 'C') as vector, concat(objects.title, ' ', objects.address, ' ', oc.title) as one_string FROM objects JOIN object_categories oc on objects.category_id = oc.id WHERE ST_CONTAINS((SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))), objects.point_value::geometry) AND deleted_at is NULL) o_search WHERE (o_search.vector @@ websearch_to_tsquery(:query) OR similarity(one_string, :query) > 0.1) ORDER BY ts_rank(o_search.vector, websearch_to_tsquery(:query)) DESC, similarity(one_string, :query) DESC LIMIT 10;";
+
+        $q = $connection->prepare($raw);
+        $q->bindValue('id', $request->query->get('cityId'));
+        $q->bindValue('query', $request->query->get('query', ''));
+        $q->execute();
+
+        return $q->fetchAll();
     }
 
     /**
@@ -1026,9 +1013,7 @@ final class ObjectsApiController extends AbstractController
     {
         $query = $connection->createQueryBuilder()
             ->select('COUNT(objects.id) as objects_count')
-            ->addSelect('object_categories_parent.title as main_category_title')
             ->addSelect('object_categories_parent.id as main_category_id')
-            ->addSelect('object_categories.title as category_title')
             ->addSelect('object_categories.id as category_id')
             ->addSelect('cities.id as city_id')
             ->addSelect('cities.name as city_name')
@@ -1075,8 +1060,26 @@ final class ObjectsApiController extends AbstractController
                 ->setParameter('cityId', $request->query->getInt('city_id'));
         }
 
+        $lang = $request->getLocale();
+        if ($lang != 'ru') {
+            $query = $query
+            ->addSelect('ct_one.content as category_title')
+            ->addSelect('ct_two.content as main_category_title')
+            ->leftJoin('object_categories', 'category_translations', 'ct_one', 'object_categories.id = CAST(ct_one.foreign_key as integer)')
+            ->leftJoin('object_categories_parent', 'category_translations', 'ct_two', 'object_categories_parent.id = CAST(ct_two.foreign_key as integer)')            
+            ->andWhere('ct_one.locale = :locale_one')
+            ->andWhere('ct_two.locale = :locale_two')
+            ->setParameter('locale_one', $lang)
+            ->setParameter('locale_two', $lang)
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id, ct_one.content, ct_two.content');
+        } else {
+            $query = $query
+            ->addSelect('object_categories_parent.title as main_category_title')
+            ->addSelect('object_categories.title as category_title')
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id');
+        }
+
         $query = $query
-            ->groupBy('object_categories_parent.id, object_categories.id, cities.id')
             ->execute()
             ->fetchAll();
 

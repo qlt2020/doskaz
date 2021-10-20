@@ -4,6 +4,7 @@
 namespace App\Tasks;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CurrentTaskDataProvider
 {
@@ -11,14 +12,20 @@ class CurrentTaskDataProvider
      * @var Connection
      */
     private Connection $connection;
+    private TranslatorInterface $translator;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, TranslatorInterface $translator)
     {
         $this->connection = $connection;
+        $this->translator = $translator;
     }
 
-    public function forUser(int $userId, int $cityId = 0): ?CurrentTaskData
+    public function forUser(int $userId, string $lang, int $cityId = 0): ?CurrentTaskData
     {
+        $profile = $this->translator->trans('Заполните профиль', [], 'attributes', $lang);
+        $verification = $this->translator->trans('Верифицируйте 1 объект', [], 'attributes', $lang);
+        $addition = $this->translator->trans('Добавьте 1 объект', [], 'attributes', $lang);
+        
         $progress = $this->connection->createQueryBuilder()
             ->select([
                 'progress'
@@ -30,7 +37,7 @@ class CurrentTaskDataProvider
             ->fetchColumn();
 
         if ($progress !== 100) {
-            return new CurrentTaskData($progress, 'Заполните профиль', 4);
+            return new CurrentTaskData($progress, $profile, 4);
         }
 
         $administrationTask = $this->connection->createQueryBuilder()
@@ -61,9 +68,9 @@ class CurrentTaskDataProvider
             ->execute()
             ->fetch();
 
-        if($administrationTask) {
-            return new CurrentTaskData(0, $administrationTask['name']);
-        }
+            if ($administrationTask) {
+                return new CurrentTaskData(0, $administrationTask['name'], $administrationTask['points']);
+            }
 
         $task = $this->connection->createQueryBuilder()
             ->select('*')
@@ -74,7 +81,7 @@ class CurrentTaskDataProvider
             ->execute()
             ->fetch();
         if ($task) {
-            return new CurrentTaskData(0, 'Верифицируйте 1 объект', $task['reward']);
+            return new CurrentTaskData(0, $verification, $task['reward']);
         }
 
         $task = $this->connection->createQueryBuilder()
@@ -87,7 +94,7 @@ class CurrentTaskDataProvider
             ->fetch();
 
         if ($task) {
-            return new CurrentTaskData(0, 'Добавьте 1 объект', $task['reward']);
+            return new CurrentTaskData(0, $addition, $task['reward']);
         }
 
         return null;

@@ -8,7 +8,7 @@
       <div class="main-page__mobile-in">
         <div class="main-page__mobile-item">
           <city-selector
-            v-if="$route.path === '/'"
+            v-if="$route.path === '/' || $route.path === '/en' || $route.path === '/kz'"
             class="mobile-city-selector"
           />
           <LangSelect />
@@ -23,7 +23,7 @@
           </nuxt-link>
         </div>
 
-        <div v-if="$route.path === '/'" class="main-page__mobile-item">
+        <div v-if="$route.path === '/' || $route.path === '/en' || $route.path === '/kz'" class="main-page__mobile-item">
           <button
             class="btn btn_white"
             type="button"

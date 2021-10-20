@@ -52,6 +52,7 @@ use Webmozart\Assert\Assert;
 use Symfony\Component\Filesystem\Filesystem;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route(path="/api")
@@ -147,7 +148,7 @@ final class UserController extends AbstractController
             $fullName->first,
             $fullName->last,
             $fullName->middle,
-            $currentTaskProvider->forUser($user['id'], $request->query->getInt('cityId', 0)),
+            $currentTaskProvider->forUser($user['id'], $request->getLocale(), $request->query->getInt('cityId', 0)),
             [
                 'current' => $level->value() ?? 0,
                 'currentPoints' => $level->points() ?? 0,
@@ -763,7 +764,7 @@ final class UserController extends AbstractController
      */
     public function tasks(Request $request, UserTasksFinder $userTasksFinder)
     {
-        return $userTasksFinder->findForUser($this->getUser()->id(), $request->query->getInt('cityId', 0), $request->query->getInt('page', 1), $request->query->get('sort', 'createdAt desc'));
+        return $userTasksFinder->findForUser($this->getUser()->id(), $request->query->getInt('cityId', 0), $request->query->getInt('page', 1), $request->query->get('sort', 'createdAt desc'), $request->getLocale());
     }
 
     /**
@@ -909,12 +910,19 @@ final class UserController extends AbstractController
      *     ),
      * )
      * @param Connection $connection
+     * @param Request $request
      * @return mixed[]
      */
-    public function awards(Connection $connection)
+    public function awards(Connection $connection, Request $request, TranslatorInterface $translator)
     {
+        $lang = $request->getLocale();
+ 
         return $connection->createQueryBuilder()
-            ->addSelect('id', 'title', 'type')
+            ->addSelect('id', 'type')
+            ->addSelect("CASE WHEN title = 'Добавлено 3 объекта' then '{$translator->trans('Добавлено 3 объекта', [], 'attributes', $lang)}'
+                        when title = 'Добавлено 8 объектов' then '{$translator->trans('Добавлено 8 объектов', [], 'attributes', $lang)}'
+                        when title = 'Добавлено 15 объектов' then '{$translator->trans('Добавлено 15 объектов', [], 'attributes', $lang)}'
+                        else title end as title")
             ->from('awards')
             ->orderBy('issued_at', 'desc')
             ->where('awards.user_id = :userId')

@@ -24,7 +24,7 @@ export default {
   login: {
     linkTitle: "Enter",
     pageTitle: "Entry",
-    logoutTitle: "Logout",
+    logoutTitle: "Log out",
     popupTitle: "Make your city closer",
     phoneLoginAdvice: "Or enter from a telephone",
     profileFillingAdvice: "Continue registration and fill into your profile",
@@ -109,6 +109,7 @@ export default {
     number: "Number",
     level: "level",
     points: "points",
+    view: "View",
     stats: {
       objects: "Facilities",
       verifications: "Inspections",
@@ -196,6 +197,7 @@ export default {
       female: "Female",
     },
     notifications: {
+      title: 'Subscribe',
       tabTitle: "Notices",
       levelReachedText: "Congratulations, you received {level} level!",
       levelReachedTitle: "New level!",
@@ -355,7 +357,7 @@ export default {
   blogLink: "Go to section",
   privacyPolicy: "Confidence policy",
   termsOfUse: "User agreement",
-  privacyAgreement: "Соглашения о неразглашении",
+  privacyAgreement: "Non-disclosure agreements",
   communityGuidelines: "Community guidelines",
   events: {
     objectAdded: {
@@ -672,10 +674,24 @@ Anonymous requests are not considered.
       "You can become a volunteer <a style='font-weight: bold' href='/login'>here</a>",
     section9Text:
       "The project is carried out by a consortium of public organizations. See the Contacts page.",
+    section9_1Text:
+      "Eurasia Foundation of Central Asia (EFCA) is a non-governmental organization founded in the region in 2005. EFCA mobilizes public and private resources to help citizens take an active part in building their own future by strengthening local communities and improving their civic and economic well-being.",
+    section9_2Text:
+      "Tandau Foundation has been operating since 2003. The mission of the organization is to create conditions for realization of potential and interests of socially vulnerable groups of the population through deploying training, information, advocacy and consulting programs.",
     section10Text:
       "The project is financed by the Delegation of the European Union to the Republic of Kazakhstan, the US Diplomatic Mission in Kazakhstan, the United Nations Children's Fund (UNICEF), Astana Hub International Technopark of IT Startups in Central Asia.",
+    section10_1Text:
+      "The European Union is made up of 28 Member States who have decided to link together their know-how, resources and destinies, having built a zone of stability, democracy and sustainable development whilst maintaining cultural diversity, tolerance and individual freedoms. The European Union is determined to share its achievements and values with countries and peoples beyond its borders.",
+    section10_2Text:
+      "The mission of the United States Embassy in Kazakhstan is to support the development of Kazakhstani democratic institutions and civil society by competitively awarding small grants to Kazakhstani nonprofit, non-governmental organizations.",
+    section10_3Text:
+      "The United Nations Children’s Fund (UNICEF) works in the field of protecting the rights of children, namely, on prevention and protection of children from violence. UNICEF pays special attention to children from the most vulnerable groups, children with disabilities, as well as children in boarding schools.",
+    section10_4Text:
+      "An international technology park for IT startups in Central Asia “Astana Hub” is intended to become the core and engine to develop the innovation ecosystem in Kazakhstan and an internationally recognized hub developing technology business.",
     section11Text:
       "If the website does not work correctly, please leave a message on the Contacts page.",
+    section11_1Text:
+      "During implementation of any project, problems of various levels of complexity can always arise that require prompt solutions. If you encounter such a problem, if you find errors in the text of the content, if you do not agree with the information about the objects, if the website does not work correctly, please inform us about it. We will tackle the issues quickly and efficiently!",
     accessible: "Accessible",
     partialAccessible: "Partially accessible",
     notAccessible: "Not accessible",
@@ -687,4 +703,63 @@ Anonymous requests are not considered.
     buttonYes: "Yes",
     buttonNo: "Change city",
   },
+  statistics: {
+    statistics: "Statistics",
+    total: "General statistics",
+    access: "Statistics on the availability of facilities",
+    statisticsTotal: {
+      accessible: "Accessible",
+      partialAccessible: "Partially accessible",
+      notAccessible: "Inaccessible",
+      usersCount: 'Number of users',
+      mensTotal: "Number of men",
+      womenTotal: "Number of women",
+      complaintsTotal: "Number of complaints",
+      feedbackTotal: "Number of appeals",
+      objectsTotal: "The number of objects in the opportunity section for",
+      usersTotal: "Number of users by category",
+      usersAge: "Chart by age by all categories",
+      complaintsYears: "Number of complaints per year",
+      feedbackYears: "Number of appeals per year",
+
+      allGroups: 'All groups',
+      withchild: "Families with children aged under 7 years",
+      movement: "Wheel chaired people",
+      babycarriage: "People with baby buggies",
+      vision: "People with vision disabilities",
+      limb: "People with musculoskeletal disabilities",
+      temporal: "People with temporary impairments",
+      missinglimbs: "People without limbs",
+      pregnant: "Pregnant women",
+      agedpeople: "Senior people",
+      hearing: "People with hearing disabilities",
+      intellectual: "People with intellectual disabilities",
+      undefined: "Unknown",
+
+      from_18_to_23: "18 to 23 years old",
+      from_23_to_28: "23 to 28 years old",
+      from_28_to_33: "28 to 33 years old",
+      from_33_to_38: "33 to 38 years old",
+      from_38_to_43: "38 to 43 years old",
+      from_43_to_50: "43 to 50 years old",
+      from_50_to_100: "50 and older",
+
+      january : 'January',
+      february : 'February',
+      march : 'March',
+      april : 'April',
+      may : 'May',
+      june : 'June',
+      july : 'July',
+      august : 'August',
+      september : 'September',
+      october : 'October',
+      november : 'November',
+      december : 'December',
+    },
+    all: "All",
+    allCountry: "All of Kazakhstan",
+    object: 'Facility ',
+    general: 'General',
+  }
 };
