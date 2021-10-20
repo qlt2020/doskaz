@@ -160,10 +160,9 @@ class UpdateCategoryTranslations extends Command
         $categories = $this->entityManager->createQueryBuilder()->select('c')->from(Category::class, 'c')
             ->getQuery()->execute();
 
-        foreach ($categories as $category) {            
+        foreach ($categories as $category) {
             $category->setTitle(self::$map[$category->getTitle()]);
             $category->setTranslatableLocale('kz');
-            
         }
         $this->entityManager->flush();
     }
