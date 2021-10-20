@@ -22,32 +22,18 @@ class HelpRepository
     {
         $locale = $request->getLocale();
         $locale = $locale === 'ru' ? '' : '_' . $locale;
-        $query = $this->connection->createQueryBuilder()
-            ->select('helps.id as id')
-            ->addSelect('helps.title' . $locale . ' as title')
-            ->addSelect('helps.description' . $locale . ' as description')
-            ->addSelect('helps.image as image')
-            ->addSelect('help_categories.id as category_id')
-            ->addSelect('help_categories.name' . $locale . ' as category_name')
-            ->from('helps', 'helps')
-            ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
-            ->where('helps.deleted_at IS NULL');
-
-        if ($roles != null && in_array('ROLE_ADMIN', $roles))
-            $query = $query
-                ->orWhere('helps.is_published = false and helps.deleted_at IS NULL')
-                ->orWhere('helps.is_published = true and helps.deleted_at IS NULL');
-        else
-            $query = $query
-                ->andWhere('helps.is_published = true and helps.deleted_at IS NULL');
-
+        $query = $this->query(null, $request, $roles);
         $items = $query->execute()->fetchAll();
 
         return new JsonResponse(['items' => $items], 200);
     }
 
-    public function show($id){
-        return $this->entityManager->getRepository(Help::class)->find($id)->getAttributes();
+    public function show($id, Request $request, array $roles = null){
+        $item = $this->query($id, $request, $roles)->execute()->fetchAll();
+        if (count($item) == 0) {
+            return new JsonResponse('Not found', 404);
+        }
+        return new JsonResponse($item[0], 200);
     }
 
     public function store(HelpData $data)
@@ -141,5 +127,37 @@ class HelpRepository
                 'message' => $exception->getMessage()
             ], 400);
         }
+    }
+
+    private function query(?int $id, Request $request, array $roles = null){
+        $locale = $request->getLocale();
+        $locale = $locale === 'ru' ? '' : '_' . $locale;
+        $query = $this->connection->createQueryBuilder()
+            ->select('helps.id as id')
+            ->addSelect('helps.title' . $locale . ' as title')
+            ->addSelect('helps.description' . $locale . ' as description')
+            ->addSelect('helps.image as image')
+            ->addSelect('help_categories.id as category_id')
+            ->addSelect('help_categories.name' . $locale . ' as category_name')
+            ->from('helps', 'helps')
+            ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
+            ->where('helps.deleted_at IS NULL');
+
+        if ($roles != null && in_array('ROLE_ADMIN', $roles)) {
+            $query = $query
+                ->orWhere('helps.is_published = false and helps.deleted_at IS NULL')
+                ->orWhere('helps.is_published = true and helps.deleted_at IS NULL');
+        } else {
+            $query = $query
+                ->andWhere('helps.is_published = true and helps.deleted_at IS NULL');
+        }
+
+        if (isset($id)) {
+            $query = $query
+                ->andWhere( 'helps.id = :id')
+                ->setParameter('id', $id);
+        }
+
+        return $query;
     }
 }

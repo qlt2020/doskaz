@@ -1042,7 +1042,6 @@ final class ObjectsApiController extends AbstractController
             ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id')
             ->andWhere('objects.deleted_at IS NULL');
 
-
         if ($request->query->getInt('main_category_id') != 0) {
             $query = $query
                 ->andWhere('object_categories_parent.id = :mainCategoryId')

@@ -5,14 +5,13 @@ export const state = () => ({
   complaintsCount: null,
   complaintsFilter: {
     params: {
-      year_id: 2021
+      year_id: (new Date()).getFullYear()
     }
   },
   complaintsFilteredStat: [],
   objectsStat: [],
   objectsStatPrimary: [],
   objectsStatTable: [],
-  objectsCount: {},
   objectsStatFilter: {
     params: {}
   },
@@ -20,13 +19,13 @@ export const state = () => ({
   feedbackCount: null,
   feedbackFilter: {
     params: {
-      year_id: 2020
+      year_id: (new Date()).getFullYear()
     }
   },
   feedbackFilteredStat: [],
   usersStat: [],
   usersAge: [],
-  usersAgeFilter: 'withChild',
+  usersAgeFilter: null,
   usersList: [],
   usersFilter: {
     params: {
@@ -42,65 +41,71 @@ export const state = () => ({
   complaintsList: [],
   group: {
     options:[
-      {value: 'kids_full_accessible', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
-      {value: 'movement_full_accessible', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
-      {value: 'movement_full_accessible', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
-      {value: 'hearing_full_accessible', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
-      {value: 'limb_full_accessible', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
-      {value: 'limb_full_accessible', title: 'Временно травмированные люди', usersValue: 'temporal'},
-      {value: 'limb_full_accessible', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
-      {value: 'limb_full_accessible', title: 'Беременные женщины', usersValue: 'pregnant'},
-      {value: 'limb_full_accessible', title: 'Пожилые люди', usersValue: 'agedPeople'},
-      {value: 'hearing_full_accessible', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
-      {value: 'intellectual_full_accessible', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
+      {value: 'kids', title: 'Семьи с детьми до семи лет', usersValue: 'withChild'},
+      {value: 'movement', title: 'Люди передвигающиеся на кресло коляске', usersValue: 'movement'},
+      {value: 'babyCarriage', title: 'Люди с детскими колясками', usersValue: 'babyCarriage'},
+      {value: 'vision', title: 'Люди с инвалидностью по зрению', usersValue: 'vision'},
+      {value: 'limb', title: 'Люди с нарушениями опорно-двигательного аппарата', usersValue: 'limb'},
+      {value: 'temporal', title: 'Временно травмированные люди', usersValue: 'temporal'},
+      {value: 'missingLimbs', title: 'Люди с отсутствующими конечностями', usersValue: 'missingLimbs'},
+      {value: 'pregnant', title: 'Беременные женщины', usersValue: 'pregnant'},
+      {value: 'agedPeople', title: 'Пожилые люди', usersValue: 'agedPeople'},
+      {value: 'hearing', title: 'Люди с инвалидностью по слуху', usersValue: 'hearing'},
+      {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью', usersValue: 'intellectual'},
     ],
   },
   propertyList: {
+    hearingTotal: 0,
     hearing_full_accessible: 0,
     hearing_not_accessible: 0,
     hearing_partial_accessible: 0,
 
+    intellectualTotal: 0,
     intellectual_full_accessible: 0,
     intellectual_not_accessible: 0,
     intellectual_partial_accessible: 0,
 
+    kidsTotal: 0,
     kids_full_accessible: 0,
     kids_not_accessible: 0,
     kids_partial_accessible: 0,
 
+    limbTotal: 0,
     limb_full_accessible: 0,
     limb_not_accessible: 0,
     limb_partial_accessible: 0,
 
+    movementTotal: 0,
     movement_full_accessible: 0,
     movement_not_accessible: 0,
     movement_partial_accessible: 0,
 
-    objects_total_count: 0,
-    objects_total_full_accessible: 0,
-    objects_total_not_accessible: 0,
-    objects_total_partial_accessible: 0,
-
+    visionTotal: 0,
     vision_full_accessible: 0,
     vision_not_accessible: 0,
     vision_partial_accessible: 0,
 
+    agedPeopleTotal: 0,
     agedPeople_full_accessible: 0,
     agedPeople_not_accessible: 0,
     agedPeople_partial_accessible: 0,
 
+    babyCarriageTotal: 0,
     babyCarriage_full_accessible: 0,
     babyCarriage_not_accessible: 0,
     babyCarriage_partial_accessible: 0,
 
+    temporalTotal: 0,
     temporal_full_accessible: 0,
     temporal_not_accessible: 0,
     temporal_partial_accessible: 0,
 
+    pregnantTotal: 0,
     pregnant_full_accessible: 0,
     pregnant_not_accessible: 0,
     pregnant_partial_accessible: 0,
 
+    missingLimbsTotal: 0,
     missingLimbs_full_accessible: 0,
     missingLimbs_not_accessible: 0,
     missingLimbs_partial_accessible: 0
@@ -189,42 +194,48 @@ export const actions = {
     const {data} = await this.$axios.get('/api/complaints/statistic', state.complaintsFilter)
     const complaintsCount = getCountToCategory(data.result, 'month', 'year', 'count')
 
+    const count = totalCount(data.result, 'count')
+
+    commit('SET_COMPLAINTS_COUNT', count)
+
     commit('SET_COMPLAINTS_FILTERED_STAT', complaintsCount)
   },
 
   async loadFeedback({commit}) {
-      const {data} = await this.$axios.get('/api/admin/feedback/statistic', {})
+      const {data} = await this.$axios.get('/api/feedback/statistic', {})
       const count = totalCount(data.result, 'count')
       commit('SET_FEEDBACK_COUNT', count)
+      
       commit('SET_FEEDBACK_STAT', data)
   },
 
   async getFeedbackFilter ({commit, state}) {
-    const {data} = await this.$axios.get('/api/admin/feedback/statistic', state.feedbackFilter)
+    const {data} = await this.$axios.get('/api/feedback/statistic', state.feedbackFilter)
     const feedbackStat = getCountToCategory(data.result, 'month', 'year', 'count')
+
+    const count = totalCount(data.result, 'count')
+    commit('SET_FEEDBACK_COUNT', count)
+
     commit('SET_FEEDBACK_FILTERED_STAT', feedbackStat)
   },
 
   async getObjectsStat({commit, state}) {
-    // if (state.objectsStat.length) {
-    //   return;
-    // }
     const listProperty = state.propertyList
 
-    const {data} = await this.$axios.get('/api/admin/objects/statistic', state.objectsStatFilter);
+    const {data} = await this.$axios.get('/api/objects/statistic', state.objectsStatFilter);
     commit('SET_OBJECTS_STAT_PRIMARY', data)
     const objectsByCategory = data.reduce((a, c) => {
       const newObject = (
-              a[c['main_category_id']] ||
-              (a[c['main_category_id']] = {
-                  category_id: c['main_category_id'],
-                  category_title: c['main_category_title'],
-                  ...listProperty
-              }
+            a[c['main_category_id']] ||
+            (a[c['main_category_id']] = {
+                category_id: c['main_category_id'],
+                category_title: c['main_category_title'],
+                ...listProperty
+            }
           )
         )
       Object.keys(listProperty).forEach(property => {
-        const replacement = property.substr(property.indexOf('_') +1);
+        const replacement = property.substring(property.indexOf('_') +1);
         if (property === `agedPeople_${replacement}` ||
             property === `pregnant_${replacement}` ||
             property === `missingLimbs_${replacement}` ||
@@ -232,86 +243,42 @@ export const actions = {
           newObject[property] +=c[`limb_${replacement}`]
         } else if (property === `babyCarriage_${replacement}`) {
           newObject[property] +=c[`movement_${replacement}`]
-        } else if (property === `objects_total_count`) {
+        } 
+        else if (property === 'hearingTotal') {
           newObject[property] +=
-          +(
-            ((c['limb_full_accessible'] + c['limb_not_accessible'] + c['limb_partial_accessible']) * 5) +
-            ((c['movement_full_accessible'] + c['movement_not_accessible'] + c['movement_partial_accessible']) * 2) +
-            (c['hearing_full_accessible'] + c['hearing_not_accessible'] + c['hearing_partial_accessible']) +
-            (c['intellectual_full_accessible'] + c['intellectual_not_accessible'] + c['intellectual_partial_accessible']) +
-            (c['kids_full_accessible'] + c['kids_not_accessible'] + c['kids_partial_accessible'])) +
-            (c['vision_full_accessible'] + c['vision_not_accessible'] + c['vision_partial_accessible']
-          );
-        } else if (property === 'objects_total_full_accessible') {
+          +(c['hearing_full_accessible'] + c['hearing_not_accessible'] + c['hearing_partial_accessible']);
+        } else if (property === 'intellectualTotal') {
           newObject[property] +=
-          +(
-            ((c['limb_full_accessible']) * 5) +
-            ((c['movement_full_accessible'] * 2) +
-            c['hearing_full_accessible'] +
-            c['intellectual_full_accessible'] +
-            c['kids_full_accessible'] +
-            c['vision_full_accessible'])
-          )
-        } else if (property === 'objects_total_not_accessible') {
+          +(c['intellectual_full_accessible'] + c['intellectual_not_accessible'] + c['intellectual_partial_accessible']);
+        } else if (property === 'kidsTotal') {
           newObject[property] +=
-          +(
-            ((c['limb_not_accessible']) * 5) +
-            ((c['movement_not_accessible'] * 2) +
-            c['hearing_not_accessible'] +
-            c['intellectual_not_accessible'] +
-            c['kids_not_accessible'] +
-            c['vision_not_accessible'])
-          )
-        } else if (property === 'objects_total_partial_accessible') {
+          +(c['kids_full_accessible'] + c['kids_not_accessible'] + c['kids_partial_accessible']);
+        } else if (property === 'visionTotal') {
           newObject[property] +=
-          +(
-            ((c['limb_partial_accessible']) * 5) +
-            ((c['movement_partial_accessible'] * 2) +
-            c['hearing_partial_accessible'] +
-            c['intellectual_partial_accessible'] +
-            c['kids_partial_accessible'] +
-            c['vision_partial_accessible'])
-          )
+          +(c['vision_full_accessible'] + c['vision_not_accessible'] + c['vision_partial_accessible']);
+        } 
+        else if
+                (property === 'agedPeopleTotal' ||
+                property === 'pregnantTotal' ||
+                property === 'missingLimbsTotal' ||
+                property === 'temporalTotal' ||
+                property === 'limbTotal') {
+          newObject[property] +=
+          +(c['limb_full_accessible'] + c['limb_not_accessible'] + c['limb_partial_accessible']);
+        } else if 
+                (property === 'babyCarriageTotal' || property === 'movementTotal') {
+          newObject[property] += +(c['movement_full_accessible'] + c['movement_not_accessible'] + c['movement_partial_accessible']);
         }
         else {
-          newObject[property] +=c[property]
+          newObject[property] +=c[property];
         }
       })
       return a
       },[])
+      .filter(objects => objects != null || objects!='empty' || objects!='undefined')
+    commit('SET_OBJECTS_STAT', objectsByCategory)
 
 
-    function sumAccesibles(typeAccesibles, item) {
-      let result = item[`hearing${typeAccesibles}`]+
-                    item[`intellectual${typeAccesibles}`]+
-                    item[`kids${typeAccesibles}`]+
-                    item[`limb${typeAccesibles}`]+
-                    item[`movement${typeAccesibles}`]+
-                    item[`vision${typeAccesibles}`]+
-
-                    item[`agedPeople${typeAccesibles}`]+
-
-                    item[`pregnant${typeAccesibles}`] +
-                    item[`missingLimbs${typeAccesibles}`] +
-                    item[`temporal${typeAccesibles}`] +
-                    item[`babyCarriage${typeAccesibles}`]
-      return result
-    }
-
-    let fullAccessible = 0;
-    let partialAccessible = 0;
-    let notAccessible = 0;
-
-    objectsByCategory.forEach(item => {
-      fullAccessible += sumAccesibles('_full_accessible', item)
-      partialAccessible += sumAccesibles('_partial_accessible', item)
-      notAccessible += sumAccesibles('_not_accessible', item)
-    })
-
-    const notEmptyObjects = objectsByCategory.filter(objects => objects != null || objects!='empty' || objects!='undefined')
-
-    commit('SET_OBJECTS_COUNT', {fullAccessible, partialAccessible, notAccessible})
-    commit('SET_OBJECTS_STAT', notEmptyObjects)
   },
 
   async getObjectsStatTable({commit, state, dispatch}) {
@@ -344,58 +311,42 @@ export const actions = {
             newObject[property] +=c[`limb_${replacement}`]
           } else if (property === `babyCarriage_${replacement}`) {
             newObject[property] +=c[`movement_${replacement}`]
-          } else if (property === `objects_total_count`) {
+          } 
+          else if (property === 'hearingTotal') {
             newObject[property] +=
-            +(
-              ((c['limb_full_accessible'] + c['limb_not_accessible'] + c['limb_partial_accessible']) * 5) +
-              ((c['movement_full_accessible'] + c['movement_not_accessible'] + c['movement_partial_accessible']) * 2) +
-              (c['hearing_full_accessible'] + c['hearing_not_accessible'] + c['hearing_partial_accessible']) +
-              (c['intellectual_full_accessible'] + c['intellectual_not_accessible'] + c['intellectual_partial_accessible']) +
-              (c['kids_full_accessible'] + c['kids_not_accessible'] + c['kids_partial_accessible'])) +
-              (c['vision_full_accessible'] + c['vision_not_accessible'] + c['vision_partial_accessible']
-            )
-          } else if (property === 'objects_total_full_accessible') {
+            +(c['hearing_full_accessible'] + c['hearing_not_accessible'] + c['hearing_partial_accessible']);
+          } else if (property === 'intellectualTotal') {
             newObject[property] +=
-            +(
-              ((c['limb_full_accessible']) * 5) +
-              ((c['movement_full_accessible'] * 2) +
-              c['hearing_full_accessible'] +
-              c['intellectual_full_accessible'] +
-              c['kids_full_accessible'] +
-              c['vision_full_accessible'])
-            )
-          } else if (property === 'objects_total_not_accessible') {
+            +(c['intellectual_full_accessible'] + c['intellectual_not_accessible'] + c['intellectual_partial_accessible']);
+          } else if (property === 'kidsTotal') {
             newObject[property] +=
-            +(
-              ((c['limb_not_accessible']) * 5) +
-              ((c['movement_not_accessible'] * 2) +
-              c['hearing_not_accessible'] +
-              c['intellectual_not_accessible'] +
-              c['kids_not_accessible'] +
-              c['vision_not_accessible'])
-            )
-          } else if (property === 'objects_total_partial_accessible') {
+            +(c['kids_full_accessible'] + c['kids_not_accessible'] + c['kids_partial_accessible']);
+          } else if (property === 'visionTotal') {
             newObject[property] +=
-            +(
-              ((c['limb_partial_accessible']) * 5) +
-              ((c['movement_partial_accessible'] * 2) +
-              c['hearing_partial_accessible'] +
-              c['intellectual_partial_accessible'] +
-              c['kids_partial_accessible'] +
-              c['vision_partial_accessible'])
-            )
+            +(c['vision_full_accessible'] + c['vision_not_accessible'] + c['vision_partial_accessible']);
+          } 
+          else if
+                  (property === 'agedPeopleTotal' ||
+                  property === 'pregnantTotal' ||
+                  property === 'missingLimbsTotal' ||
+                  property === 'temporalTotal' ||
+                  property === 'limbTotal') {
+            newObject[property] +=
+            +(c['limb_full_accessible'] + c['limb_not_accessible'] + c['limb_partial_accessible']);
+          } else if 
+                  (property === 'babyCarriageTotal' || property === 'movementTotal') {
+            newObject[property] += +(c['movement_full_accessible'] + c['movement_not_accessible'] + c['movement_partial_accessible']);
           }
           else {
-            newObject[property] +=c[property]
+            newObject[property] +=c[property];
           }
         })
+        
         return a
-    },[])
-
-    const notEmptySubObjects = objectsBySubategory.filter(objects => objects != null || objects!='empty' || objects!='undefined')
+    },[]).filter(objects => objects != null || objects!='empty' || objects!='undefined')
 
     objectsByCategory.map(category => {
-      return category.subcategory = [...notEmptySubObjects.filter(subcategory => {
+      return category.subcategory = [...objectsBySubategory.filter(subcategory => {
         return category.category_id === subcategory.main_category_id
       })]
     })
@@ -417,6 +368,7 @@ export const actions = {
     }
 
     return this.$axios.get('/api/dashboard/users/statistics').then(res => {
+      delete res.data.categories['justview']
       commit('SET_USERS_STAT', res.data)
     })
   },
@@ -433,6 +385,7 @@ export const actions = {
   async usersList({commit, state}) {
     const {data} = await this.$axios.get('/api/admin/users/statistics', state.usersFilter)
 
+    data.forEach(function(v){ delete v.categories.justView});
     commit('SET_USERS_LIST', data)
   },
 

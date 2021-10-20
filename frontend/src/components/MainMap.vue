@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="map_wrapper">
     <yandex-map
       class="ymap"
       :settings="settings"
@@ -37,6 +37,7 @@ export default {
         version: "2.1",
       },
       controls: [],
+      loader: this.$loading.show(),
     };
   },
 
@@ -151,34 +152,38 @@ export default {
       });
       this.objectManager = yamap;
       map.geoObjects.add(yamap);
+      this.loader.hide();
       yamap.objects.events.add(["click"], (e) => {
-        var id = e.get("objectId");
-        var allObjects = e.originalEvent.currentTarget._objectsById;
-        var allObjectsId = Object.keys(allObjects);
-        var currentObject = allObjects[id];
-        currentObject.properties.background = "white";
-        currentObject.properties.fill = currentObject.properties.color;
-        if (allObjectsId.find((el) => el == this.clickedObjectId)) {
-          allObjects[this.clickedObjectId].properties.background =
-            allObjects[this.clickedObjectId].properties.color;
-          allObjects[this.clickedObjectId].properties.fill = "white";
-        }
-        this.setClickedObject(id);
-        const isSame =
-          this.$route.name === "objects-id" &&
-          this.$route.params.id === e.get("objectId");
-        this.$router.push(
-          this.localePath({
-            name: "objects-id",
-            params: { id: e.get("objectId") },
-            query: isSame
-              ? {
-                  t: now(),
-                }
-              : undefined,
-          })
-        );
+        this.clickOnObject(e);
       });
+    },
+    clickOnObject(e) {
+      var id = e.get("objectId");
+      var allObjects = e.originalEvent.currentTarget._objectsById;
+      var allObjectsId = Object.keys(allObjects);
+      var currentObject = allObjects[id];
+      currentObject.properties.background = "white";
+      currentObject.properties.fill = currentObject.properties.color;
+      if (allObjectsId.find((el) => el == this.clickedObjectId)) {
+        allObjects[this.clickedObjectId].properties.background =
+          allObjects[this.clickedObjectId].properties.color;
+        allObjects[this.clickedObjectId].properties.fill = "white";
+      }
+      this.setClickedObject(id);
+      const isSame =
+        this.$route.name === "objects-id" &&
+        this.$route.params.id === e.get("objectId");
+      this.$router.push(
+        this.localePath({
+          name: "objects-id",
+          params: { id: e.get("objectId") },
+          query: isSame
+            ? {
+                t: now(),
+              }
+            : undefined,
+        })
+      );
     },
     applyFilter: debounce(
       function(val) {

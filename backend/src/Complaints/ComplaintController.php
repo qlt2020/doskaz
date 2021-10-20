@@ -449,9 +449,7 @@ final class ComplaintController extends AbstractController
     public function statisticAll(Connection $connection, Request $request)
     {
         $queryComplaints = $connection->createQueryBuilder()
-            ->select('COUNT(cm.id) as complaint_count')
-            ->addSelect('COUNT(f.id) as feedback_count')
-            ->addSelect('c.name as city_name')
+            ->select('c.name as city_name')
             ->addSelect('c.id as city_id')
             ->from('cities', 'c')
             ->leftJoin('c', 'complaints', 'cm', '(cm.content->>\'cityId\')::INT = c.id')
@@ -467,14 +465,18 @@ final class ComplaintController extends AbstractController
             $dateFrom = date_create($request->query->getAlnum('dateFrom'));
             if ($request->query->getAlnum('dateTo') != '') {
                 $dateTo = date_create($request->query->getAlnum('dateTo'));
+                $dateTo->add(new \DateInterval('P1D'));
                 $queryComplaints = $queryComplaints
-                    ->andWhere('cm.created_at > :dateFrom')
-                    ->andWhere('f.created_at > :dateFrom')
-                    ->andWhere('cm.created_at < :dateTo')
-                    ->andWhere('f.created_at < :dateTo')
+                    ->addSelect('COUNT(DISTINCT (CASE WHEN cm.created_at > :dateFrom and cm.created_at < :dateTo THEN cm.id END)) as complaint_count')
+                    ->addSelect('COUNT(DISTINCT (CASE WHEN f.created_at > :dateFrom and f.created_at < :dateTo THEN f.id END)) as feedback_count')
                     ->setParameter('dateFrom', date_format($dateFrom, 'Y-m-d H:i:s'))
                     ->setParameter('dateTo', date_format($dateTo, 'Y-m-d H:i:s'));
             }
+        }
+        else {
+            $queryComplaints = $queryComplaints
+            ->addSelect('COUNT(DISTINCT cm.id) as complaint_count')
+            ->addSelect('COUNT(DISTINCT f.id) as feedback_count');
         }
 
         $data = $queryComplaints
@@ -482,7 +484,6 @@ final class ComplaintController extends AbstractController
             ->groupBy('c.id')
             ->execute()
             ->fetchAll();
-
 
         if (!$request->query->get('city_id') &&
             (!$request->query->get('dateFrom') && !$request->query->get('dateTo'))) {

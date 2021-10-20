@@ -36,7 +36,7 @@ class CurrentTaskProvider
      */
     public function execute(int $userId)
     {
-        $profileCompletionTask = $this->profileCompletionTaskRepository->find($userId);
+        $profileCompletionTask = $this->profileCompletionTaskRepository->findByUserId($userId);
         if (!$profileCompletionTask->isCompleted()) {
             return $profileCompletionTask;
         }

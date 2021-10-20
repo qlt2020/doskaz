@@ -9,7 +9,8 @@ export default {
   },
   modules: [
     "@nuxtjs/axios",
-    "cookie-universal-nuxt",
+    // 'cookie-universal-nuxt' ,
+    ["cookie-universal-nuxt", {ssr : true, target : 'server'}],
     "@nuxtjs/redirect-module",
     "@nuxtjs/robots",
     "nuxt-i18n",
@@ -47,8 +48,8 @@ export default {
     { src: "~plugins/csrf.js", mode: "server" },
     { src: "~plugins/no-ssr.js", mode: "client" },
     { src: "~plugins/authenticated.js" },
-    { src: '~plugins/vuex-persist.js', ssr: false },
-    { src: '~plugins/scrollactive.js' }
+    { src: "~plugins/vuex-persist.js", ssr: false },
+    { src: "~plugins/scrollactive.js" },
   ],
   buildModules: ["@nuxtjs/google-analytics", "@nuxtjs/yandex-metrika"],
   css: [
@@ -59,7 +60,11 @@ export default {
   head: {
     meta: [
       { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0",
+      },
     ],
     script: [
       {

@@ -158,4 +158,53 @@ export default {
     }
   }
 }
+
+body {
+  &.black,
+  &.white {
+    .user-object {
+      box-shadow: none;
+      border-radius: 0;
+      border: 1px solid;
+      .title,
+      .address {
+        color: inherit;
+      }
+      .top {
+        div.object-status {
+          border-radius: 0;
+          background: transparent;
+        }
+      }
+      .category {
+        .category-title {
+          color: inherit;
+        }
+      }
+    }
+  }
+  &.white {
+    .user-object {
+      border-color: #000;
+      .top {
+        div.object-status {
+          border: 1px solid #000;
+          color: #000;
+        }
+      }
+    }
+  }
+  &.black {
+    .user-object {
+      background: #000;
+      border-color: #fff;
+      .top {
+        div.object-status {
+          border: 1px solid #fff;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
 </style>

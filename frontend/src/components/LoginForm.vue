@@ -1,16 +1,39 @@
 <template>
-  <div class="login-form isOpened">
+  <div
+    class="login-form isOpened"
+    :class="
+      viModeEnabled
+        ? `${visualImpairedModeSettings.colorTheme} ${visualImpairedModeSettings.fontFamily} ${visualImpairedModeSettings.fontSize}`
+        : ``
+    "
+  >
     <div class="login-form__content">
       <div class="login-form__card" :class="{ expanded: expanded }">
         <div class="header">
           <div class="header__img">
-            <img :src="require('~/assets/logo_doskaz.svg')" />
+            <img
+              :src="
+                !viModeEnabled
+                  ? require('~/assets/logo_doskaz.svg')
+                  : visualImpairedModeSettings.colorTheme === 'white'
+                  ? require('~/assets/logo_doskaz-vi-black.svg')
+                  : require('~/assets/logo_doskaz-vi-white.svg')
+              "
+            />
           </div>
           <div class="header__title">
             <span>{{ $t("login.popupTitle") }}</span>
           </div>
           <div class="close" @click="loginFormClose">
-            <img :src="require('~/assets/icons/cross.png')" />
+            <img
+              :src="
+                !viModeEnabled
+                  ? require('~/assets/icons/cross.svg')
+                  : visualImpairedModeSettings.colorTheme === 'white'
+                  ? require('~/assets/icons/cross.svg')
+                  : require('~/assets/icons/cross-white.svg')
+              "
+            />
           </div>
         </div>
 
@@ -37,9 +60,14 @@
           </div>
         </div>
         <div class="intro-files__container">
-          {{ $t('youAccept.main') }}
-          <nuxt-link :to="'/privacy_policy.pdf'" target="_blank">{{ $t("youAccept.privacyPolicy") }}</nuxt-link> и
-          <nuxt-link :to="'/terms-of-service.pdf'" target="_blank">{{ $t("youAccept.termsOfUse") }}</nuxt-link>
+          {{ $t("youAccept.main") }}
+          <nuxt-link :to="'/privacy_policy.pdf'" target="_blank">{{
+            $t("youAccept.privacyPolicy")
+          }}</nuxt-link>
+          и
+          <nuxt-link :to="'/terms-of-service.pdf'" target="_blank">{{
+            $t("youAccept.termsOfUse")
+          }}</nuxt-link>
         </div>
       </div>
     </div>
@@ -47,6 +75,7 @@
 </template>
 
 <script>
+import { get } from "vuex-pathify";
 import PhoneAuthForm from "./PhoneAuthForm";
 import PhoneAuthFormPoints from "./PhoneAuthFormPoints";
 import LoginSocialButtons from "./LoginSocialButtons";
@@ -56,14 +85,18 @@ export default {
   data() {
     return {
       showPhoneAuthForm: false,
-      expanded: false
+      expanded: false,
     };
   },
   methods: {
     loginFormClose() {
       this.$router.push(this.localePath({ name: "index" }));
-    }
-  }
+    },
+  },
+  computed: {
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
+    viModeEnabled: get("visualImpairedModeSettings/enabled"),
+  },
 };
 </script>
 
@@ -252,6 +285,138 @@ export default {
       text-align: center;
       a {
         color: #2d9cdb;
+      }
+    }
+  }
+}
+
+.login-form {
+  &.black,
+  &.white {
+    .login-form__card {
+      border-radius: 0;
+      .buttons {
+        .button {
+          border-radius: 0;
+          background: #fff;
+          border: 1px solid #000;
+          span {
+            color: #000;
+          }
+        }
+      }
+      .intro-files {
+        &__container {
+          a {
+            color: inherit;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+    .phone-form__form {
+      .input {
+        border-radius: 0;
+        background: transparent;
+        input {
+          border: 1px solid;
+          background: transparent;
+        }
+      }
+      .button {
+        border-radius: 0;
+        background: transparent;
+        border: 1px solid;
+      }
+    }
+  }
+  &.black {
+    * {
+      color: #fff;
+    }
+    .login-form__card {
+      background: #000;
+      .header__title {
+        span {
+          color: #fff;
+        }
+      }
+    }
+    .phone-form__form {
+      .button {
+        &:hover {
+          border-radius: 0;
+          background: #fff;
+          border: 1px solid;
+          opacity: 1;
+          span {
+            color: #000;
+          }
+        }
+      }
+    }
+  }
+  &.white {
+    * {
+      color: #000;
+    }
+    .login-form__card {
+      background: #fff;
+    }
+    .phone-form__form {
+      .button {
+        span {
+          color: #000;
+        }
+        &:hover {
+          border-radius: 0;
+          background: #000;
+          border: 1px solid;
+          opacity: 1;
+          span {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  &.md {
+    .login-form {
+      &__card {
+        .header__title,
+        .phone-form__switch,
+        .intro-files__container {
+          font-size: 17px;
+        }
+        .buttons {
+          .button {
+            &.button_google {
+              span {
+                font-size: 19px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  &.lrg {
+    .login-form {
+      &__card {
+        .header__title,
+        .phone-form__switch,
+        .intro-files__container {
+          font-size: 20px;
+        }
+        .buttons {
+          .button {
+            &.button_google {
+              span {
+                font-size: 22px;
+              }
+            }
+          }
+        }
       }
     }
   }

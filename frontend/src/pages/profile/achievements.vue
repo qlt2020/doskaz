@@ -159,6 +159,11 @@ import first from "lodash/first";
 import UserAchievments from "~/components/user/UserAchievments";
 
 export default {
+  head() {
+    return {
+      title: this.$t("profile.title"),
+    };
+  },
   data() {
     return {
       newLevelPopup: false,

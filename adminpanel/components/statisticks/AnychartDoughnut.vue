@@ -34,10 +34,10 @@ export default {
       }
       if (Array.isArray(this.statData)) {
           this.statData.forEach(item => {
-            totalCount += item[this.selectedCategory];
+            totalCount += item[`${this.selectedCategory}Total`];
             data.push({
               x: item.category_title,
-              value: item[this.selectedCategory]
+              value: item[`${this.selectedCategory}Total`]
             })
           })
       }
@@ -59,8 +59,8 @@ export default {
                 "text": totalCount,
                 "position": this.rowPie ? "center" : "left-center",
                 "anchor": "center",
-                "offsetX": this.rowPie ? "-1%" : "25%",
-                "offsetY": this.rowPie ? "-9%" : "5%",
+                "offsetX": this.rowPie ? "0%" : "30%",
+                "offsetY": this.rowPie ? "-8%" : "6%",
               },
             ],
             "title": {
@@ -71,7 +71,7 @@ export default {
               fontColor: '#323136',
               fontWeight: 500,
               margin: {
-                left: this.rowPie ? 20 : 10,
+                left: this.rowPie ? 20 : 30,
                 bottom: this.rowPie ? 60 : 10
               }
             },
@@ -84,14 +84,26 @@ export default {
               "color": "#d3d3d3",
               "opacity": 0.4
             },
+            "padding": {
+              "left": 0,
+              "top": 0,
+              "bottom": 0,
+              "right": 0
+            },
             "selectRectangleMarqueeStroke": "#d3d3d3",
             "legend": {
               legendItem: {iconType: "marker"},
               iconType: "marker",
+              "padding": {
+                "left": 0,
+                "top": 0,
+                "bottom": 0,
+                "right": 0
+              },
               "usePointStyle": true,
               "zIndex": 200,
               "enabled": true,
-              "fontSize": 12,
+              "fontSize": 10,
               "fontFamily": "Verdana, Helvetica, Arial, sans-serif",
               "fontColor": "#535353",
               "fontOpacity": 1,
@@ -101,34 +113,41 @@ export default {
               "fontWeight": "normal",
               "letterSpacing": "normal",
               "textDirection": "ltr",
-              "textShadow": "1111",
               "lineHeight": "normal",
               "textIndent": 1,
-              "vAlign": "right",
-              "hAlign": "end",
-              "wordWrap": "normal",
-              "wordBreak": "normal",
-              // "textOverflow": "...",
+              "vAlign": "left",
+              "hAlign": "top",
+              "wordWrap": "break-word",
+              "wordBreak": "break-all",
               "selectable": false,
               "disablePointerEvents": false,
               "useHtml": false,
               "inverted": false,
               "itemsLayout": "verticalExpandable",
-              "width": this.rowPie ? "100%" : '50%',
+              "width": this.rowPie ? "130px" : '40%',
+              // itemsFormat: "% Change: {%value}",
               "height": '200px',
-              "maxWidth": null,
               "maxHeight": null,
               "position": this.rowPie ? "bottom" : "right",
               "positionMode": "outside",
               "drag": false,
               "itemsFormat": null,
               "titleFormat": null,
-              "itemsHAlign": "left",
+              "itemsHAlign": "center",
               "itemsSpacing": 15,
               "itemsSourceMode": "default",
               "hoverCursor": "pointer",
               "iconTextSpacing": 5,
-              "align": "bottom",
+              "align": "center",
+              "paginator": {
+                "layout": "vertical",
+                "padding": {
+                  "left": 10,
+                  "top": 0,
+                  "bottom": 0,
+                  "right": 0
+                },
+              },
               "margin": {
                 "left": 0,
                 "top": 0,
@@ -138,11 +157,16 @@ export default {
               "background": {
                 "enabled": false
               },
-            
             },
             data,
             "innerRadius": "50%",
             "insideLabelsOffset": "50%",
+            "normal": {
+              "labels": {
+                "format": "{%Value}",
+                "position": "outside"
+              }
+            }
           }
       }
     }

@@ -3,7 +3,7 @@
     <div
       class="dropdown__block__selected dropdown__block__item"
       @click="!active ? null : toggleDropdown($event)"
-      :class="{ opened: isOpened }"
+      :class="{ opened: isOpened, to_print: toPrint}"
       :style="!active ? `opacity: 0.7` : ``"
     >
       <span>{{ selectedTitle }}</span>
@@ -14,7 +14,15 @@
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path d="M1 1L4.5 4.5L8 1" stroke="#3a3a3a" stroke-width="1.5" />
+        <path
+          d="M1 1L4.5 4.5L8 1"
+          :stroke="
+            visualImpairedModeSettings.colorTheme === 'white'
+              ? '#3a3a3a'
+              : '#fff'
+          "
+          stroke-width="1.5"
+        />
       </svg>
     </div>
     <div
@@ -27,7 +35,7 @@
         :key="index"
         @click="selectOption(option)"
       >
-        <span>{{ option.title }}</span>
+        <span>{{ option.title || option.name}}</span>
       </div>
     </div>
   </div>
@@ -35,6 +43,7 @@
 
 <script>
 import ClickOutside from "vue-click-outside";
+import { get } from "vuex-pathify";
 
 export default {
   name: "DropdownBlock",
@@ -63,6 +72,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    toPrint: {
+      type:Boolean,
+      default:false
+    }
   },
   data() {
     return {
@@ -77,7 +90,7 @@ export default {
       this.isOpened = false;
     },
     selectOption(option) {
-      this.$emit("input", option.value);
+      this.$emit("input", option.value || option.id);
       this.closeDropdown();
     },
   },
@@ -85,12 +98,17 @@ export default {
     ClickOutside,
   },
   computed: {
+    visualImpairedModeSettings: get("visualImpairedModeSettings"),
     selectedTitle() {
       const selectedOption = this.options.find(
         (item) => item.value === this.value
       );
+      const selectStat = this.options.find((item) => item.id === this.value)
+
       if (selectedOption) {
         return selectedOption.title;
+      } else if (selectStat) {
+        return selectStat.title || selectStat.name
       } else {
         return this.options[0].title;
       }
@@ -104,6 +122,7 @@ export default {
   position: relative;
   width: 100%;
   background: #fff;
+  min-width: 270px;
   &__item {
     position: relative;
     padding: 15px 35px 15px 20px;
@@ -162,6 +181,9 @@ export default {
     border-radius: 6px;
     border: 1px solid transparent;
     border-bottom: none;
+    &.to_print {
+      box-shadow: none;
+    }
     &.opened + .dropdown__block__list {
       display: block;
     }

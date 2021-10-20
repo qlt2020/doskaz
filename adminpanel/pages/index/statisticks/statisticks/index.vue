@@ -18,59 +18,7 @@
             </div>
         </div>
        <div class="statisticks__main">
-           <div class="row statisticks__main-row" style="height: 320px">
-            <div class="col-2 d-flex flex-column justify-content-start">
-                <div class="statisticks__main-total statisticks__block mb-3">
-                    <div class="statisticks__main-total-title">
-                        Количество жалоб
-                    </div>
-                    <div class="statisticks__main-total-number --red" v-if="complaintsCount">
-                        {{complaintsCount.count}}
-                    </div>
-                </div>
-                <div class="statisticks__main-total statisticks__block">
-                    <div class="statisticks__main-total-title">
-                        Количество обращений
-                    </div>
-                    <div class="statisticks__main-total-number --green" v-if="feedbackCount">
-                        {{feedbackCount.count}}
-                    </div>
-                </div>
-            </div>
-            <div class="col-10 d-flex justify-content-between" >
-                <div
-                    style="margin-right: 20px"
-                    class="statisticks__block"
-                >
-                    <Select
-                        :value="selectedYear"
-                        :options="yearsComplaints"
-                        @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
-                    />
-                    <AnychartColumn
-                        :statData="complaintsFiltered"
-                        :fill="'#EB5757'"
-                        :stroke="'#EB5757'"
-                        :title="'Количество жалоб за месяц'"
-                    />
-                </div>
-                <div class="statisticks__block">
-
-                    <Select
-                        :value="selectedFeedbackYear"
-                        :options="yearsFeedback"
-                        @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
-                    />
-                    <AnychartColumn
-                        :statData="feedbackFiltered"
-                        :fill="'#27AE60'"
-                        :stroke="'#27AE60'"
-                        :title="'Количество обращений за месяц'"
-                    />
-                </div>
-            </div>
-           </div>
-           <div class="row mt-5">
+           <div class="row">
             <div class="col-8">
                 <div class="row">
                     <div class="col-3 d-flex flex-column">
@@ -81,6 +29,7 @@
                             <div class="statisticks__main-total-number --green">
                                 {{objectsCount.fullAccessible}}
                             </div>
+
                         </div>
                         <div class="statisticks__main-total statisticks__block mb-3">
                             <div class="statisticks__main-total-title">
@@ -99,7 +48,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-9">
                         <div class="statisticks__block statisticks__main-offer">
                             <Select @input="changeCategory" :options="groupPopulation" :value="selectedCategoryObj"/>
@@ -150,9 +98,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4" >
+            <div class="col-4" v-if="usersAge">
                 <div class="statisticks__block statisticks__block-fix-width">
-                    <Select @input="changeCategory(arguments[0], true)" :options="groupPopulation" :usersValue="true" :value="selectedCategoryAge" class="mtop"/>
+                    <Select @input="changeCategory(arguments[0], true)" :options="ageGroupPopulations" :usersValue="true" :value="selectedCategoryAge" class="mtop"/>
                     <AnychartDoughnut
                         :statData="usersAge"
                         :categoryData="usersAgeList"
@@ -160,6 +108,59 @@
                         :selectedCategory="selectedCategoryObj"
                         :totalData="usersStat.registered"
                         :rowPie="true"
+                    />
+                </div>
+            </div>
+           </div>
+            <div class="row statisticks__main-row mt-5" style="height: 320px">
+            <div class="col-2 d-flex flex-column justify-content-start">
+                <div class="statisticks__main-total statisticks__block mb-3">
+                    <div class="statisticks__main-total-title">
+                        Количество жалоб
+                    </div>
+                    <div class="statisticks__main-total-number --red" v-if="complaintsCount">
+                        {{complaintsCount.count}}
+                    </div>
+                </div>
+                <div class="statisticks__main-total statisticks__block">
+                    <div class="statisticks__main-total-title">
+                        Количество обращений
+                    </div>
+                    <div class="statisticks__main-total-number --green" v-if="feedbackCount">
+                        {{feedbackCount.count}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-10 d-flex justify-content-between" >
+                <div
+                    style="margin-right: 20px"
+                    class="statisticks__block"
+                >
+                    <Select
+                        v-if="currentYear"
+                        :value="currentYear"
+                        :options="yearsComplaints"
+                        @input="changeYear(arguments[0], 'filterComplaints', 'getComplaintsFilter')"
+                    />
+                    <AnychartColumn
+                        :statData="complaintsFiltered"
+                        :fill="'#EB5757'"
+                        :stroke="'#EB5757'"
+                        :title="'Количество жалоб за год'"
+                    />
+                </div>
+                <div class="statisticks__block">
+                    <Select
+                        v-if="currentYear"
+                        :value="currentYear"
+                        :options="yearsFeedback"
+                        @input="changeYear(arguments[0], 'feedbackFilter', 'getFeedbackFilter')"
+                    />
+                    <AnychartColumn
+                        :statData="feedbackFiltered"
+                        :fill="'#27AE60'"
+                        :stroke="'#27AE60'"
+                        :title="'Количество обращений за год'"
                     />
                 </div>
             </div>
@@ -184,10 +185,9 @@
         data() {
             return {
                 newObjects:[],
-                selectedCategoryObj: 'kids_full_accessible',
-                selectedCategoryAge: 'withChild',
-                selectedYear: 2021,
-                selectedFeedbackYear: 2020,
+                currentYear: null,
+                selectedCategoryObj: 'kids',
+                selectedCategoryAge: null,
                 users: {
                    kids_full_accessible: null,
                    movement_full_accessible: null
@@ -215,7 +215,6 @@
                     {value: 'hearing', title: 'Люди с инвалидностью по слуху'},
                     {value: 'intellectual', title: 'Люди с интеллектуальной инвалидностью'},
                     {value: 'undefined', title: 'Неизвестно'},
-                    {value: 'justview', title: 'Просто посмотреть'},
                     ],
                 yearsComplaints: {options:[]},
                 yearsFeedback: {options:[]}
@@ -230,7 +229,7 @@
             this.$store.dispatch('statisticks/getFeedbackFilter');
             await this.yearsCount();
             this.$store.dispatch('statisticks/getUsersStat');
-            this.$store.dispatch('statisticks/getUsersAge');
+            await this.$store.dispatch('statisticks/getUsersAge');
         },
         computed: {
             complaintsCount: get('statisticks/complaintsCount'),
@@ -242,23 +241,52 @@
             feedbackFiltered: get('statisticks/feedbackFilteredStat'),
             usersStat: get('statisticks/usersStat'),
             groupPopulation:get('statisticks/group'),
-            objectsCount: get('statisticks/objectsCount'),
-            usersAge: get('statisticks/usersAge')
+            usersAge: get('statisticks/usersAge'),
+            ageGroupPopulations() {
+                const populations = {}
+                populations.options = [...this.groupPopulation.options]
+                populations.options.push({usersValue: null, title: 'Все группы'})
+                return populations
+            },
+            objectsCount() {
+                let fullAccessible = 0,
+                      notAccessible = 0,
+                      partialAccessible = 0;
+
+                this.objectsStat.forEach(item => {
+                    fullAccessible += item[`${this.selectedCategoryObj}_full_accessible`];
+                    notAccessible += item[`${this.selectedCategoryObj}_not_accessible`];
+                    partialAccessible += item[`${this.selectedCategoryObj}_partial_accessible`];
+                })
+
+                return {'fullAccessible': fullAccessible,
+                        'notAccessible': notAccessible,
+                        'partialAccessible': partialAccessible}
+            }
         },
         methods: {
             async yearsCount(complaintsSelect) {
                 let yearsApi;
+                this.currentYear = (new Date()).getFullYear();
+
                 if (complaintsSelect) {
                     yearsApi = await this.complaintsStat.years
                     yearsApi.forEach(year => {
-                        this.yearsComplaints.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsComplaints.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsComplaints.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
                 } else {
                     yearsApi = await this.feedbackStat.years
                     yearsApi.forEach(year => {
-                        this.yearsFeedback.options.push({'value': year, 'title': year})
+                        if (year != this.currentYear) {
+                            this.yearsFeedback.options.push({'value': year, 'title': year})
+                        } else {
+                            this.yearsFeedback.options.push({'value': this.currentYear, 'title': this.currentYear})
+                        }
                     })
-
                 }
             },
             changeYear(value, mutation, action ) {
@@ -267,8 +295,13 @@
             },
             changeCategory(value, filterApi) {
                 if (filterApi) {
-                    this.selectedCategoryAge = value
-                    this.$store.commit('statisticks/SET_USERS_AGE_FILTER', 'value');
+                    if (value === '') {
+                        this.selectedCategoryAge = null
+                        this.$store.commit('statisticks/SET_USERS_AGE_FILTER', null);
+                    } else {
+                        this.selectedCategoryAge = value
+                        this.$store.commit('statisticks/SET_USERS_AGE_FILTER', value);
+                    }
                     this.$store.dispatch('statisticks/getUsersAge');
                 } else {
                     this.selectedCategoryObj = value
@@ -311,7 +344,6 @@
 .statisticks  .statisticks__block-fix-width .select-stat {
     width: 300px;
 }
-
 
 .statisticks__block {
     position: relative;

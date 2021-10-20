@@ -43,7 +43,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="(complaint, index) in complaintsList">
+            <tr v-for="(complaint, index) in complaintsList" :key="complaint + index">
                 <th scope="row">{{ index }}</th>
                 <td>{{ complaint.city_name }}</td>
                 <td>{{ complaint.complaint_count }}</td>
@@ -72,7 +72,9 @@
                 cityList: {options:[{value: null, title: 'Весь Казахстан'}]},
                 countryData: true,
                 selectedCity: '',
-                selectedDate: ''
+                selectedDate: '',
+                dateFrom: '',
+                dateTo: ''
             }
         },
         async mounted() {
@@ -91,11 +93,29 @@
                 this.$store.dispatch('statisticks/complaintsList');
             },
             async changeDate(val) {
-                let from = new Date(val[0]).toISOString().split('T')[0]
-                let to = new Date(val[1]).toISOString().split('T')[0]
+                let from = this.toISOLocal(new Date(val[0])).split('T')[0];
+                let to = this.toISOLocal(new Date(val[1])).split('T')[0];
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': from});
+                this.dateFrom = from;
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateTo', 'value': to});
+                this.dateTo = to;
                 await this.$store.dispatch('statisticks/complaintsList');
+            },
+            toISOLocal(d) {
+                var z  = n =>  ('0' + n).slice(-2);
+                var zz = n => ('00' + n).slice(-3);
+                var off = d.getTimezoneOffset();
+                var sign = off < 0? '+' : '-';
+                off = Math.abs(off);
+
+                return d.getFullYear() + '-'
+                        + z(d.getMonth()+1) + '-' +
+                        z(d.getDate()) + 'T' +
+                        z(d.getHours()) + ':'  + 
+                        z(d.getMinutes()) + ':' +
+                        z(d.getSeconds()) + '.' +
+                        zz(d.getMilliseconds()) +
+                        sign + z(off/60|0) + ':' + z(off%60); 
             },
             async clearDate() {
                 await this.$store.commit('statisticks/filterComplaintsList', {'field': 'dateFrom', 'value': ''});
@@ -107,6 +127,8 @@
                 this.$store.dispatch('statisticks/complaintsList');
                 this.selectedCity = ''
                 this.selectedDate = ''
+                this.dateFrom = ''
+                this.dateTo = ''
             },
             async getCityList() {
                 let cities = await this.city
@@ -115,7 +137,16 @@
                 });
             },
             async exportList() {
-                window.open('/api/complaints/export/excel', '_blank')
+                let dateFrom = '',
+                      dateTo = ''
+                if (this.dateFrom) {
+                    dateFrom = `&dateFrom=${this.dateFrom}`
+                } 
+                if (this.dateTo) {
+                    dateTo = `&dateTo=${this.dateTo}`
+                }
+
+                window.open(`/api/complaints/export/excel?city_id=${this.selectedCity ? this.selectedCity : 0}${dateTo}${dateFrom}`, '_blank')
             }
         }
     }

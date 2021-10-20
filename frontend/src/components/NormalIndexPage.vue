@@ -1,6 +1,18 @@
 <template>
   <div>
     <sidebar :posts="posts" :events="events" />
+    <div class="stat_button-wrap">
+      <StatisticsBtn
+        :page="'statisticsAccess'"
+        :class="'btn_right'"
+        :title="$t('statistics.access')"
+      />
+      <StatisticsBtn 
+        :page="'statisticsTotal'"
+        :class="'btn_left'"
+        :title="$t('statistics.total')"
+      />
+    </div>
     <post-submit-message />
     <post-addition-message />
   </div>
@@ -10,10 +22,11 @@
 import Sidebar from "~/components/Sidebar";
 import PostSubmitMessage from "~/components/complaint/PostSubmitMessage";
 import PostAdditionMessage from "~/components/object_add/PostAdditionMessage";
+import StatisticsBtn from "~/components/statistics/StatisticsBtn"
 
 export default {
   name: "NormalIndexPage",
-  components: { PostAdditionMessage, PostSubmitMessage, Sidebar },
+  components: { PostAdditionMessage, PostSubmitMessage, Sidebar, StatisticsBtn },
   data() {
     return {
       posts: [],
@@ -31,4 +44,21 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .stat_button-wrap {
+    @media all and (max-width: 1023px) {
+      display: none;
+    }
+  }
+  .btn_left {
+    left: 25px;
+  }
+  .btn_right {
+    left: 320px;
+    @media all and (max-width: 1366px) {
+      left: 270px;
+
+    }
+  }
+
+</style>

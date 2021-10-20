@@ -24,6 +24,7 @@ export default {
   login: {
     linkTitle: "Enter",
     pageTitle: "Entry",
+    logoutTitle: "Log out",
     popupTitle: "Make your city closer",
     phoneLoginAdvice: "Or enter from a telephone",
     profileFillingAdvice: "Continue registration and fill into your profile",
@@ -354,7 +355,8 @@ export default {
   blogLink: "Go to section",
   privacyPolicy: "Confidence policy",
   termsOfUse: "User agreement",
-  privacyAgreement: "Соглашения о неразглашении",
+  privacyAgreement: "Non-disclosure agreements",
+  communityGuidelines: "Community guidelines",
   events: {
     objectAdded: {
       yourself: "You added facility",
@@ -621,49 +623,141 @@ Anonymous requests are not considered.
   ready: "Ready",
   about: {
     header:
-      "Мы, создатели карты «Доступный Казахстан», верим, что вместе сможем создать безбарьерную, доступную, безопасную и дружественную среду для каждого жителя в нашей стране. Каждый из нас имеет право на свободное передвижение. Независимо от возраста, места проживания, состояния здоровья. Присоединяйтесь к пользователям виртуальной карты «Доступный Казахстан» уже сейчас и получайте доступ к сервисам! Разработано с заботой о вас!",
-    title: "Что представляет собой проект «Доступный Казахстан»",
-    text:
-      "«Доступный Казахстан» — это онлайн-карта, на которую нанесена информация о доступности городских объектов и услуг. Открытые и бесплатные данные на карте дают возможность маломобильным группам населения (включая людей с инвалидностью, родителей с маленькими детьми на колясках, пожилых, беременных, временно-травмированных) ориентироваться в городском пространстве, а в случае отсутствия объекта на карте удобный интерфейс предоставляет возможность любому желающему поделиться со всеми информацией о доступности объекта.",
-    map: "Как работает карта",
-    accessibility:
-      "Доступность объектов для маломобильных групп населения обозначена на карте международной системой светофора:",
-    accessible: "Доступно",
-    accessibleDescription:
-      "Зеленая иконка обозначает, что объект полностью доступен, его можно посетить и воспользоваться услугами самостоятельно, без посторонней помощи.",
-    partialAccessible: "Частично доступно",
-    partialAccessibleDescription:
-      "Желтая иконка — объект частично доступен, для посещения данного объекта нужна посторонняя помощь, либо не все его функциональные зоны доступны.",
-    notAccessible: "Недоступно",
-    notAccessibleDescription:
-      "Красная иконка — объект недоступен, попасть на объект невозможно из-за недоступности входной группы (например, нет пандуса), либо невозможности движения по объекту.",
-    participant: "Стань участником проекта",
-    participantDescription:
-      "На этапе запуска карты обученные волонтеры собрали информацию о более 2000 общественных объектов, есть не только фото-, но и видеообзоры. Мы возлагаем большие надежды именно на ВАС, на тех, кто пользуется картой, кому она ежедневно помогает получать актуальную информацию о доступности городских объектов! Мы позиционируем карту как сообщество, и надеемся, что ВЫ станете ее активным членом, полноценным участником и будете сами добавлять объекты на карту, а также комментировать и дополнять информацию об уже отраженных на карте объектах. При самостоятельном размещении на карте нового объекта, пожалуйста, оставляйте в комментариях как можно более подробную информацию и прикрепляйте фотографии, ведь именно эти материалы помогут другому человеку ориентироваться в городской среде.",
-    text1: "Почему эта карта необходима",
-    text2:
-      "Зайдя на карту, вы сразу же увидите, что множество объектов отмечены красной иконкой. Так получилось не потому, что на карту специально заносились недоступные объекты, а потому, что доступных и частично доступных объектов в населенных пунктах намного меньше. Организации обязаны сделать вход в здание доступным для всех, но в большинстве случаев либо пандус не соответствует нормативам, либо человек, даже попав в здание, не может воспользоваться услугами, так как на его пути встречается мебель в узких коридорах, лестницы, а лифты отсутствуют и т.п.",
-    text3:
-      "Мы все — граждане своей страны с одинаковыми правами, отраженными в Конституции. Считаете ли вы, что ограничение в доступе к объектам и услугам является нарушением наших прав? Мы в этом уверены. 20 февраля 2015 года в Нур-Султане была ратифицирована Конвенция о правах людей с инвалидностью, после чего наше государство взяло на себя обязанность обеспечить благоприятную среду жизнедеятельности для людей с инвалидностью. В ближайшей перспективе Конвенция должна максимально ускорить процесс стирания барьеров, мешающих людям с инвалидностью полноценно участвовать в жизни общества наравне с другими гражданами.",
-    text4:
-      "Доступность открывает путь к получению образования, трудоустройству, лечению, отдыху, к возможности вести независимый образ жизни. Безбарьерная среда является общественным благом и тесно связана с социальным и экономическим развитием страны. Пусть термин «безбарьерная среда» для многих уже приобрел окрас разочарования, но мы надеемся и верим, что безбарьерная среда — это ближайшая реальность, и данная карта один из инструментов ее приближения!",
-    text5: "Реальная польза проекта",
-    text6:
-      "Информация на карте поможет не только эффективно распланировать свой день и передвижения по городу, но и будет способствовать созданию инклюзивной среды.\n" +
-      "                    При разработке карты была создана функция сбора данных об объектах — администратор карты в любой момент может предоставить статистические данные о количестве доступных или недоступных для посещения городских объектах. Представленные данные — это актуальный инструмент, показывающий реальную ситуацию в населенном пункте, необходимый для неправительственных и государственных организаций.",
-    text7: "Реализация проекта",
-    text8:
-      "Проект реализуется консорциумом общественных организаций. Смотрите страницу ",
-    contacts: "Контакты",
-    text9: "",
-    financing: "Финансирование",
-    financingDescription:
-      "Проект финансируется Европейским Союзом и Дипломатической миссией США в Казахстане.",
+      "We, creators of Accessible Kazakhstan map, believe that together we can create a barrier-free, accessible, safe and friendly environment for every citizen in our country. Each of us has the right to move freely. Regardless of age, place of residence, health status. Join users of Accessible Kazakhstan online map now and get access to services! Designed with care about you!",
+    section1: "What is a barrier-free environment?",
+    section2: "What is a target audience of our map?",
+    section3: "How does Accessible Kazakhstan map work?",
+    section4: "How to use Accessible Kazakhstan map on doskaz.kz website?",
+    section5: "Как пользоваться картой «Доступный Казахстан» в приложении IOS?",
+    section6:
+      "Как пользоваться картой «Доступный Казахстан» в приложении ANDROID?",
+    section7: "What can be done at this stage?",
+    section8: "Info for volunteers",
+    section9: "Project implementation",
+    section10: "Financing",
+    section11: "Technical assistance",
+    section1Text:
+      "Do you think that restricting access to facilities and services is a violation of our rights? We are sure of that.\n" +
+      "On February 20, 2015, Kazakhstan ratified the Convention on the Rights of Persons with disability, and afterwards the government assumed responsibility to provide a  favorable living environment for people with disability. In the short term, the Convention must speed up the process of removing barriers that prevent people with disability from fully participation in life of the society on an equal basis with other citizens.<br> <br>\n" +
+      "Barrier-free environment is a public benefit and it is closely linked to social and economic development of a country. Accessibility opens the way to education, employment, treatment, recreation and an opportunity to have an independent way of living. \n" +
+      "In the course of development of the map, a function of collecting data about facilities was created - each user can freely obtain statistical data on number of public facilities accessible or inaccessible for visiting in any locality of the country or in the country as a whole. Presented data is a relevant tool reflecting a real situation in the field of creating an inclusive and barrier-free environment.",
+    section2Text:
+      "Every citizen of Kazakhstan has the right to freedom of movement in a barrier-free and inclusive environment. <br><br> We, creators of Accessible Kazakhstan map, believe that together we can create an accessible, safe and friendly environment for every citizen in our country. Regardless of age, place of residence, health status. Are you with us? Join users of Accessible Kazakhstan online map now and get access to services.",
+    section3Text:
+      "Accessible Kazakhstan is an online map of the country that displays information about accessibility of public facilities for safe and comfortable visits and use by all residents of our country. <br><br> Map users can use the service for people with limited mobility and people with special needs (these are people with disability, parents with small children in wheelchairs, the elderly, pregnant women, temporarily injured people, children aged under 7 years) and plan the most accessible and safest route, and also find out how accessible and safe a selected facility is for visiting. <br><br> Additionally, any user can mark a public place, organization, institution on the map and share public information about its accessibility.   \n" +
+      "\n" +
+      "Accessibility of facilities for people with limited mobility is indicated on the map by the international traffic light system:",
+    section3Access:
+      "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
+    section3PartAccess:
+      "Green icon means that a facility is fully accessible, you can visit it and use the services yourself, without outside help.",
+    section3NoAccess:
+      "Red icon means that a facility is not accessible. It is impossible to get to the facility due to inaccessibility of its entrance group (for example, there is no ramp) or impossibility of movement inside the facility.",
+    section3Text2:
+      "When entering the map, you will immediately see that many facilities are marked with a red icon. This is not because inaccessible facilities were specially entered on the map but because there are much fewer accessible and partially accessible facilities in population centers. <br><br> Organizations have to make an entrance to a building and all the premises inside it accessible to everyone but in most cases either a ramp does not meet standards or a person, even after he enters the building, cannot use services since there is furniture on his/her way in narrow corridors, there are stairs and there are no lifts, etc.\n",
+    section7Text:
+      "Plan an accessible and safe route and select an accessible public facility to visit using Accessible Kazakhstan map.",
+    section7Text2:
+      "Help other users - by scoring accessibility of the <a style='color: #1534EC; font-weight: bold' href='https://doskaz.kz/objects/164485' target='_blank'>place of your visit.</a> <br><br> <a style='color: #1534EC; font-weight: bold' href='/login' target='_blank'>Become a volunteer</a> of Accessible Kazakhstan team and contribute to development of the map.\n",
+    section7Text2Black:
+      "Help other users - by scoring accessibility of the <a style='font-weight: bold' href='https://doskaz.kz/objects/164485' target='_blank'>place of your visit.</a> <br><br> <a style='font-weight: bold' href='/login' target='_blank'>Become a volunteer</a> of Accessible Kazakhstan team and contribute to development of the map.\n",
+    section7Text3: "Share information about Accessible Kazakhstan map ",
+    section8Text:
+      "Our volunteers have collected information on more than 20,000 public facilities, there are not only photos but also video reviews. We pin great hopes on YOU, on those who use the map. Those whom it helps every day to receive up-to-date information on the accessibility of city facilities!<br><br>\n" +
+      "We position the map as a community and we hope that YOU will become an active and full member of it, and you will add facilities to the map yourself as well as comment and update information about facilities already reflected on the map. When you place a new facility on the map yourself, please leave as detailed information as possible in comments and attach photos. This will help new map users. \n" +
+      "You can become a volunteer <a style='color: #1534EC; font-weight: bold' href='/login'>here</a>",
+    section8TextBlack:
+      "Our volunteers have collected information on more than 20,000 public facilities, there are not only photos but also video reviews. We pin great hopes on YOU, on those who use the map. Those whom it helps every day to receive up-to-date information on the accessibility of city facilities!<br><br>\n" +
+      "We position the map as a community and we hope that YOU will become an active and full member of it, and you will add facilities to the map yourself as well as comment and update information about facilities already reflected on the map. When you place a new facility on the map yourself, please leave as detailed information as possible in comments and attach photos. This will help new map users. \n" +
+      "You can become a volunteer <a style='font-weight: bold' href='/login'>here</a>",
+    section9Text:
+      "The project is carried out by a consortium of public organizations. See the Contacts page.",
+    section9_1Text:
+      "Eurasia Foundation of Central Asia (EFCA) is a non-governmental organization founded in the region in 2005. EFCA mobilizes public and private resources to help citizens take an active part in building their own future by strengthening local communities and improving their civic and economic well-being.",
+    section9_2Text:
+      "Tandau Foundation has been operating since 2003. The mission of the organization is to create conditions for realization of potential and interests of socially vulnerable groups of the population through deploying training, information, advocacy and consulting programs.",
+    section10Text:
+      "The project is financed by the Delegation of the European Union to the Republic of Kazakhstan, the US Diplomatic Mission in Kazakhstan, the United Nations Children's Fund (UNICEF), Astana Hub International Technopark of IT Startups in Central Asia.",
+    section10_1Text:
+      "The European Union is made up of 28 Member States who have decided to link together their know-how, resources and destinies, having built a zone of stability, democracy and sustainable development whilst maintaining cultural diversity, tolerance and individual freedoms. The European Union is determined to share its achievements and values with countries and peoples beyond its borders.",
+    section10_2Text:
+      "The mission of the United States Embassy in Kazakhstan is to support the development of Kazakhstani democratic institutions and civil society by competitively awarding small grants to Kazakhstani nonprofit, non-governmental organizations.",
+    section10_3Text:
+      "The United Nations Children’s Fund (UNICEF) works in the field of protecting the rights of children, namely, on prevention and protection of children from violence. UNICEF pays special attention to children from the most vulnerable groups, children with disabilities, as well as children in boarding schools.",
+    section10_4Text:
+      "An international technology park for IT startups in Central Asia “Astana Hub” is intended to become the core and engine to develop the innovation ecosystem in Kazakhstan and an internationally recognized hub developing technology business.",
+    section11Text:
+      "If the website does not work correctly, please leave a message on the Contacts page.",
+    section11_1Text:
+      "During implementation of any project, problems of various levels of complexity can always arise that require prompt solutions. If you encounter such a problem, if you find errors in the text of the content, if you do not agree with the information about the objects, if the website does not work correctly, please inform us about it. We will tackle the issues quickly and efficiently!",
+    accessible: "Accessible",
+    partialAccessible: "Partially accessible",
+    notAccessible: "Not accessible",
   },
   selectObjectType: "Select facility type",
   detectedLocation: {
-    modalText: "We have determined your location as {span}, are you here?",
+    modalText:
+      "We have determined your {break} location as {span},{break} are you here?",
     buttonYes: "Yes",
     buttonNo: "Change city",
   },
+  statistics: {
+    statistics: "Statistics",
+    total: "General statistics",
+    access: "Statistics on the availability of facilities",
+    statisticsTotal: {
+      accessible: "Accessible",
+      partialAccessible: "Partially accessible",
+      notAccessible: "Inaccessible",
+      usersCount: 'Number of users',
+      mensTotal: "Number of men",
+      womenTotal: "Number of women",
+      complaintsTotal: "Number of complaints",
+      feedbackTotal: "Number of appeals",
+      objectsTotal: "The number of objects in the opportunity section for",
+      usersTotal: "Number of users by category",
+      usersAge: "Chart by age by all categories",
+      complaintsYears: "Number of complaints per year",
+      feedbackYears: "Number of appeals per year",
+
+      allGroups: 'All groups',
+      withchild: "Families with children aged under 7 years",
+      movement: "Wheel chaired people",
+      babycarriage: "People with baby buggies",
+      vision: "People with vision disabilities",
+      limb: "People with musculoskeletal disabilities",
+      temporal: "People with temporary impairments",
+      missinglimbs: "People without limbs",
+      pregnant: "Pregnant women",
+      agedpeople: "Senior people",
+      hearing: "People with hearing disabilities",
+      intellectual: "People with intellectual disabilities",
+      undefined: "Unknown",
+
+      from_18_to_23: "18 to 23 years old",
+      from_23_to_28: "23 to 28 years old",
+      from_28_to_33: "28 to 33 years old",
+      from_33_to_38: "33 to 38 years old",
+      from_38_to_43: "38 to 43 years old",
+      from_43_to_50: "43 to 50 years old",
+      from_50_to_100: "50 and older",
+
+      january : 'January',
+      february : 'February',
+      march : 'March',
+      april : 'April',
+      may : 'May',
+      june : 'June',
+      july : 'July',
+      august : 'August',
+      september : 'September',
+      october : 'October',
+      november : 'November',
+      december : 'December',
+    },
+    all: "All",
+    allCountry: "All of Kazakhstan",
+    object: 'Facility ',
+    general: 'General',
+  }
 };

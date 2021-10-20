@@ -119,6 +119,7 @@ export default {
         align-items: center;
         justify-content: center;
         width: 40px;
+        min-width: 40px;
         height: 40px;
         background: #2d9cdb;
         border-radius: 10px;
