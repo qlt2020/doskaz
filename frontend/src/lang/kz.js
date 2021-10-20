@@ -109,6 +109,7 @@ export default {
     number: "Нөмір",
     level: "деңгей",
     points: "ұпайлар",
+    view: "Көру",
     stats: {
       objects: "Нысандар",
       verifications: "Тексерулер",
@@ -196,6 +197,7 @@ export default {
       female: "Әйел",
     },
     notifications: {
+      title: 'Жазылу',
       tabTitle: "Хабарландырулар",
       levelReachedText: "Құттықтаймыз, сіз {level} деңгейін алдыңыз!",
       levelReachedTitle: "Жаңа деңгей!",

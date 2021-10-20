@@ -17,7 +17,7 @@
           class="user-notifications__head__btn subscribe"
           @click="subscribe"
         >
-          Подписаться
+          {{ $t("profile.notifications.title") }}
         </button>
       </template>
     </div>

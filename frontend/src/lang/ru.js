@@ -199,6 +199,7 @@ export default {
       female: "Женский",
     },
     notifications: {
+      title: 'Подписаться',
       tabTitle: "Уведомления",
       levelReachedText: "Поздравляем, вы получили {level} уровень!",
       levelReachedTitle: "Новый уровень!",
