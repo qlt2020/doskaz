@@ -9,7 +9,8 @@ export default {
   },
   modules: [
     "@nuxtjs/axios",
-    "cookie-universal-nuxt",
+    // 'cookie-universal-nuxt' ,
+    ["cookie-universal-nuxt", {ssr : true, target : 'server'}],
     "@nuxtjs/redirect-module",
     "@nuxtjs/robots",
     "nuxt-i18n",
