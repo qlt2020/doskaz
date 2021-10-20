@@ -36,6 +36,11 @@ use TheCodingMachine\Gotenberg\ClientException;
 use TheCodingMachine\Gotenberg\RequestException;
 use TheCodingMachine\Gotenberg\URLRequest;
 use Webmozart\Assert\Assert;
+use App\Users\User;
+use App\Objects\Services\ExportToExcelService;
+use Symfony\Component\HttpFoundation\File\File;
+use App\Objects\AccessibleObjectExportDecorator;
+use App\Objects\Command\UpdateCategoryEnTranslations;
 
 /**
  * @Route(path="/api/objects")
@@ -109,7 +114,7 @@ final class ObjectsApiController extends AbstractController
             ->from('objects')
             ->andWhere('ST_Contains(ST_MAKEENVELOPE(:x1,:y1,:x2,:y2, 4326)::geometry, point_value::geometry)')
             ->andWhere('objects.deleted_at IS NULL')
-            ->groupBy('hash' )
+            ->groupBy('hash')
             ->having('COUNT(*) > 1')
             ->setParameters([
                 'x1' => $boundary[1],
@@ -611,7 +616,7 @@ final class ObjectsApiController extends AbstractController
      */
     public function pdf(Request $request, MapObject $mapObject, Client $client)
     {
-        $request = new URLRequest($this->params->get('app.frontend_url').'/objects/pdf?id=' . $mapObject->id());
+        $request = new URLRequest($this->params->get('app.frontend_url') . '/objects/pdf?id=' . $mapObject->id());
         $request->setMargins([0, 0, 0, 0]);
         $request->setPaperSize(URLRequest::A4);
         $path = tempnam('/tmp', 'pdf');
@@ -651,27 +656,14 @@ final class ObjectsApiController extends AbstractController
         if (empty($request->query->get('query'))) {
             return [];
         }
-        $cityId = $request->query->get('cityId');
-        $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
-        return $connection->createQueryBuilder()
-            ->select([
-                'objects.id',
-                'objects.title',
-                'objects.address',
-                'object_categories.title as category',
-                'object_categories.icon',
-            ])
-            ->from('objects')
-            ->join('objects', 'object_categories', 'object_categories', 'object_categories.id = objects.category_id')
-            ->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
-            ->andWhere('SIMILARITY(CONCAT(objects.title, \' \', objects.address, \' \', object_categories.title, \' \', objects.other_names), :search) > 0')
-            ->andWhere('deleted_at IS NULL')
-            ->setParameter('search', $request->query->get('query', ''))
-            ->setParameter('id', $cityId)
-            ->setMaxResults(10)
-            ->orderBy('SIMILARITY(concat(objects.title, \' \', objects.address, \' \', object_categories.title), :search)', 'desc')
-            ->execute()
-            ->fetchAll();
+        $raw = "SELECT id, title, address, category, icon FROM (SELECT objects.id as id, objects.title as title, objects.address as address, oc.title as category, oc.icon as icon, setweight(to_tsvector(objects.title), 'A') || setweight(to_tsvector(objects.address), 'A') || setweight(to_tsvector(oc.title), 'B') || setweight(to_tsvector(coalesce(objects.other_names, '')), 'C') as vector, concat(objects.title, ' ', objects.address, ' ', oc.title) as one_string FROM objects JOIN object_categories oc on objects.category_id = oc.id WHERE ST_CONTAINS((SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))), objects.point_value::geometry) AND deleted_at is NULL) o_search WHERE (o_search.vector @@ websearch_to_tsquery(:query) OR similarity(one_string, :query) > 0.1) ORDER BY ts_rank(o_search.vector, websearch_to_tsquery(:query)) DESC, similarity(one_string, :query) DESC LIMIT 10;";
+
+        $q = $connection->prepare($raw);
+        $q->bindValue('id', $request->query->get('cityId'));
+        $q->bindValue('query', $request->query->get('query', ''));
+        $q->execute();
+
+        return $q->fetchAll();
     }
 
     /**
@@ -711,8 +703,6 @@ final class ObjectsApiController extends AbstractController
         Assert::oneOf($disabilitiesCategory, AccessibilityScore::SCORE_CATEGORIES);
         $subcategoryId = $request->query->get('subCategoryId');
 
-        $cityId = $request->query->get('cityId');
-        $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
         $qb = $connection->createQueryBuilder()
             ->select([
                 'objects.id',
@@ -723,10 +713,16 @@ final class ObjectsApiController extends AbstractController
             ])
             ->from('objects')
             ->join('objects', 'object_categories', 'object_categories', 'object_categories.id = objects.category_id')
-            ->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
-            ->setParameter('id', $cityId)
             ->setMaxResults(10)
             ->andWhere('deleted_at IS NULL');
+
+        if ($request->query->has('cityId') && !empty($request->query->get('cityId'))) {
+            $cityId = $request->query->get('cityId');
+            $cityGeometry = 'SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))';
+            $qb->andWhere("ST_CONTAINS(($cityGeometry), objects.point_value::geometry)")
+                ->setParameter('id', $cityId);
+        }
+
         if (count($accessibilityLevels)) {
             $qb->andWhere("overall_score_$disabilitiesCategory IN (:levels)")
                 ->setParameter('levels', $accessibilityLevels, Connection::PARAM_STR_ARRAY);
@@ -1006,5 +1002,148 @@ final class ObjectsApiController extends AbstractController
             'name' => (clone $qb)->andWhere('title = :title')->setParameter('title', $presenceRequestData->name)->execute()->fetchColumn(),
             'otherNames' => (clone $qb)->andWhere('other_names = :otherNames')->setParameter('otherNames', $presenceRequestData->otherNames)->execute()->fetchColumn(),
         ];
+    }
+
+    /**
+     * @Route(path="/statistic", methods={"GET"})
+     * @param Request $request
+     * @param Connection $connection
+     * @return array
+     */
+    public function statistic(Request $request, Connection $connection): array
+    {
+        $query = $connection->createQueryBuilder()
+            ->select('COUNT(objects.id) as objects_count')
+            ->addSelect('object_categories_parent.id as main_category_id')
+            ->addSelect('object_categories.id as category_id')
+            ->addSelect('cities.id as city_id')
+            ->addSelect('cities.name as city_name')
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'partial_accessible' THEN 1 ELSE 0 END) AS movement_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'not_accessible' THEN 1 ELSE 0 END) AS movement_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_movement = 'full_accessible' THEN 1 ELSE 0 END) AS movement_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'partial_accessible' THEN 1 ELSE 0 END) AS limb_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'not_accessible' THEN 1 ELSE 0 END) AS limb_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_limb = 'full_accessible' THEN 1 ELSE 0 END) AS limb_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'partial_accessible' THEN 1 ELSE 0 END) AS vision_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'not_accessible' THEN 1 ELSE 0 END) AS vision_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_vision = 'full_accessible' THEN 1 ELSE 0 END) AS vision_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'partial_accessible' THEN 1 ELSE 0 END) AS hearing_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'not_accessible' THEN 1 ELSE 0 END) AS hearing_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_hearing = 'full_accessible' THEN 1 ELSE 0 END) AS hearing_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'partial_accessible' THEN 1 ELSE 0 END) AS intellectual_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'not_accessible' THEN 1 ELSE 0 END) AS intellectual_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_intellectual = 'full_accessible' THEN 1 ELSE 0 END) AS intellectual_full_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'partial_accessible' THEN 1 ELSE 0 END) AS kids_partial_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'not_accessible' THEN 1 ELSE 0 END) AS kids_not_accessible")
+            ->addSelect("SUM (CASE WHEN objects.overall_score_kids = 'full_accessible' THEN 1 ELSE 0 END) AS kids_full_accessible")
+            ->from('objects', 'objects')
+            ->join('objects', 'object_categories', 'object_categories', 'objects.category_id = object_categories.id')
+            ->join('object_categories', 'object_categories', 'object_categories_parent', 'object_categories.parent_id = object_categories_parent.id')
+            ->leftJoin('objects', 'cities_geometry', 'cities_geometry', 'ST_Contains(cities_geometry.geometry, objects.point_value::geometry)')
+            ->leftJoin('cities_geometry', 'cities', 'cities', 'cities.id = cities_geometry.id')
+            ->andWhere('objects.deleted_at IS NULL');
+
+
+        if ($request->query->getInt('main_category_id') != 0) {
+            $query = $query
+                ->andWhere('object_categories_parent.id = :mainCategoryId')
+                ->setParameter('mainCategoryId', $request->query->getInt('main_category_id'));
+        }
+
+        if ($request->query->getInt('category_id') != 0) {
+            $query = $query
+                ->andWhere('object_categories.id = :categoryId')
+                ->setParameter('categoryId', $request->query->getInt('category_id'));
+        }
+
+        if ($request->query->getInt('city_id') != 0) {
+            $query = $query
+                ->andWhere('cities.id = :cityId')
+                ->setParameter('cityId', $request->query->getInt('city_id'));
+        }
+
+        $lang = $request->getLocale();
+        if ($lang != 'ru') {
+            $query = $query
+            ->addSelect('ct_one.content as category_title')
+            ->addSelect('ct_two.content as main_category_title')
+            ->leftJoin('object_categories', 'category_translations', 'ct_one', 'object_categories.id = CAST(ct_one.foreign_key as integer)')
+            ->leftJoin('object_categories_parent', 'category_translations', 'ct_two', 'object_categories_parent.id = CAST(ct_two.foreign_key as integer)')            
+            ->andWhere('ct_one.locale = :locale_one')
+            ->andWhere('ct_two.locale = :locale_two')
+            ->setParameter('locale_one', $lang)
+            ->setParameter('locale_two', $lang)
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id, ct_one.content, ct_two.content');
+        }
+        else {
+            $query = $query
+            ->addSelect('object_categories_parent.title as main_category_title')
+            ->addSelect('object_categories.title as category_title')
+            ->groupBy('object_categories_parent.id, object_categories.id, cities.id');
+        }
+
+        $query = $query
+            ->execute()
+            ->fetchAll();
+
+        if (count($query) == 0) {
+            return [];
+        }
+
+        return $query;
+    }
+
+
+    /**
+     * @Route(path="/statistic/export/excel", methods={"GET"})
+     * @Get(
+     *     path="/api/objects/statistic/export/excel",
+     *     summary="Экспорт статистики по объектам",
+     *     tags={"Объекты"},
+     *     security={{"clientAuth": {}}},
+     *     @Parameter(name="main_category_id", in="query", description="Id основной категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="category_id", in="query", description="Id категории", @Schema(type="integer", nullable=true)),
+     *     @Parameter(name="city_id", in="query", description="Id города", @Schema(type="integer", nullable=true)),
+     *     @Response(response=200, description=""),
+     * )
+     */
+    public function exportToExcel(Connection $connection, Request $request)
+    {
+        $data = $this->statistic($request, $connection);
+
+        if ($request->query->has('group') && $request->query->get('group') != 'all') {
+            $groups = [$request->query->getAlpha('group')];
+        } else {
+            $groups = User::USER_CATEGORIES;
+            unset($groups[array_search("undefined", $groups)], $groups[array_search("justView", $groups)]);
+        }
+
+        $newData = array();
+        $previouseMainCat = '';
+        $previousSubCat = '';
+        $accessibleObjectExportDecorator = new AccessibleObjectExportDecorator();
+        foreach ($data as $mainCategory) {
+            if ($mainCategory['main_category_title'] != $previouseMainCat || $mainCategory['category_title'] != $previousSubCat) {
+                $accessibleObjectExportDecorator->resetGroupFields();
+            }
+            $previouseMainCat = $mainCategory['main_category_title'];
+            $previousSubCat = $mainCategory['category_title'];
+            $newData[$mainCategory['main_category_title']][$mainCategory['category_title']] = [];
+            $accessibleObjectExportDecorator->setGroupFields($mainCategory);
+            foreach ($groups as $group) {
+                $newData[$mainCategory['main_category_title']][$mainCategory['category_title']][$group] = $accessibleObjectExportDecorator->sumGroupCategory($group);
+            }
+        }
+
+        $export = new ExportToExcelService();
+        $export->fillData($newData);
+        try {
+            $filePath = $export->writeFile();
+            $file = new File($filePath);
+
+            return $this->file($file, 'Статистика по доступности объектов.xlsx')->deleteFileAfterSend();
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), 400);
+        }
     }
 }
