@@ -109,6 +109,7 @@ export default {
     number: "Number",
     level: "level",
     points: "points",
+    view: "View",
     stats: {
       objects: "Facilities",
       verifications: "Inspections",
@@ -196,6 +197,7 @@ export default {
       female: "Female",
     },
     notifications: {
+      title: 'Subscribe',
       tabTitle: "Notices",
       levelReachedText: "Congratulations, you received {level} level!",
       levelReachedTitle: "New level!",
