@@ -655,8 +655,16 @@ final class ObjectsApiController extends AbstractController
         if (empty($request->query->get('query'))) {
             return [];
         }
-        $raw = "SELECT id, title, address, category, icon FROM (SELECT objects.id as id, objects.title as title, objects.address as address, oc.title as category, oc.icon as icon, setweight(to_tsvector(objects.title), 'A') || setweight(to_tsvector(objects.address), 'A') || setweight(to_tsvector(oc.title), 'B') || setweight(to_tsvector(coalesce(objects.other_names, '')), 'C') as vector, concat(objects.title, ' ', objects.address, ' ', oc.title) as one_string FROM objects JOIN object_categories oc on objects.category_id = oc.id WHERE ST_CONTAINS((SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))), objects.point_value::geometry) AND deleted_at is NULL) o_search WHERE (o_search.vector @@ websearch_to_tsquery(:query) OR similarity(one_string, :query) > 0.1) ORDER BY ts_rank(o_search.vector, websearch_to_tsquery(:query)) DESC, similarity(one_string, :query) DESC LIMIT 10;";
 
+        $vector = "setweight(to_tsvector(objects.title), 'A') || setweight(to_tsvector(objects.address), 'A') || setweight(to_tsvector(oc.title), 'B') || setweight(to_tsvector(coalesce(objects.other_names, '')), 'C') as vector";
+        $oneString = "concat(objects.title, ' ', objects.address, ' ', oc.title) as one_string";
+        $cityGeometry = "SELECT geometry FROM cities_geometry WHERE ST_CONTAINS(geometry, (SELECT ST_CENTROID(cities.bbox) FROM cities WHERE id = :id))";
+        $subQuery = "SELECT objects.id as id, objects.title as title, objects.address as address, oc.title as category, oc.icon as icon, ${vector}, ${oneString} FROM objects JOIN object_categories oc on objects.category_id = oc.id WHERE ST_CONTAINS((${cityGeometry}), objects.point_value::geometry) AND objects.deleted_at is NULL";
+        if ($request->query->has('category') && $request->query->getAlpha('category') === 'withChild') {
+            $subQuery .= " AND objects.overall_score_kids IS NOT NULL";
+        }
+
+        $raw = "SELECT id, title, address, category, icon FROM (${subQuery}) o_search WHERE (o_search.vector @@ websearch_to_tsquery(:query) OR similarity(one_string, :query) > 0.1) ORDER BY ts_rank(o_search.vector, websearch_to_tsquery(:query)) DESC, similarity(one_string, :query) DESC LIMIT 10;";
         $q = $connection->prepare($raw);
         $q->bindValue('id', $request->query->get('cityId'));
         $q->bindValue('query', $request->query->get('query', ''));
