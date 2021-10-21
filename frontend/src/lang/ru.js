@@ -200,6 +200,7 @@ export default {
     },
     notifications: {
       title: 'Подписаться',
+      unsubscribe : 'Отписаться от рассылки',
       tabTitle: "Уведомления",
       levelReachedText: "Поздравляем, вы получили {level} уровень!",
       levelReachedTitle: "Новый уровень!",

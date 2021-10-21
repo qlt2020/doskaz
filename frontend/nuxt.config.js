@@ -6,16 +6,13 @@ export default {
   components: true,
   generate: {
     fallback: true,
+    minify: {
+      collapseWhitespace: false
+    }
   },
   modules: [
     "@nuxtjs/axios",
-    // 'cookie-universal-nuxt' ,
     ["cookie-universal-nuxt", {ssr : true, target : 'server'}],
-    // {
-    //   src:'cookie-universal-nuxt',
-    //   options:  {ssr : true, target : 'server'}
-    // },
-    // ["cookie-universal-nuxt", {ssr : true, target : 'server', parseJSON: false}],
     "@nuxtjs/redirect-module",
     "@nuxtjs/robots",
     "nuxt-i18n",

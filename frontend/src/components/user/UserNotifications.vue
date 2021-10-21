@@ -10,7 +10,7 @@
           class="user-notifications__head__btn"
           @click="unsubscribe"
         >
-          Отписаться от рассылки
+          {{ $t("profile.notifications.unsubscribe") }}
         </button>
         <button
           v-else
