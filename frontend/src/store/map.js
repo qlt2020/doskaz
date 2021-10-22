@@ -49,11 +49,12 @@ export const actions = {
       );
     }
   },
-  async search({ commit }, { cityId, query }) {
+  async search({ commit }, { cityId, query, category }) {
     const data = await this.$axios.$get("/api/objects/search", {
       params: {
         cityId,
         query,
+        category
       },
     });
 

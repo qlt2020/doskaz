@@ -231,15 +231,6 @@ export default {
       this.setLocation(val);
     },
   },
-  // mounted() {
-  //   console.log(this.settings);
-  //   console.log(this.map);
-  //   console.log(this);
-  //   console.log(this.coordinates);
-  //   console.log(this.zoom);
-  //   console.log(this.coordinatesAndZoom);
-  //   console.log(this.clickedObjectId);
-  // },
   computed: {
     ...sync("map", [
       "coordinates",
