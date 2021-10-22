@@ -254,7 +254,10 @@ export default {
     @media all and (max-width: 1023px) {
       margin-bottom: 35px;
     }
-
+    @media all and (max-width: 991px) {
+      margin-bottom: 35px;
+      flex-wrap: wrap;
+    }
     .object-side__button {
       margin: -15px 0 0;
     }
@@ -268,10 +271,10 @@ export default {
     }
 
     & > * {
-      margin-left: 35px;
-
-      &:first-child {
-        margin-left: 0;
+      margin-right: 35px;
+      margin-bottom: 10px;
+      &:last-child {
+        margin-right: 0;
       }
     }
 
