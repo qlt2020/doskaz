@@ -61,7 +61,7 @@
             type="text"
             :placeholder="$t('mainFilter.searchPlaceholder')"
             @focus="searchFocused = true"
-            @input="search({ query: $event.target.value, cityId })"
+            @input="search({ query: $event.target.value, cityId, category })"
             v-model="query"
             @keypress.enter.prevent
           />

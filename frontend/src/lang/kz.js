@@ -198,6 +198,7 @@ export default {
     },
     notifications: {
       title: 'Жазылу',
+      unsubscribe : 'Жазылымнан бас тарту',
       tabTitle: "Хабарландырулар",
       levelReachedText: "Құттықтаймыз, сіз {level} деңгейін алдыңыз!",
       levelReachedTitle: "Жаңа деңгей!",

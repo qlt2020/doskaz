@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { sync, get, call } from "vuex-pathify";
+import { sync, get } from "vuex-pathify";
 import queryString from "query-string";
 import debounce from "lodash/debounce";
 import now from "lodash/now";
@@ -40,7 +40,6 @@ export default {
       loader: this.$loading.show(),
     };
   },
-
   methods: {
     setClickedObject(id) {
       this.$store.dispatch("map/clickedObject", id);
@@ -68,7 +67,7 @@ export default {
       });
 
       this.map = map;
-      /* this.map.setBounds(this.cityBounds); */
+      // this.map.setBounds(this.cityBounds);
       if (this.coordinatesAndZoom) {
         this.map.setCenter(
           this.coordinatesAndZoom.coordinates,
