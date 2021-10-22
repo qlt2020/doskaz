@@ -1,5 +1,5 @@
 <template>
-  <div class="statisticks" ref="to_pdf">
+  <div class="statisticks" >
         <div class="statisticks__header row mb-4 align-items-center">
             <div class="statisticks__header-title statisticks__main-total-title col-2">
                 Статистика
@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-       <div class="statisticks__main">
+       <div class="statisticks__main" :class="toPdf ? 'to-pdf' : ''" ref="to_pdf">
            <div class="row">
             <div class="col-8">
                 <div class="row">
@@ -217,7 +217,8 @@
                     {value: 'undefined', title: 'Неизвестно'},
                     ],
                 yearsComplaints: {options:[]},
-                yearsFeedback: {options:[]}
+                yearsFeedback: {options:[]},
+                toPdf:false
             }
         },
         async mounted() {
@@ -307,17 +308,22 @@
                     this.selectedCategoryObj = value
                 }
             },
-            exportAll() {
+            async exportAll() {
+                this.toPdf = true
                 let date = format(new Date(), 'd.MM.yyyy')
-                html2pdf(this.$refs.to_pdf, {
+                await html2pdf(this.$refs.to_pdf, {
                     margin: 2,
                     filename: `${date}_Статистика.pdf`,
                     html2canvas: {
                         letterRendering: true,
                         ignoreElements: (el) => {return el.id === 'export_btn'}
                     },
-                    jsPDF: { unit: 'in', format: 'a3', orientation: 'l' }
+                    jsPDF: {
+                      format: "ledger",
+                      orientation: "l",
+                    },
                 })
+                this.toPdf = false
             },
         }
     }
@@ -348,7 +354,6 @@
 .statisticks__block {
     position: relative;
     border-radius: 10px;
-    box-shadow: 0px, 2px rgba(0, 0, 0, 0.04);
     background-color: white;
     width: 100%;
     padding: 15px;
@@ -357,7 +362,9 @@
     height: 100%;
     box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
 }
-
+.statisticks__main.to-pdf .statisticks__block {
+    box-shadow: none;
+}
 .statisticks__block-fix-width {
     min-width: 350px;
 }
