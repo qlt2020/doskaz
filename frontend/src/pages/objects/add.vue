@@ -26,7 +26,10 @@
       </div>
     </div>
     <div class="complaint__wrapper">
-      <ObjectAddContent />
+      <client-only>
+        <ObjectAddContent />
+      </client-only>
+      
     </div>
     <MainFooter />
   </div>
