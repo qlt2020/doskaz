@@ -56,6 +56,9 @@ export default {
   async fetch({ store }) {
     return store.dispatch("objectAdding/init");
   },
+  async mounted() {
+    await this.$store.dispatch("objectAdding/init");
+  },
   methods: {
     ...call("objectAdding", ["changeForm"]),
   },
