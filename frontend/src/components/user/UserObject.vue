@@ -17,9 +17,19 @@
     </div>
     <span class="title">{{ objectTitle }}</span>
     <span class="address">{{ objectAddress }}</span>
-    <nuxt-link :to="localePath(objectLink)" class="btn btn_blue"
-      ><span>{{ $t("profile.objects.openObject") }}</span></nuxt-link
-    >
+    <div @click="setClickedObj(objectId)">
+      <nuxt-link
+        :to="localePath({
+          name: 'objects-id',
+          params: { id: objectId },
+          query: { zoom: 19 }
+        })" 
+        class="btn btn_blue"
+      >
+        <span>{{ $t("profile.objects.openObject") }}</span>
+      </nuxt-link>
+    </div>
+
   </div>
 </template>
 
@@ -41,6 +51,7 @@ export default {
     "objectCategoryTitle",
     "objectCategorySubtitle",
     "objectAddress",
+    "objectId"
   ],
   computed: {
     scores() {
@@ -68,6 +79,11 @@ export default {
       };
     },
   },
+  methods: {
+    setClickedObj(id) {
+      this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

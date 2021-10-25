@@ -2,247 +2,249 @@
   <div class="about">
     <ViTop />
     <MainHeader v-if="!viModeEnabled"/>
-    <div class="container">
-      <loading :is-full-page="true" :active="!isLoading" />
-      <div class="statisticks">
-        <div class="statisticks__header row mb-4 align-items-center">
-          <div
-            class="statisticks__header-title statisticks__main-total-title col-md-7 col-9"
-          >
-            <img
-              :src="require('@/assets/icons/back-arrow.svg')"
-              @click="$router.back()"
-              class="title-back_arrow"
-            />
-            {{$t('statistics.access')}}
-          </div>
-          <div class="col-md-5 col-3">
-            <div class="d-flex justify-content-end align-items-center">
-              <button class="button b_green" @click="exportList">
-                <i class="fas fa-download" style="color:#fff"></i>
-                <span
-                  :class="
-                    !viModeEnabled
-                      ? 'button-white'
-                      : ''"
-                >{{$t('objects.download')}}</span>
-              </button>
+    <client-only>
+      <div class="container">
+        <loading :is-full-page="true" :active="!isLoading" />
+        <div class="statisticks">
+          <div class="statisticks__header row mb-4 align-items-center">
+            <div
+              class="statisticks__header-title statisticks__main-total-title col-md-7 col-9"
+            >
+              <img
+                :src="require('@/assets/icons/back-arrow.svg')"
+                @click="$router.back()"
+                class="title-back_arrow"
+              />
+              {{$t('statistics.access')}}
+            </div>
+            <div class="col-md-5 col-3">
+              <div class="d-flex justify-content-end align-items-center">
+                <button class="button b_green" @click="exportList">
+                  <i class="fas fa-download" style="color:#fff"></i>
+                  <span
+                    :class="
+                      !viModeEnabled
+                        ? 'button-white'
+                        : ''"
+                  >{{$t('objects.download')}}</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="statisticks__filter">
-          <div class="statisticks_dropdown-wrap">
-            <DropdownBlock
-              :options="[
-                {
-                  value: 0,
-                  title: this.$t('statistics.allCountry')
-                },
-                ...citiesList,
-              ]"
-              v-model="selectedCity"
-              @input="changeCity"
-            />
+          <div class="statisticks__filter">
+            <div class="statisticks_dropdown-wrap">
+              <DropdownBlock
+                :options="[
+                  {
+                    value: 0,
+                    title: this.$t('statistics.allCountry')
+                  },
+                  ...citiesList,
+                ]"
+                v-model="selectedCity"
+                @input="changeCity"
+              />
+            </div>
+            <div class="statisticks_dropdown-wrap">
+              <DropdownBlock
+                :options="[
+                  {
+                    value: 'all',
+                    title: this.$t('statistics.all')
+                  },
+                  ...group,
+                ]"
+                v-model="selectedGroup"
+              />
+            </div>
+            <div class="statisticks_dropdown-wrap">
+              <DropdownBlock
+                :options="[
+                  {
+                    value: 0,
+                    title: this.$t('statistics.all')
+                  },
+                  ...categories,
+                ]"
+                v-model="selectedCategory"
+                @input="changeCategory"
+              />
+            </div>
+            <div
+              v-if="subCategoriesVisible && subCategoriesOptions"
+              class="statisticks_dropdown-wrap"
+            >
+              <DropdownBlock
+                :options="[
+                  {
+                    value: 0,
+                    title: this.$t('statistics.all')
+                  },
+                  ...subCategoriesOptions.subCategories,
+                ]"
+                v-model="selectedSubCategory"
+                @input="changeSubcategory"
+              />
+            </div>
           </div>
-          <div class="statisticks_dropdown-wrap">
-            <DropdownBlock
-              :options="[
-                {
-                  value: 'all',
-                  title: this.$t('statistics.all')
-                },
-                ...group,
-              ]"
-              v-model="selectedGroup"
-            />
-          </div>
-          <div class="statisticks_dropdown-wrap">
-            <DropdownBlock
-              :options="[
-                {
-                  value: 0,
-                  title: this.$t('statistics.all')
-                },
-                ...categories,
-              ]"
-              v-model="selectedCategory"
-              @input="changeCategory"
-            />
-          </div>
-          <div
-            v-if="subCategoriesVisible && subCategoriesOptions"
-            class="statisticks_dropdown-wrap"
-          >
-            <DropdownBlock
-              :options="[
-                {
-                  value: 0,
-                  title: this.$t('statistics.all')
-                },
-                ...subCategoriesOptions.subCategories,
-              ]"
-              v-model="selectedSubCategory"
-              @input="changeSubcategory"
-            />
-          </div>
-        </div>
-        <div class="statisticks__main">
-          <b-table-simple
-            hover
-            small
-            caption-top
-            responsive
-            :sticky-header="true"
-            :no-border-collapse="true"
-            class="table"
-          >
-            <b-thead head-variant="light" class="table_header">
-              <b-tr v-if="groupsTable">
-                <b-th colspan="1">№</b-th>
-                <b-th colspan="1" :stickyColumn="true">{{$t('statistics.object')}}</b-th>
-                <b-th
-                  colspan="4"
-                  v-for="categories in groupsTable"
-                  :key="categories"
-                  class="text-nowrap"
-                  stackedHeading="true"
-                >
-                  {{ categories }}
-                </b-th>
-              </b-tr>
-              <b-tr v-if="objectsStat">
-                <b-th :stickyColumn="true"></b-th>
-                <b-th :stickyColumn="true"></b-th>
-                <template v-for="(categories, key, index) in groupsTable">
+          <div class="statisticks__main">
+            <b-table-simple
+              hover
+              small
+              caption-top
+              responsive
+              :sticky-header="true"
+              :no-border-collapse="true"
+              class="table"
+            >
+              <b-thead head-variant="light" class="table_header">
+                <b-tr v-if="groupsTable">
+                  <b-th colspan="1">№</b-th>
+                  <b-th colspan="1" :stickyColumn="true">{{$t('statistics.object')}}</b-th>
                   <b-th
-                    class="statisticks__table-subtitle --green"
-                    :key="categories + key + index + 17"
-                    >{{$t('statistics.general')}}</b-th
+                    colspan="4"
+                    v-for="categories in groupsTable"
+                    :key="categories"
+                    class="text-nowrap"
+                    stackedHeading="true"
                   >
-                  <b-th
-                    class="statisticks__table-subtitle --green"
-                    :key="categories + key + index + 1"
-                    >{{$t('accessibilityScore.status.full_accessible')}}</b-th
-                  >
-                  <b-th
-                    class="statisticks__table-subtitle --orange text-nowrap"
-                    :key="categories + key + index + 4"
-                    >{{$t('accessibilityScore.status.partial_accessible')}}</b-th
-                  >
-                  <b-th
-                    class="statisticks__table-subtitle --red"
-                    :key="categories + key + index + 25"
-                    >{{$t('accessibilityScore.status.not_accessible')}}</b-th
-                  >
-                </template>
-              </b-tr>
-            </b-thead>
-            <b-tbody head-variant="light" v-if="objectsStat">
-              <template v-for="(item, index) in objectsStat">
-                <b-tr :key="item.category_title + index">
-                  <b-th
-                    :key="item.category_title + index + 6"
-                    class="statistics_table_stroke"
-                    :stickyColumn="true"
-                    >{{ index }}</b-th
-                  >
-                  <b-th
-                    :key="item.category_title + index + 5"
-                    class="statistics_table_stroke"
-                    :stickyColumn="true"
-                    >{{  $t(item.category_title)   }}</b-th
-                  >
-
-                  <template v-for="(group, groupName, index) in groupsTable">
-                    <b-td
-                      :key="groupName + index + item.category_id + 1"
-                      class="statistics_table_stroke"
-                      >{{ item[`${groupName}Total`] }}</b-td
+                    {{ categories }}
+                  </b-th>
+                </b-tr>
+                <b-tr v-if="objectsStat">
+                  <b-th :stickyColumn="true"></b-th>
+                  <b-th :stickyColumn="true"></b-th>
+                  <template v-for="(categories, key, index) in groupsTable">
+                    <b-th
+                      class="statisticks__table-subtitle --green"
+                      :key="categories + key + index + 17"
+                      >{{$t('statistics.general')}}</b-th
                     >
-                    <b-td
-                      class="--green statistics_table_stroke"
-                      :key="groupName + index + item.category_id + 2"
-                      >{{ item[`${groupName}_full_accessible`] }}</b-td
+                    <b-th
+                      class="statisticks__table-subtitle --green"
+                      :key="categories + key + index + 1"
+                      >{{$t('accessibilityScore.status.full_accessible')}}</b-th
                     >
-                    <b-td
-                      class="--orange statistics_table_stroke"
-                      :key="groupName + index + item.category_id + 3"
-                      >{{ item[`${groupName}_partial_accessible`] }}</b-td
+                    <b-th
+                      class="statisticks__table-subtitle --orange text-nowrap"
+                      :key="categories + key + index + 4"
+                      >{{$t('accessibilityScore.status.partial_accessible')}}</b-th
                     >
-                    <b-td
-                      class="--red statistics_table_stroke"
-                      :key="groupName + index + item.category_id + 4"
-                      >{{ item[`${groupName}_not_accessible`] }}</b-td
+                    <b-th
+                      class="statisticks__table-subtitle --red"
+                      :key="categories + key + index + 25"
+                      >{{$t('accessibilityScore.status.not_accessible')}}</b-th
                     >
                   </template>
                 </b-tr>
-
-                <template
-                  v-for="(subcategory, subcategoryIndex) in item.subcategory"
-                >
-                  <b-tr
-                    :key="
-                      item.category_title +
-                        (subcategoryIndex +
-                          index * subcategoryIndex * subcategoryIndex)
-                    "
-                  >
+              </b-thead>
+              <b-tbody head-variant="light" v-if="objectsStat">
+                <template v-for="(item, index) in objectsStat">
+                  <b-tr :key="item.category_title + index">
                     <b-th
-                      :key="subcategory.sub_category_id + 17 * 4"
-                      class="statistics_table_stroke-subcategoria"
-                      >{{ index }}.{{ subcategoryIndex + 1 }}</b-th
-                    >
-                    <b-th
-                      :key="subcategory.sub_category_id + 19 * 5"
-                      class="statistics_table_stroke-subcategoria"
+                      :key="item.category_title + index + 6"
+                      class="statistics_table_stroke"
                       :stickyColumn="true"
-                      >{{ subcategory.sub_category_title }}</b-th
+                      >{{ index }}</b-th
                     >
+                    <b-th
+                      :key="item.category_title + index + 5"
+                      class="statistics_table_stroke"
+                      :stickyColumn="true"
+                      >{{  $t(item.category_title)   }}</b-th
+                    >
+
                     <template v-for="(group, groupName, index) in groupsTable">
-                      <b-td :key="groupName + index + item.category_id + 1">{{
-                        subcategory[`${groupName}Total`]
-                      }}</b-td>
                       <b-td
-                        class="--green"
-                        :key="
-                          group +
-                            index +
-                            groupName +
-                            (subcategory.sub_category_id + 11)
-                        "
-                        >{{ subcategory[`${groupName}_full_accessible`] }}</b-td
+                        :key="groupName + index + item.category_id + 1"
+                        class="statistics_table_stroke"
+                        >{{ item[`${groupName}Total`] }}</b-td
                       >
                       <b-td
-                        class="--orange"
-                        :key="
-                          group +
-                            index +
-                            groupName +
-                            (subcategory.sub_category_id + 13)
-                        "
-                        >{{
-                          subcategory[`${groupName}_partial_accessible`]
-                        }}</b-td
+                        class="--green statistics_table_stroke"
+                        :key="groupName + index + item.category_id + 2"
+                        >{{ item[`${groupName}_full_accessible`] }}</b-td
                       >
                       <b-td
-                        class="--red"
-                        :key="
-                          group +
-                            index +
-                            groupName +
-                            (subcategory.sub_category_id + 15)
-                        "
-                        >{{ subcategory[`${groupName}_not_accessible`] }}</b-td
+                        class="--orange statistics_table_stroke"
+                        :key="groupName + index + item.category_id + 3"
+                        >{{ item[`${groupName}_partial_accessible`] }}</b-td
+                      >
+                      <b-td
+                        class="--red statistics_table_stroke"
+                        :key="groupName + index + item.category_id + 4"
+                        >{{ item[`${groupName}_not_accessible`] }}</b-td
                       >
                     </template>
                   </b-tr>
+
+                  <template
+                    v-for="(subcategory, subcategoryIndex) in item.subcategory"
+                  >
+                    <b-tr
+                      :key="
+                        item.category_title +
+                          (subcategoryIndex +
+                            index * subcategoryIndex * subcategoryIndex)
+                      "
+                    >
+                      <b-th
+                        :key="subcategory.sub_category_id + 17 * 4"
+                        class="statistics_table_stroke-subcategoria"
+                        >{{ index }}.{{ subcategoryIndex + 1 }}</b-th
+                      >
+                      <b-th
+                        :key="subcategory.sub_category_id + 19 * 5"
+                        class="statistics_table_stroke-subcategoria"
+                        :stickyColumn="true"
+                        >{{ subcategory.sub_category_title }}</b-th
+                      >
+                      <template v-for="(group, groupName, index) in groupsTable">
+                        <b-td :key="groupName + index + item.category_id + 1">{{
+                          subcategory[`${groupName}Total`]
+                        }}</b-td>
+                        <b-td
+                          class="--green"
+                          :key="
+                            group +
+                              index +
+                              groupName +
+                              (subcategory.sub_category_id + 11)
+                          "
+                          >{{ subcategory[`${groupName}_full_accessible`] }}</b-td
+                        >
+                        <b-td
+                          class="--orange"
+                          :key="
+                            group +
+                              index +
+                              groupName +
+                              (subcategory.sub_category_id + 13)
+                          "
+                          >{{
+                            subcategory[`${groupName}_partial_accessible`]
+                          }}</b-td
+                        >
+                        <b-td
+                          class="--red"
+                          :key="
+                            group +
+                              index +
+                              groupName +
+                              (subcategory.sub_category_id + 15)
+                          "
+                          >{{ subcategory[`${groupName}_not_accessible`] }}</b-td
+                        >
+                      </template>
+                    </b-tr>
+                  </template>
                 </template>
-              </template>
-            </b-tbody>
-          </b-table-simple>
+              </b-tbody>
+            </b-table-simple>
+          </div>
         </div>
       </div>
-    </div>
+    </client-only>
     <MainFooter />
   </div>
 </template>

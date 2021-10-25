@@ -9,12 +9,14 @@
         <div class="list__text">
           <a><username :value="event.data.username"/></a>
           {{ $t("profile.achievements.event.objectReviewed") }}
-          <nuxt-link
-            :to="
-              localePath({ name: 'objects-id', params: { id: event.data.id } })
-            "
-            >{{ event.data.title }}</nuxt-link
-          >
+          <div @click="setClickedObj(event.data.id)">
+            <nuxt-link
+              :to="
+                localePath({ name: 'objects-id', params: { id: event.data.id }, query: { zoom: 19 } })
+              "
+              >{{ event.data.title }}</nuxt-link
+            >
+          </div>
         </div>
       </div>
     </template>
@@ -24,12 +26,14 @@
         <div class="list__text">
           <span><username :value="event.data.username"/></span>
           {{ $t("profile.achievements.event.objectSupplemented") }}
-          <nuxt-link
-            :to="
-              localePath({ name: 'objects-id', params: { id: event.data.id } })
-            "
-            >{{ event.data.title }}</nuxt-link
-          >
+          <div @click="setClickedObj(event.data.id)">
+            <nuxt-link
+              :to="
+                localePath({ name: 'objects-id', params: { id: event.data.id }, query: { zoom: 19 } })
+              "
+              >{{ event.data.title }} </nuxt-link
+            >
+          </div>
         </div>
       </div>
     </template>
@@ -88,15 +92,18 @@
           <div class="user-tasks__item-status list__icon --new"></div>
           <div class="list__text">
             {{ $t("profile.achievements.event.objectAdded") }}
-            <nuxt-link
-              :to="
-                this.localePath({
-                  name: 'objects-id',
-                  params: { id: event.data[0].id }
-                })
-              "
-              >{{ event.data[0].title }}</nuxt-link
-            >, {{ event.data[0].categoryTitle }}
+            <div @click="setClickedObj(event.data.id)">
+              <nuxt-link
+                :to="
+                  this.localePath({
+                    name: 'objects-id',
+                    params: { id: event.data[0].id },
+                    query: { zoom: 19 }
+                  })
+                "
+                >{{ event.data[0].title}},
+              </nuxt-link> {{ event.data[0].categoryTitle }}
+            </div> 
           </div>
         </div>
 
@@ -111,7 +118,12 @@ import FormattedDate from "~/components/FormattedDate";
 export default {
   name: "UserEvent",
   components: { FormattedDate, Username },
-  props: ["event"]
+  props: ["event"],
+  methods: {
+    setClickedObj(id) {
+      this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
+    },
+  }
 };
 </script>
 
