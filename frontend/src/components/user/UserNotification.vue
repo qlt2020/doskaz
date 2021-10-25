@@ -6,7 +6,7 @@
         <!-- <span class="category">(категория, указанная в анкете)</span> -->
       </div>
       <div class="user-notifications__date">
-        {{ $dateFns.format(new Date(item.created_at), "dd.MM.yyyy") }}
+        {{ $dateFns.format(new Date(item.created_at).toISOString(), "dd.MM.yyyy") }}
       </div>
     </div>
     <div class="user-notifications__description">
