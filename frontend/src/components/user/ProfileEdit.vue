@@ -199,7 +199,7 @@
       <div class="col">
         <div class="input" :class="{ error: false }">
           <input type="email" v-model.trim="profile.email" />
-          <span class="error-msg">{{  }}</span>
+          <span class="error-msg">{{}}</span>
         </div>
       </div>
     </div>
@@ -210,7 +210,12 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: errors.find(e => e.property === 'phoneChangeToken') }">
+        <div
+          class="input"
+          :class="{
+            error: errors.find((e) => e.property === 'phoneChangeToken'),
+          }"
+        >
           <client-only>
             <input
               type="text"
@@ -223,7 +228,13 @@
               @accept="profile.phone = $event.detail.unmaskedValue"
             />
           </client-only>
-          <span v-if="errors.find(e => e.property === 'phoneChangeToken')" class="error-msg">{{ errors.find(e => e.property === 'phoneChangeToken').message }}</span>
+          <span
+            v-if="errors.find((e) => e.property === 'phoneChangeToken')"
+            class="error-msg"
+            >{{
+              errors.find((e) => e.property === "phoneChangeToken").message
+            }}</span
+          >
         </div>
       </div>
     </div>
@@ -591,7 +602,7 @@ export default {
     display: flex;
     align-items: center;
     input {
-      -webkit-appearance: auto;
+      -webkit-appearance: radio;
       margin-right: 10px;
     }
   }
