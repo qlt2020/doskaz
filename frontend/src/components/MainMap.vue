@@ -29,6 +29,7 @@ export default {
       autoDetectModal: false,
       detectedLocation: [],
       city: "",
+      objectsInMap: {},
       mapInstance: Object,
       settings: {
         apiKey: "c1050142-1c08-440e-b357-f2743155c1ec",
@@ -155,34 +156,68 @@ export default {
       yamap.objects.events.add(["click"], (e) => {
         this.clickOnObject(e);
       });
+
+
+      yamap.objects.events.add(["add"], (e) => {
+      const objectId = e.get("objectId");
+
+        if (objectId === this.clickedObjectId) {
+          console.log('objectId');
+          console.log('objectId', objectId);
+          console.log('objectIdStore', this.clickedObjectId);
+          this.clickOnObject(e);
+        }
+      });
+
+      console.log(yamap.objects);
+
+      // console.log(yamap.objects.getAll());
+
+      // console.log(yamap.objects.get);
+      // console.log('geoObjects', yamap.geoObjects.get(0));
+      // yamap.objects
+
+      // this.objectsInMap = yamap.objects.;
+      // console.log('run', yamap.objects);
+      // console.log('run',this.objectManager.getObjectState(175232) );
+
     },
     clickOnObject(e) {
-      var id = e.get("objectId");
-      var allObjects = e.originalEvent.currentTarget._objectsById;
-      var allObjectsId = Object.keys(allObjects);
-      var currentObject = allObjects[id];
+      console.log(e);
+      let id = e.get("objectId");
+      let allObjects = e.originalEvent.target._objectsById;
+      console.log(allObjects);
+      let allObjectsId = Object.keys(allObjects);
+      let currentObject = allObjects[id];
+      console.log('currentObject',currentObject);
       currentObject.properties.background = "white";
       currentObject.properties.fill = currentObject.properties.color;
+
+      currentObject.properties.fill = 'red'
+
+
+      console.log('currentObject',currentObject);
+
       if (allObjectsId.find((el) => el == this.clickedObjectId)) {
         allObjects[this.clickedObjectId].properties.background =
           allObjects[this.clickedObjectId].properties.color;
         allObjects[this.clickedObjectId].properties.fill = "white";
       }
       this.setClickedObject(id);
-      const isSame =
-        this.$route.name === "objects-id" &&
-        this.$route.params.id === e.get("objectId");
-      this.$router.push(
-        this.localePath({
-          name: "objects-id",
-          params: { id: e.get("objectId") },
-          query: isSame
-            ? {
-                t: now(),
-              }
-            : undefined,
-        })
-      );
+      // const isSame =
+      //   this.$route.name === "objects-id" &&
+      //   this.$route.params.id === e.get("objectId");
+      // this.$router.push(
+      //   this.localePath({
+      //     name: "objects-id",
+      //     params: { id: e.get("objectId") },
+      //     query: isSame
+      //       ? {
+      //           t: now(),
+      //         }
+      //       : undefined,
+      //   })
+      // );
     },
     applyFilter: debounce(
       function(val) {
