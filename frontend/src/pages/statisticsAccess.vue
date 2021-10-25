@@ -422,6 +422,7 @@ export default {
 
 .statisticks .table .table_header {
   position: sticky;
+  position: -webkit-sticky;
   top: 0;
   z-index: 3;
 }
