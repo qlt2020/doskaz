@@ -81,7 +81,7 @@
             <div v-if="user.avatar" class="head-buttons-avatar">
               <img :src="user.avatar" alt="avatar" />
             </div>
-            {{ name }}
+            {{ name || $t('mainMenu.myProfile') }}
           </div>
         </nuxt-link>
         <nuxt-link v-else :to="localePath({ name: 'login' })">
