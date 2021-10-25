@@ -53,6 +53,7 @@
         :objectComments="object.reviewsCount"
         :objectReports="object.complaintsCount"
         :objectAddress="object.address"
+        :objectId="object.id"
       />
     </div>
     <div class="user-objects__pagination" v-if="pages > 1">

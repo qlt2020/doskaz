@@ -15,9 +15,18 @@
     <div class="user-comments__description">
       <p class="user-comments__text">{{ item.text }}</p>
     </div>
-    <nuxt-link class="user-comments__btn" :to="localePath(link)">
-      {{ $t("profile.view") }}
-    </nuxt-link>
+    <div @click="setClickedObj(item.objectId)">
+      <nuxt-link
+        class="user-comments__btn" 
+        :to="localePath({
+          name: 'objects-id',
+          params: { id: item.objectId },
+          query: { zoom: 19 }
+        })"
+      >
+        {{ $t("profile.view") }}
+      </nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -46,5 +55,10 @@ export default {
         : { name: "objects-id", params: { id: this.item.objectId } };
     },
   },
+  methods: {
+    setClickedObj(id) {
+      this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
+    }
+  }
 };
 </script>

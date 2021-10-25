@@ -22,8 +22,8 @@
                     Сохранить
                 </button>
                 <a
-                    @click="resetCockieCategory"
-                    :href="`/objects/${$route.params.id}`"
+                    @click="setStore($route.params.id)"
+                    :href="`/objects/${$route.params.id}?zoom=19`"
                     target="_blank"
                     class="btn btn-link"
                     >Просмотр на сайте</a
@@ -85,8 +85,14 @@ export default {
     async mounted() {
         await this.$store.dispatch('nuxtServerInit');
     },
+    computed: {
+        ...get('crud/edit', [
+            'isLoading'
+        ]),
+    },
     methods: {
-        async resetCockieCategory() {
+        async setStore(id) {
+            await this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
             await this.$store.dispatch('nuxtServerInit');
             this.$store.dispatch('settings/selectUserCategory', null);
         },

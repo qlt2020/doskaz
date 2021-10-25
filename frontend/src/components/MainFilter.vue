@@ -149,7 +149,7 @@
             <div class="search-sub__icon">
               <i class="fa" :class="item.icon"></i>
             </div>
-            <div class="search-sub__info">
+            <div class="search-sub__info" @click="setClickedObj(item.id)">
               <span class="search-sub__title"
                 >{{ item.title }}, {{ item.category }}</span
               >
@@ -238,6 +238,9 @@ export default {
     mainPageMobOpened: call("settings/menuOpen"),
     emitCities(event) {
       this.$emit("open-list", event);
+    },
+    setClickedObj(id) {
+      this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
     },
     closeSearch() {
       this.searchFocused = false;

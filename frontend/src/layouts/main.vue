@@ -92,36 +92,39 @@
         </nuxt-link>
       </div>
     </div>
-    <StartCategoryForm @showDetectModal="showDetectModal" />
-    <IsParticipantModal
-      v-if="modal"
-      @close="modal = false"
-      @showCategories="selectCategoryModalVisible = true"
-      @updateUserCategory="updateUserCategory"
-    />
-    <SelectCategoryModal
-      v-if="selectCategoryModalVisible"
-      @close="selectCategoryModalVisible = false"
-      @updateUserCategory="updateUserCategory"
-    />
-    <SubscribeNotifModal
-      v-if="subscribeNotifModalVisible"
-      @close="subscribeNotifModalVisible = false"
-      @showNextModal="subscribeNotifDoneModalVisible = true"
-    />
-    <SubscribeNotifDoneModal
-      v-if="subscribeNotifDoneModalVisible"
-      @close="subscribeNotifDoneModalVisible = false"
-    />
-    <SelectObjectTypeModal
-      @close="openSelectTypeObject"
-      v-if="objectTypeSelect"
-    />
-    <detect-location
-      v-if="detectModal"
-      @close="closeDetectModal"
-      @setLocation="setLocation"
-    />
+    <client-only>
+      <StartCategoryForm @showDetectModal="showDetectModal" />
+      <IsParticipantModal
+        v-if="modal"
+        @close="modal = false"
+        @showCategories="selectCategoryModalVisible = true"
+        @updateUserCategory="updateUserCategory"
+      />
+      <SelectCategoryModal
+        v-if="selectCategoryModalVisible"
+        @close="selectCategoryModalVisible = false"
+        @updateUserCategory="updateUserCategory"
+      />
+      <SubscribeNotifModal
+        v-if="subscribeNotifModalVisible"
+        @close="subscribeNotifModalVisible = false"
+        @showNextModal="subscribeNotifDoneModalVisible = true"
+      />
+      <SubscribeNotifDoneModal
+        v-if="subscribeNotifDoneModalVisible"
+        @close="subscribeNotifDoneModalVisible = false"
+      />
+      <SelectObjectTypeModal
+        @close="openSelectTypeObject"
+        v-if="objectTypeSelect"
+      />
+      <detect-location
+        v-if="detectModal"
+        @close="closeDetectModal"
+        @setLocation="setLocation"
+      />
+    </client-only>
+
     <nuxt />
     <mobile-menu></mobile-menu>
     <div class="btn-change-type" v-if="!mobileOpened && !objectTypeSelect">
