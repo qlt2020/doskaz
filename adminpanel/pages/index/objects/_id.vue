@@ -93,6 +93,7 @@ export default {
     methods: {
         async setStore(id) {
             await this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
+            console.log(this.$store.state.map.clickedObjectId);
             await this.$store.dispatch('nuxtServerInit');
             this.$store.dispatch('settings/selectUserCategory', null);
         },
