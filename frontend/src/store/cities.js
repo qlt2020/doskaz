@@ -31,6 +31,7 @@ export const actions = {
   async load({ commit, getters }) {
     const cities = await this.$axios.$get("/api/cities");
     cities.unshift(getters.country);
+    console.log(cities);
     commit("SET_LIST", cities);
   },
   ...make.mutations(state),

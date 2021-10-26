@@ -1,16 +1,24 @@
 <template>
-    <button 
-      @click="$router.push(localePath({ name: page }))"
-      class="stat_btn"
-      :style="css"
-      :class="classStyle"
-    >
-      <img v-if="page === 'statisticsAccess'" src="@/assets/icons/stat_diagram.svg" alt="stat_diagram">
-      <img v-if="page === 'statisticsTotal'" src="@/assets/icons/stat_pie.svg" alt="stat_pie">
-      <span style="text-align: start;">
-        {{title}}
-      </span>
-    </button>
+  <button
+    @click="$router.push(localePath({ name: page }))"
+    class="stat_btn"
+    :style="css"
+    :class="classStyle"
+  >
+    <img
+      v-if="page === 'statisticsAccess'"
+      src="@/assets/icons/stat_diagram.svg"
+      alt="stat_diagram"
+    />
+    <img
+      v-if="page === 'statisticsTotal'"
+      src="@/assets/icons/stat_pie.svg"
+      alt="stat_pie"
+    />
+    <span style="text-align: start;">
+      {{ title }}
+    </span>
+  </button>
 </template>
 
 <script>
@@ -18,19 +26,19 @@ export default {
   name: "StatisticsBtn",
   props: {
     title: {
-      type: String
+      type: String,
     },
     page: {
       type: String,
     },
     css: {
-      type: String
+      type: String,
     },
     classStyle: {
-      type: String
-    }
+      type: String,
+    },
   },
-  methods: {}
+  methods: {},
 };
 </script>
 
@@ -40,13 +48,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 80px;
+  bottom: 40px;
   /* left: 25px; */
   width: 275px;
   height: 43px;
   border-radius: 10px;
   border: 0;
-  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04), 0px 0px 1px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
   outline: none;
   background-color: #fff;
   z-index: 5;
@@ -61,13 +70,13 @@ export default {
     bottom: 15px;
   }
   span {
-    color: #2D9CDB;
-    font-family: 'Montserrat';
+    color: #2d9cdb;
+    font-family: "Montserrat";
     font-weight: 600;
     font-size: 13px;
-      @media all and (max-width: 1023px) {
-        display: none;
-      }
+    @media all and (max-width: 1023px) {
+      display: none;
+    }
   }
 
   img {
