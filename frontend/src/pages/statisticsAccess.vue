@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <ViTop />
-    <MainHeader v-if="!viModeEnabled"/>
+    <MainHeader v-if="!viModeEnabled" />
     <client-only>
       <div class="container">
         <loading :is-full-page="true" :active="!isLoading" />
@@ -15,18 +15,15 @@
                 @click="$router.back()"
                 class="title-back_arrow"
               />
-              {{$t('statistics.access')}}
+              {{ $t("statistics.access") }}
             </div>
             <div class="col-md-5 col-3">
               <div class="d-flex justify-content-end align-items-center">
                 <button class="button b_green" @click="exportList">
                   <i class="fas fa-download" style="color:#fff"></i>
-                  <span
-                    :class="
-                      !viModeEnabled
-                        ? 'button-white'
-                        : ''"
-                  >{{$t('objects.download')}}</span>
+                  <span :class="!viModeEnabled ? 'button-white' : ''">{{
+                    $t("objects.download")
+                  }}</span>
                 </button>
               </div>
             </div>
@@ -37,7 +34,7 @@
                 :options="[
                   {
                     value: 0,
-                    title: this.$t('statistics.allCountry')
+                    title: this.$t('statistics.allCountry'),
                   },
                   ...citiesList,
                 ]"
@@ -50,7 +47,7 @@
                 :options="[
                   {
                     value: 'all',
-                    title: this.$t('statistics.all')
+                    title: this.$t('statistics.all'),
                   },
                   ...group,
                 ]"
@@ -62,7 +59,7 @@
                 :options="[
                   {
                     value: 0,
-                    title: this.$t('statistics.all')
+                    title: this.$t('statistics.all'),
                   },
                   ...categories,
                 ]"
@@ -78,7 +75,7 @@
                 :options="[
                   {
                     value: 0,
-                    title: this.$t('statistics.all')
+                    title: this.$t('statistics.all'),
                   },
                   ...subCategoriesOptions.subCategories,
                 ]"
@@ -100,7 +97,9 @@
               <b-thead head-variant="light" class="table_header">
                 <b-tr v-if="groupsTable">
                   <b-th colspan="1">№</b-th>
-                  <b-th colspan="1" :stickyColumn="true">{{$t('statistics.object')}}</b-th>
+                  <b-th colspan="1" :stickyColumn="true">{{
+                    $t("statistics.object")
+                  }}</b-th>
                   <b-th
                     colspan="4"
                     v-for="categories in groupsTable"
@@ -111,6 +110,8 @@
                     {{ categories }}
                   </b-th>
                 </b-tr>
+              </b-thead>
+              <b-thead head-variant="light" class="table_header2">
                 <b-tr v-if="objectsStat">
                   <b-th :stickyColumn="true"></b-th>
                   <b-th :stickyColumn="true"></b-th>
@@ -118,22 +119,28 @@
                     <b-th
                       class="statisticks__table-subtitle --green"
                       :key="categories + key + index + 17"
-                      >{{$t('statistics.general')}}</b-th
+                      >{{ $t("statistics.general") }}</b-th
                     >
                     <b-th
                       class="statisticks__table-subtitle --green"
                       :key="categories + key + index + 1"
-                      >{{$t('accessibilityScore.status.full_accessible')}}</b-th
+                      >{{
+                        $t("accessibilityScore.status.full_accessible")
+                      }}</b-th
                     >
                     <b-th
                       class="statisticks__table-subtitle --orange text-nowrap"
                       :key="categories + key + index + 4"
-                      >{{$t('accessibilityScore.status.partial_accessible')}}</b-th
+                      >{{
+                        $t("accessibilityScore.status.partial_accessible")
+                      }}</b-th
                     >
                     <b-th
                       class="statisticks__table-subtitle --red"
                       :key="categories + key + index + 25"
-                      >{{$t('accessibilityScore.status.not_accessible')}}</b-th
+                      >{{
+                        $t("accessibilityScore.status.not_accessible")
+                      }}</b-th
                     >
                   </template>
                 </b-tr>
@@ -151,7 +158,7 @@
                       :key="item.category_title + index + 5"
                       class="statistics_table_stroke"
                       :stickyColumn="true"
-                      >{{  $t(item.category_title)   }}</b-th
+                      >{{ $t(item.category_title) }}</b-th
                     >
 
                     <template v-for="(group, groupName, index) in groupsTable">
@@ -199,7 +206,9 @@
                         :stickyColumn="true"
                         >{{ subcategory.sub_category_title }}</b-th
                       >
-                      <template v-for="(group, groupName, index) in groupsTable">
+                      <template
+                        v-for="(group, groupName, index) in groupsTable"
+                      >
                         <b-td :key="groupName + index + item.category_id + 1">{{
                           subcategory[`${groupName}Total`]
                         }}</b-td>
@@ -211,7 +220,9 @@
                               groupName +
                               (subcategory.sub_category_id + 11)
                           "
-                          >{{ subcategory[`${groupName}_full_accessible`] }}</b-td
+                          >{{
+                            subcategory[`${groupName}_full_accessible`]
+                          }}</b-td
                         >
                         <b-td
                           class="--orange"
@@ -233,7 +244,9 @@
                               groupName +
                               (subcategory.sub_category_id + 15)
                           "
-                          >{{ subcategory[`${groupName}_not_accessible`] }}</b-td
+                          >{{
+                            subcategory[`${groupName}_not_accessible`]
+                          }}</b-td
                         >
                       </template>
                     </b-tr>
@@ -269,43 +282,70 @@ export default {
     MainFooter,
     BackBtn,
     DropdownBlock,
-    Loading
+    Loading,
   },
   data() {
     return {
       usersTitleList: {
         options: {
-          movement: this.$t('statistics.statisticsTotal.movement'),
-          vision: this.$t('statistics.statisticsTotal.vision'),
-          limb: this.$t('statistics.statisticsTotal.limb'),
-          hearing: this.$t('statistics.statisticsTotal.hearing'),
-          temporal: this.$t('statistics.statisticsTotal.temporal'),
-          babyCarriage: this.$t('statistics.statisticsTotal.babycarriage'),
-          missingLimbs: this.$t('statistics.statisticsTotal.missinglimbs'),
-          pregnant: this.$t('statistics.statisticsTotal.pregnant'),
-          intellectual: this.$t('statistics.statisticsTotal.intellectual'),
-          agedPeople: this.$t('statistics.statisticsTotal.agedpeople'),
-          kids: this.$t('statistics.statisticsTotal.withchild'),
+          movement: this.$t("statistics.statisticsTotal.movement"),
+          vision: this.$t("statistics.statisticsTotal.vision"),
+          limb: this.$t("statistics.statisticsTotal.limb"),
+          hearing: this.$t("statistics.statisticsTotal.hearing"),
+          temporal: this.$t("statistics.statisticsTotal.temporal"),
+          babyCarriage: this.$t("statistics.statisticsTotal.babycarriage"),
+          missingLimbs: this.$t("statistics.statisticsTotal.missinglimbs"),
+          pregnant: this.$t("statistics.statisticsTotal.pregnant"),
+          intellectual: this.$t("statistics.statisticsTotal.intellectual"),
+          agedPeople: this.$t("statistics.statisticsTotal.agedpeople"),
+          kids: this.$t("statistics.statisticsTotal.withchild"),
         },
       },
       group: [
-        { value: "movement", title: this.$t('statistics.statisticsTotal.movement') },
-        { value: "vision", title: this.$t('statistics.statisticsTotal.vision') },
+        {
+          value: "movement",
+          title: this.$t("statistics.statisticsTotal.movement"),
+        },
+        {
+          value: "vision",
+          title: this.$t("statistics.statisticsTotal.vision"),
+        },
         {
           value: "limb",
-          title: this.$t('statistics.statisticsTotal.limb'),
+          title: this.$t("statistics.statisticsTotal.limb"),
         },
-        { value: "hearing", title: this.$t('statistics.statisticsTotal.hearing') },
-        { value: "temporal", title: this.$t('statistics.statisticsTotal.temporal') },
-        { value: "babyCarriage", title: this.$t('statistics.statisticsTotal.babycarriage') },
-        { value: "missingLimbs", title: this.$t('statistics.statisticsTotal.missinglimbs') },
-        { value: "pregnant", title: this.$t('statistics.statisticsTotal.pregnant') },
+        {
+          value: "hearing",
+          title: this.$t("statistics.statisticsTotal.hearing"),
+        },
+        {
+          value: "temporal",
+          title: this.$t("statistics.statisticsTotal.temporal"),
+        },
+        {
+          value: "babyCarriage",
+          title: this.$t("statistics.statisticsTotal.babycarriage"),
+        },
+        {
+          value: "missingLimbs",
+          title: this.$t("statistics.statisticsTotal.missinglimbs"),
+        },
+        {
+          value: "pregnant",
+          title: this.$t("statistics.statisticsTotal.pregnant"),
+        },
         {
           value: "intellectual",
-          title: this.$t('statistics.statisticsTotal.intellectual'),
+          title: this.$t("statistics.statisticsTotal.intellectual"),
         },
-        { value: "agedPeople", title: this.$t('statistics.statisticsTotal.agedpeople') },
-        { value: "kids", title: this.$t('statistics.statisticsTotal.withchild') },
+        {
+          value: "agedPeople",
+          title: this.$t("statistics.statisticsTotal.agedpeople"),
+        },
+        {
+          value: "kids",
+          title: this.$t("statistics.statisticsTotal.withchild"),
+        },
       ],
       selectedCity: 0,
       selectedCategory: 0,
@@ -324,7 +364,7 @@ export default {
   },
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
-    isLoading: get('statistics/isLoading'),
+    isLoading: get("statistics/isLoading"),
     objectsStat: get("statistics/getObjectsStatTable"),
     groupsTable() {
       if (this.selectedGroup == "all") {
@@ -415,7 +455,7 @@ export default {
 }
 
 .statisticks .button-white {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 .statisticks .table {
@@ -424,9 +464,28 @@ export default {
 
 .statisticks .table .table_header {
   position: sticky;
-  position: -webkit-sticky;
+  position: -webkit-static;
   top: 0;
   z-index: 3;
+}
+
+.statisticks .table .table_header2 {
+  position: sticky;
+  position: -webkit-static;
+  top: 39px;
+  z-index: 3;
+}
+@media not all and (min-resolution: 0.001dpcm) {
+  .statisticks .table {
+    .table_header,
+    .table_header2 {
+      position: relative;
+      z-index: 3;
+    }
+  }
+  .b-table-sticky-header > .table.b-table > thead > tr > th[data-v-43de8d2a] {
+    z-index: 3;
+  }
 }
 
 .statisticks .statisticks__filter {
@@ -498,11 +557,11 @@ export default {
 }
 
 .statisticks .statisticks__header-title {
-    font-weight: 700;
-    font-size: 28px;
-    font-family: "SFProDisplay";
-    margin: 0;
-    color: #000000;
+  font-weight: 700;
+  font-size: 28px;
+  font-family: "SFProDisplay";
+  margin: 0;
+  color: #000000;
 }
 
 .statisticks__block-fix-width {
@@ -563,7 +622,7 @@ export default {
   .statisticks .statisticks__filter {
     margin-bottom: 10px;
   }
-  
+
   .statisticks .statisticks__header-title {
     font-size: 22px;
   }
@@ -575,15 +634,13 @@ export default {
     position: inherit;
   }
 
-
-  .b-table-sticky-header > .table.b-table > thead > tr > .b-table-sticky-column, 
-  .b-table-sticky-header > .table.b-table > tbody > tr > .b-table-sticky-column, 
-  .b-table-sticky-header > .table.b-table > tfoot > tr > .b-table-sticky-column, 
-  .table-responsive > .table.b-table > thead > tr > .b-table-sticky-column, 
-  .table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column, 
+  .b-table-sticky-header > .table.b-table > thead > tr > .b-table-sticky-column,
+  .b-table-sticky-header > .table.b-table > tbody > tr > .b-table-sticky-column,
+  .b-table-sticky-header > .table.b-table > tfoot > tr > .b-table-sticky-column,
+  .table-responsive > .table.b-table > thead > tr > .b-table-sticky-column,
+  .table-responsive > .table.b-table > tbody > tr > .b-table-sticky-column,
   .table-responsive > .table.b-table > tfoot > tr > .b-table-sticky-column {
     position: inherit;
   }
 }
-
 </style>
