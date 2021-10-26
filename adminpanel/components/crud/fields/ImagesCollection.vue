@@ -72,8 +72,6 @@
                     reader.readAsDataURL(file);
                     this.uploading.push(uploadingFile)
 
-                    console.log(file)
-
                     this.queue.push(uploadingFile, (e, res) => {
                         uploadingFile.file = null;
                         this.addItem(res)
