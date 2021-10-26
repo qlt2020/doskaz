@@ -131,7 +131,7 @@
         </button>
       </div>
       <div class="stat_button-wrap">
-        <StatisticsBtn 
+        <StatisticsBtn
           :page="'statisticsTotal'"
           :class="'btn_left'"
           :title="'Общая статистика'"
@@ -199,6 +199,7 @@ export default {
     StatisticsBtn,
   },
   computed: {
+    selectedCity: get("settings/cityId"),
     currentCategory: get("disabilitiesCategorySettings/currentCategory"),
     popupOpen: sync("disabilitiesCategorySettings/popupOpen"),
     category: sync("disabilitiesCategorySettings/category"),
@@ -218,6 +219,7 @@ export default {
     this.$nuxt.$off("mainPageMobOpened");
   },
   mounted() {
+    this.selectCity(this.selectedCity);
     if (this.$route.query.cat == "null") {
       // console.log(this.$router);
       this.selectCategory("hearing");
@@ -225,6 +227,7 @@ export default {
     }
   },
   methods: {
+    selectCity: call("settings/select"),
     showDetectModal() {
       setTimeout(() => {
         if (!this.isCitySelected) {
@@ -750,7 +753,7 @@ export default {
         position: inherit;
         width: 58px;
         height: 100%;
-        
+
         img {
           margin: 0;
         }
