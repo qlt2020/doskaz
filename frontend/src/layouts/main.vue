@@ -219,7 +219,9 @@ export default {
     this.$nuxt.$off("mainPageMobOpened");
   },
   mounted() {
-    this.selectCity(this.selectedCity);
+    setTimeout(() => {
+      this.selectCity(this.selectedCity);
+    }, 1000);
     if (this.$route.query.cat == "null") {
       // console.log(this.$router);
       this.selectCategory("hearing");

@@ -30,6 +30,7 @@ export const actions = {
     dispatch("saveSettings");
   },
   select({ commit, dispatch }, cityId) {
+    alert("changed");
     commit("SET_CITY_ID", Number(cityId));
     dispatch("saveSettings");
   },
