@@ -22,7 +22,8 @@ export default {
     return store.dispatch("objectCategories/getCategories");
   },
   mounted() {
-    this.$store.commit("map/SET_CLICKED_OBJECT_ID", '');
+    console.log(this.$store.state.map.setClickedObject);
+    // this.$store.commit("map/SET_CLICKED_OBJECT_ID", '');
   },
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled")
