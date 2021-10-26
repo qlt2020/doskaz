@@ -65,6 +65,7 @@ export default {
   async mounted() {
     await this.$store.dispatch("objectAdding/init");
     await this.$store.dispatch("object/load", this.$route.params.id);
+    console.log(this.$store.state.map.clickedObjectId);
     this.$store.commit("map/SET_COORDINATES_AND_ZOOM", {
       coordinates: this.$store.state.object.item.coordinates,
       zoom: this.$route.query ?  this.$route.query.zoom : 19,

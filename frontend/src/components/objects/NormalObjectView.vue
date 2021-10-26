@@ -698,7 +698,6 @@ export default {
       this.activeItem = tabItem;
     },
     viewPhoto(photo) {
-      console.log(photo);
       this.videosIndex = null;
       this.imagesIndex = this.object.photos.indexOf(photo);
     },
