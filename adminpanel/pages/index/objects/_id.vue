@@ -22,12 +22,12 @@
                     Сохранить
                 </button>
                 <div @click="setStore($route.params.id)" class="d-inline">
-                    <nuxt-link
+                    <a
                         :to="`/objects/${$route.params.id}?zoom=19`"
                         target="_blank"
                         class="btn btn-link"
                         >Просмотр на сайте
-                    </nuxt-link>
+                    </a>
                 </div>
             </object-form>
         </b-card>
