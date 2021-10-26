@@ -21,13 +21,14 @@
                 >
                     Сохранить
                 </button>
-                <a
-                    @click="setStore($route.params.id)"
-                    :href="`/objects/${$route.params.id}?zoom=19`"
-                    target="_blank"
-                    class="btn btn-link"
-                    >Просмотр на сайте</a
-                >
+                <div @click="setStore($route.params.id)" class="d-inline">
+                    <nuxt-link
+                        :to="`/objects/${$route.params.id}?zoom=19`"
+                        target="_blank"
+                        class="btn btn-link"
+                        >Просмотр на сайте
+                    </nuxt-link>
+                </div>
             </object-form>
         </b-card>
     </div>
