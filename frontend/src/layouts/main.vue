@@ -226,7 +226,6 @@ export default {
       this.selectCity(this.selectedCity);
     }, 1000);
     if (this.$route.query.cat == "null") {
-      // console.log(this.$router);
       this.selectCategory("hearing");
       this.$router.replace({ ...this.$route, query: {} });
     }
