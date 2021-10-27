@@ -82,7 +82,6 @@ export const actions = {
         })*/
     },
     updateItem({commit, state}, {key, value}) {
-        console.log(state)
         commit('SET_ITEM', {
             ...state.item,
             [key]: value

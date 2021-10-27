@@ -21,13 +21,15 @@
                 >
                     Сохранить
                 </button>
-                <a
-                    @click="setStore($route.params.id)"
-                    :href="`/objects/${$route.params.id}?zoom=19`"
-                    target="_blank"
-                    class="btn btn-link"
-                    >Просмотр на сайте</a
-                >
+                <!-- <div @click="setStore($route.params.id)" class="d-inline"> -->
+                    <a
+                        @click="setStore($route.params.id)"
+                        :href="`/objects/${$route.params.id}?zoom=19`"
+                        target="_blank"
+                        class="btn btn-link"
+                        >Просмотр на сайте
+                    </a>
+                <!-- </div> -->
             </object-form>
         </b-card>
     </div>
@@ -92,9 +94,12 @@ export default {
     },
     methods: {
         async setStore(id) {
-            await this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
             await this.$store.dispatch('nuxtServerInit');
-            this.$store.dispatch('settings/selectUserCategory', null);
+            await this.$store.dispatch('settings/selectUserCategory', null);
+
+            await this.$store.dispatch("map/clickedObject", id);
+            console.log(this.$store.state.map.clickedObjectId);
+
         },
         submitForm: call("crud/edit/submit"),
         async submit() {

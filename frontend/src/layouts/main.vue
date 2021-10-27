@@ -225,11 +225,10 @@ export default {
     setTimeout(() => {
       this.selectCity(this.selectedCity);
     }, 1000);
-    if (this.$route.query.cat == "null") {
-      // console.log(this.$router);
-      this.selectCategory("hearing");
-      this.$router.replace({ ...this.$route, query: {} });
-    }
+    // if (this.$route.query.cat == "null") {
+    //   this.selectCategory("hearing");
+    //   this.$router.replace({ ...this.$route, query: {} });
+    // }
   },
   methods: {
     selectCity: call("settings/select"),
