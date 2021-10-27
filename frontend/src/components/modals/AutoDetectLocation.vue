@@ -47,11 +47,9 @@ export default {
       this.setCitySelected();
     },
     openCityList() {
-      this.mainPageMobOpened();
       this.$emit("close");
-      setTimeout(() => {
-        this.openedCityList = true;
-      }, 100);
+      this.setCitySelected();
+      this.openedCityList = !this.openedCityList;
     },
     setCitySelected: call("settings/setCitySeleted"),
   },
