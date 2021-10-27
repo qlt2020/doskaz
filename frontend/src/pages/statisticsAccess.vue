@@ -483,7 +483,7 @@ export default {
       z-index: 3;
     }
   }
-  .b-table-sticky-header > .table.b-table > thead > tr > th[data-v-43de8d2a] {
+  .b-table-sticky-header > .table.b-table > thead > tr > th {
     z-index: 3;
   }
 }
