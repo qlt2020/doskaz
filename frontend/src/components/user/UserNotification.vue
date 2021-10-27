@@ -2,11 +2,16 @@
   <div class="user-notifications__item">
     <div class="user-notifications__info">
       <div class="user-notifications__title">
-        <span class="name">{{ $t('newObjectAdded') }}</span>
+        <span class="name">{{ $t("newObjectAdded") }}</span>
         <!-- <span class="category">(категория, указанная в анкете)</span> -->
       </div>
       <div class="user-notifications__date">
-        {{ $dateFns.format(new Date(item.created_at).toISOString(), "dd.MM.yyyy") }}
+        {{
+          $dateFns.format(
+            new Date(item.created_at.split(" ")[0]).toISOString(),
+            "dd.MM.yyyy"
+          )
+        }}
       </div>
     </div>
     <div class="user-notifications__description">
@@ -21,32 +26,38 @@
     </div>
     <div class="user-notifications__body">
       <div class="user-notifications__body__item">
-        <span class="user-notifications__body__label">{{ $t('complaint.city') }}</span>
+        <span class="user-notifications__body__label">{{
+          $t("complaint.city")
+        }}</span>
         <div class="user-notifications__body__text">{{ item.city }}</div>
       </div>
       <div class="user-notifications__body__item">
-        <span class="user-notifications__body__label">{{ $t('objectAdding.address') }}</span>
+        <span class="user-notifications__body__label">{{
+          $t("objectAdding.address")
+        }}</span>
         <div class="user-notifications__body__text">{{ item.address }}</div>
       </div>
       <div class="user-notifications__body__item descrip">
-        <span class="user-notifications__body__label">{{ $t('objects.tabTitles.description') }}</span>
+        <span class="user-notifications__body__label">{{
+          $t("objects.tabTitles.description")
+        }}</span>
         <div class="user-notifications__body__text descrip">
           {{ item.description }}
         </div>
       </div>
     </div>
     <div @click="setClickedObj(item.object_id)">
-      <nuxt-link 
-        class="user-comments__btn notifs" 
-        :to="localePath(
-          { 
-            name: 'objects-id', 
+      <nuxt-link
+        class="user-comments__btn notifs"
+        :to="
+          localePath({
+            name: 'objects-id',
             params: { id: item.object_id },
-            query: { zoom: 19 }
-          }
-        )"
+            query: { zoom: 19 },
+          })
+        "
       >
-        {{ $t('profile.objects.openObject') }}
+        {{ $t("profile.objects.openObject") }}
       </nuxt-link>
     </div>
   </div>
@@ -61,18 +72,18 @@ const locales = { ru, kz };
 export default {
   props: {
     item: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   methods: {
     setClickedObj(id) {
       this.$store.commit("map/SET_CLICKED_OBJECT_ID", id);
-    }
+    },
   },
   computed: {
     categories() {
-      return []
-    }
-  }
+      return [];
+    },
+  },
 };
 </script>

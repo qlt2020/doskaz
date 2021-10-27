@@ -66,9 +66,6 @@ export default {
     bottom: 35px;
     width: 225px;
   }
-  @media all and (max-height: 900px) {
-    bottom: 15px;
-  }
   span {
     color: #2d9cdb;
     font-family: "Montserrat";
