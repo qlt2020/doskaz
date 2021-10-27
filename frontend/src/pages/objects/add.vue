@@ -26,7 +26,10 @@
       </div>
     </div>
     <div class="complaint__wrapper">
-      <ObjectAddContent />
+      <client-only>
+        <ObjectAddContent />
+      </client-only>
+      
     </div>
     <MainFooter />
   </div>
@@ -55,6 +58,9 @@ export default {
   },
   async fetch({ store }) {
     return store.dispatch("objectAdding/init");
+  },
+  mounted() {
+    this.$store.dispatch("objectAdding/init");
   },
   methods: {
     ...call("objectAdding", ["changeForm"]),

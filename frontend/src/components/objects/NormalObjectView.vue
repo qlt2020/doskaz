@@ -339,11 +339,19 @@
               >
                 <h3 class="more-detail__item-title">{{ zone.title }}</h3>
                 <template v-for="(group, index) in attributesList[zone.group]">
-                  <h4 class="more-detail__line-title" v-if="group.title" :key="index">
+                  <h4
+                    class="more-detail__line-title"
+                    v-if="group.title"
+                    :key="index"
+                  >
                     {{ group.title }}
                   </h4>
                   <template v-for="(sub, index2) in group.subGroups">
-                    <h4 class="more-detail__line-title" v-if="sub.title" :key="index2">
+                    <h4
+                      class="more-detail__line-title"
+                      v-if="sub.title"
+                      :key="index2"
+                    >
                       {{ sub.title }}
                     </h4>
                     <div
@@ -690,7 +698,6 @@ export default {
       this.activeItem = tabItem;
     },
     viewPhoto(photo) {
-      console.log(photo);
       this.videosIndex = null;
       this.imagesIndex = this.object.photos.indexOf(photo);
     },
@@ -918,7 +925,6 @@ export default {
   left: 25px;
   bottom: 0;
   width: 498px;
-  height: 85%;
   background: $tr;
   transform: translateX(0);
   transition: transform 0.3s;

@@ -198,6 +198,7 @@ export default {
     },
     notifications: {
       title: 'Subscribe',
+      unsubscribe : 'Unsubscribe',
       tabTitle: "Notices",
       levelReachedText: "Congratulations, you received {level} level!",
       levelReachedTitle: "New level!",

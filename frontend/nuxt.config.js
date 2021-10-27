@@ -6,16 +6,13 @@ export default {
   components: true,
   generate: {
     fallback: true,
+    minify: {
+      collapseWhitespace: false
+    }
   },
   modules: [
     "@nuxtjs/axios",
-    // 'cookie-universal-nuxt' ,
     ["cookie-universal-nuxt", {ssr : true, target : 'server'}],
-    // {
-    //   src:'cookie-universal-nuxt',
-    //   options:  {ssr : true, target : 'server'}
-    // },
-    // ["cookie-universal-nuxt", {ssr : true, target : 'server', parseJSON: false}],
     "@nuxtjs/redirect-module",
     "@nuxtjs/robots",
     "nuxt-i18n",
@@ -78,6 +75,9 @@ export default {
       },
     ],
     link: [{ rel: "icon", type: "image/png", href: "/favicon.png?v1" }],
+  },
+  sentry: {
+    dsn: "https://c080f375de7c4ff6ac3748ba5fad4a71@o451259.ingest.sentry.io/6036974",
   },
   googleAnalytics: {
     id: "UA-176268948-1",

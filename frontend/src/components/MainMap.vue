@@ -1,18 +1,20 @@
 <template>
-  <div class="map_wrapper">
-    <yandex-map
-      class="ymap"
-      :settings="settings"
-      :coords="cityBounds"
-      :zoom.sync="zoom"
-      :controls="controls"
-      @map-was-initialized="mapWasInitialized"
-    />
-  </div>
+  <!-- <client-only> -->
+    <div class="map_wrapper">
+      <yandex-map
+        class="ymap"
+        :settings="settings"
+        :coords="cityBounds"
+        :zoom.sync="zoom"
+        :controls="controls"
+        @map-was-initialized="mapWasInitialized"
+      />
+    </div>
+  <!-- </client-only> -->
 </template>
 
 <script>
-import { sync, get, call } from "vuex-pathify";
+import { sync, get } from "vuex-pathify";
 import queryString from "query-string";
 import debounce from "lodash/debounce";
 import now from "lodash/now";
@@ -40,7 +42,6 @@ export default {
       loader: this.$loading.show(),
     };
   },
-
   methods: {
     setClickedObject(id) {
       this.$store.dispatch("map/clickedObject", id);
@@ -68,7 +69,7 @@ export default {
       });
 
       this.map = map;
-      /* this.map.setBounds(this.cityBounds); */
+      this.map.setBounds(this.cityBounds);
       if (this.coordinatesAndZoom) {
         this.map.setCenter(
           this.coordinatesAndZoom.coordinates,
@@ -156,12 +157,29 @@ export default {
       yamap.objects.events.add(["click"], (e) => {
         this.clickOnObject(e);
       });
+
+      yamap.objects.events.add(["add"], (e) => {
+      const objectId = e.get("objectId");
+        if (objectId === this.clickedObjectId) {
+          this.setObjectColor(e);
+        }
+      });
+    },
+    setObjectColor(e) {
+      const id = e.get("objectId");
+      const allObjects = e.originalEvent.target._objectsById;
+      let currentObject = allObjects[id];
+
+      currentObject.properties.background = "white";
+      currentObject.properties.fill = currentObject.properties.color;
+      
     },
     clickOnObject(e) {
-      var id = e.get("objectId");
-      var allObjects = e.originalEvent.currentTarget._objectsById;
-      var allObjectsId = Object.keys(allObjects);
-      var currentObject = allObjects[id];
+      const id = e.get("objectId");
+      const allObjects = e.originalEvent.currentTarget._objectsById;
+      let allObjectsId = Object.keys(allObjects);
+      let currentObject = allObjects[id];
+
       currentObject.properties.background = "white";
       currentObject.properties.fill = currentObject.properties.color;
       if (allObjectsId.find((el) => el == this.clickedObjectId)) {

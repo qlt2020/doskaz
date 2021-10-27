@@ -21,6 +21,10 @@ export default {
   async fetch({ store }) {
     return store.dispatch("objectCategories/getCategories");
   },
+  mounted() {
+    console.log(this.$store.state.map.clickedObjectId);
+    // this.$store.commit("map/SET_CLICKED_OBJECT_ID", '');
+  },
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled")
   }

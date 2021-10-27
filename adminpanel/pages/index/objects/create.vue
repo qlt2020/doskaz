@@ -86,7 +86,6 @@
         methods: {
             submitForm: call('crud/edit/submit'),
             async submit() {
-                console.log(this.$bvToast)
                 await this.submitForm();
                 if(this.item.id) {
                     await this.$nuxt.$router.replace(`/objects/${this.item.id}`)

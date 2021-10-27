@@ -323,13 +323,13 @@ export default {
   },
   data() {
     return {
-      mobileWidth: false
-    }
+      mobileWidth: false,
+    };
   },
   mounted() {
-      if (document.documentElement.clientWidth <= 1024) {
-        this.mobileWidth = true
-      }
+    if (document.documentElement.clientWidth <= 1024) {
+      this.mobileWidth = true;
+    }
   },
   computed: {
     viModeEnabled: get("visualImpairedModeSettings/enabled"),
@@ -350,11 +350,14 @@ export default {
     },
     scrollInSlide(e, currentItem) {
       if (this.mobileWidth) {
-        $('#slide_scroll').animate({
-          scrollLeft: currentItem.offsetLeft - 50
-        }, 100)
+        $("#slide_scroll").animate(
+          {
+            scrollLeft: currentItem.offsetLeft - 50,
+          },
+          100
+        );
       }
-    }
+    },
   },
 };
 </script>
@@ -490,20 +493,20 @@ export default {
         position: sticky;
         top: 58px;
         z-index: 999;
-          &::-webkit-scrollbar {
-            height: 6px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: $tr;
-            border-radius: 10px;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background: transparentize(#c4c4c4, 0.5);
-            border-radius: 10px;
-          }
+        &::-webkit-scrollbar {
+          height: 6px;
         }
+
+        &::-webkit-scrollbar-track {
+          background: $tr;
+          border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: transparentize(#c4c4c4, 0.5);
+          border-radius: 10px;
+        }
+      }
     }
 
     .about__container {

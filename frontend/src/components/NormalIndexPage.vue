@@ -7,7 +7,7 @@
         :class="'btn_right'"
         :title="$t('statistics.access')"
       />
-      <StatisticsBtn 
+      <StatisticsBtn
         :page="'statisticsTotal'"
         :class="'btn_left'"
         :title="$t('statistics.total')"
@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script>
+<script> 
 import Sidebar from "~/components/Sidebar";
 import PostSubmitMessage from "~/components/complaint/PostSubmitMessage";
 import PostAdditionMessage from "~/components/object_add/PostAdditionMessage";

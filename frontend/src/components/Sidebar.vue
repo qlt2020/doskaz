@@ -77,7 +77,6 @@ export default {
   left: 25px;
   bottom: 0;
   width: 600px;
-  height: 85%;
   background: $tr;
   transform: translateX(0);
   transition: transform 0.3s;
@@ -165,7 +164,7 @@ export default {
     border-radius: 10px;
     box-shadow: 0px 16px 24px #00000029;
     @media all and (max-width: 1366px) {
-      max-height: calc(100% - 50px);
+      max-height: calc(100% - 80px);
       /* padding: 15px 0 15px 30px; */
     }
 

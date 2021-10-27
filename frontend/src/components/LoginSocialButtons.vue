@@ -79,7 +79,6 @@ export default {
           if (err) {
             return;
           }
-          console.log(code);
           this.oauthAuthenticate({ code: code.code, provider });
         }
       );

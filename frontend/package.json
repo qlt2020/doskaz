@@ -14,7 +14,7 @@
     "@nuxtjs/feed": "^1.1.0",
     "@nuxtjs/redirect-module": "^0.3.1",
     "@nuxtjs/robots": "^2.4.2",
-    "@nuxtjs/sentry": "^5.0.1",
+    "@nuxtjs/sentry": "^5.1.4",
     "anychart": "^8.10.0",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",

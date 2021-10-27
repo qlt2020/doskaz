@@ -81,7 +81,7 @@
             <div v-if="user.avatar" class="head-buttons-avatar">
               <img :src="user.avatar" alt="avatar" />
             </div>
-            {{ name }}
+            {{ name || $t('mainMenu.myProfile') }}
           </div>
         </nuxt-link>
         <nuxt-link v-else :to="localePath({ name: 'login' })">
@@ -92,36 +92,39 @@
         </nuxt-link>
       </div>
     </div>
-    <StartCategoryForm @showDetectModal="showDetectModal" />
-    <IsParticipantModal
-      v-if="modal"
-      @close="modal = false"
-      @showCategories="selectCategoryModalVisible = true"
-      @updateUserCategory="updateUserCategory"
-    />
-    <SelectCategoryModal
-      v-if="selectCategoryModalVisible"
-      @close="selectCategoryModalVisible = false"
-      @updateUserCategory="updateUserCategory"
-    />
-    <SubscribeNotifModal
-      v-if="subscribeNotifModalVisible"
-      @close="subscribeNotifModalVisible = false"
-      @showNextModal="subscribeNotifDoneModalVisible = true"
-    />
-    <SubscribeNotifDoneModal
-      v-if="subscribeNotifDoneModalVisible"
-      @close="subscribeNotifDoneModalVisible = false"
-    />
-    <SelectObjectTypeModal
-      @close="openSelectTypeObject"
-      v-if="objectTypeSelect"
-    />
-    <detect-location
-      v-if="detectModal"
-      @close="closeDetectModal"
-      @setLocation="setLocation"
-    />
+    <client-only>
+      <StartCategoryForm @showDetectModal="showDetectModal" />
+      <IsParticipantModal
+        v-if="modal"
+        @close="modal = false"
+        @showCategories="selectCategoryModalVisible = true"
+        @updateUserCategory="updateUserCategory"
+      />
+      <SelectCategoryModal
+        v-if="selectCategoryModalVisible"
+        @close="selectCategoryModalVisible = false"
+        @updateUserCategory="updateUserCategory"
+      />
+      <SubscribeNotifModal
+        v-if="subscribeNotifModalVisible"
+        @close="subscribeNotifModalVisible = false"
+        @showNextModal="subscribeNotifDoneModalVisible = true"
+      />
+      <SubscribeNotifDoneModal
+        v-if="subscribeNotifDoneModalVisible"
+        @close="subscribeNotifDoneModalVisible = false"
+      />
+      <SelectObjectTypeModal
+        @close="openSelectTypeObject"
+        v-if="objectTypeSelect"
+      />
+      <detect-location
+        v-if="detectModal"
+        @close="closeDetectModal"
+        @setLocation="setLocation"
+      />
+    </client-only>
+
     <nuxt />
     <mobile-menu></mobile-menu>
     <div class="btn-change-type" v-if="!mobileOpened && !objectTypeSelect">
@@ -131,7 +134,7 @@
         </button>
       </div>
       <div class="stat_button-wrap">
-        <StatisticsBtn 
+        <StatisticsBtn
           :page="'statisticsTotal'"
           :class="'btn_left'"
           :title="'Общая статистика'"
@@ -199,6 +202,7 @@ export default {
     StatisticsBtn,
   },
   computed: {
+    selectedCity: get("settings/cityId"),
     currentCategory: get("disabilitiesCategorySettings/currentCategory"),
     popupOpen: sync("disabilitiesCategorySettings/popupOpen"),
     category: sync("disabilitiesCategorySettings/category"),
@@ -218,13 +222,16 @@ export default {
     this.$nuxt.$off("mainPageMobOpened");
   },
   mounted() {
-    if (this.$route.query.cat == "null") {
-      // console.log(this.$router);
-      this.selectCategory("hearing");
-      this.$router.replace({ ...this.$route, query: {} });
-    }
+    setTimeout(() => {
+      this.selectCity(this.selectedCity);
+    }, 1000);
+    // if (this.$route.query.cat == "null") {
+    //   this.selectCategory("hearing");
+    //   this.$router.replace({ ...this.$route, query: {} });
+    // }
   },
   methods: {
+    selectCity: call("settings/select"),
     showDetectModal() {
       setTimeout(() => {
         if (!this.isCitySelected) {
@@ -750,7 +757,7 @@ export default {
         position: inherit;
         width: 58px;
         height: 100%;
-        
+
         img {
           margin: 0;
         }

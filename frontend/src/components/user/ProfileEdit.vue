@@ -199,7 +199,7 @@
       <div class="col">
         <div class="input" :class="{ error: false }">
           <input type="email" v-model.trim="profile.email" />
-          <span class="error-msg">{{  }}</span>
+          <span class="error-msg">{{}}</span>
         </div>
       </div>
     </div>
@@ -210,7 +210,12 @@
         }}</label>
       </div>
       <div class="col">
-        <div class="input" :class="{ error: errors.find(e => e.property === 'phoneChangeToken') }">
+        <div
+          class="input"
+          :class="{
+            error: errors.find((e) => e.property === 'phoneChangeToken'),
+          }"
+        >
           <client-only>
             <input
               type="text"
@@ -223,7 +228,13 @@
               @accept="profile.phone = $event.detail.unmaskedValue"
             />
           </client-only>
-          <span v-if="errors.find(e => e.property === 'phoneChangeToken')" class="error-msg">{{ errors.find(e => e.property === 'phoneChangeToken').message }}</span>
+          <span
+            v-if="errors.find((e) => e.property === 'phoneChangeToken')"
+            class="error-msg"
+            >{{
+              errors.find((e) => e.property === "phoneChangeToken").message
+            }}</span
+          >
         </div>
       </div>
     </div>
@@ -345,6 +356,7 @@ import ru from "vuejs-datepicker/dist/locale/translations/ru";
 import SubscribeNotifModal from "~/components/modals/SubscribeNotifModal";
 import SubscribeNotifDoneModal from "~/components/modals/SubscribeNotifDoneModal";
 import DropdownBlock from "@/components/DropdownBlock";
+import {format} from 'date-fns'
 
 export default {
   name: "ProfileEdit",
@@ -408,6 +420,7 @@ export default {
           .signInWithPhoneNumber(this.profile.phone, this.recaptchaVerifier);
         this.codeSent = true;
       } catch (e) {
+        console.log(e);
         this.smsErrorCode = e.code;
       }
     },
@@ -424,16 +437,7 @@ export default {
       }
     },
     async submit() {
-      var date = new Date(this.profile.birthday);
-      var month =
-        date.getMonth().toString().length === 1
-          ? `0${date.getMonth() + 1}`
-          : date.getMonth() + 1;
-      var day =
-        date.getDate().toString().length === 1
-          ? `0${date.getDate()}`
-          : date.getDate();
-      var newDate = `${date.getFullYear()}-${month}-${day}`;
+      var newDate = format(new Date(this.profile.birthday),'yyyy-MM-dd');
       this.profile.birthday = newDate;
       this.smsErrorCode = null;
       this.errors = [];
@@ -469,7 +473,7 @@ export default {
           this.subscribeNotifModalVisible = true;
         }
         if (!newUser.category) {
-          await this.$store.dispatch("notifications/unsubscribe");
+         this.$store.dispatch("notifications/unsubscribe");
         }
         this.oldCategory = newUser.category;
         this.oldCity = newUser.city_id;
@@ -591,7 +595,7 @@ export default {
     display: flex;
     align-items: center;
     input {
-      -webkit-appearance: auto;
+      -webkit-appearance: radio;
       margin-right: 10px;
     }
   }
