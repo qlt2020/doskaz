@@ -473,7 +473,7 @@ export default {
           this.subscribeNotifModalVisible = true;
         }
         if (!newUser.category) {
-          await this.$store.dispatch("notifications/unsubscribe");
+         this.$store.dispatch("notifications/unsubscribe");
         }
         this.oldCategory = newUser.category;
         this.oldCity = newUser.city_id;
