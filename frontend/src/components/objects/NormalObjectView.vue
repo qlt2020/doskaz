@@ -24,7 +24,7 @@
       >
         <div class="object-side__close-mobile"></div>
       </div>
-      <div class="object-side__close-wrapper" v-if="!moreDetailsShow">
+      <div class="object-side__close-wrapper" v-if="!moreDetailsShow" @click="closeFillObject">
         <nuxt-link
           :to="localePath({ name: 'index' })"
           class="object-side__close"
@@ -681,6 +681,9 @@ export default {
     formAttributesByZone: get("objectAdding/formAttributesByZone"),
   },
   methods: {
+    closeFillObject() {
+      this.$store.commit("map/SET_CLICKED_OBJECT_ID", '');
+    },
     mainPageMobOpened() {
       this.$nuxt.$emit("mainPageMobOpened");
     },
