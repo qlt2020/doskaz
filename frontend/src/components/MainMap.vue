@@ -40,6 +40,7 @@ export default {
       },
       controls: [],
       loader: this.$loading.show(),
+      ymap: null
     };
   },
   methods: {
@@ -154,25 +155,27 @@ export default {
       this.objectManager = yamap;
       map.geoObjects.add(yamap);
       this.loader.hide();
+
       yamap.objects.events.add(["click"], (e) => {
         this.clickOnObject(e);
       });
 
-      yamap.objects.events.add(["add"], (e) => {
+      this.ymap = yamap
+
+      this.ymap.objects.events.add(["add"], (e) => {
       const objectId = e.get("objectId");
         if (objectId === this.clickedObjectId) {
           this.setObjectColor(e);
-        }
+        } 
+
       });
     },
     setObjectColor(e) {
       const id = e.get("objectId");
       const allObjects = e.originalEvent.target._objectsById;
       let currentObject = allObjects[id];
-
       currentObject.properties.background = "white";
       currentObject.properties.fill = currentObject.properties.color;
-      
     },
     clickOnObject(e) {
       const id = e.get("objectId");
@@ -216,6 +219,9 @@ export default {
     ),
   },
   watch: {
+    clickedObjectId() {
+      this.ymap.reloadData()
+    },
     url(val) {
       this.applyFilter(val);
     },
