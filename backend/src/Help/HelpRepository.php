@@ -135,7 +135,7 @@ class HelpRepository
         $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->connection->createQueryBuilder()
             ->select('helps.id as id')
-            ->addSelect('help_categories.id as category_id')
+            ->addSelect('help_categories.id as category')
             ->from('helps', 'helps')
             ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
             ->where('helps.deleted_at IS NULL');
