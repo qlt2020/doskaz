@@ -135,21 +135,33 @@ class HelpRepository
         $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->connection->createQueryBuilder()
             ->select('helps.id as id')
-            ->addSelect('helps.title' . $locale . ' as title')
-            ->addSelect('helps.description' . $locale . ' as description')
-            ->addSelect('helps.image' . $locale . ' as image')
             ->addSelect('help_categories.id as category_id')
-            ->addSelect('help_categories.name' . $locale . ' as category_name')
             ->from('helps', 'helps')
             ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
             ->where('helps.deleted_at IS NULL');
 
         if ($roles != null && in_array('ROLE_ADMIN', $roles)) {
             $query = $query
+                ->addSelect('helps.title')
+                ->addSelect('helps.title_en')
+                ->addSelect('helps.title_kz')
+                ->addSelect('helps.description')
+                ->addSelect('helps.description_en')
+                ->addSelect('helps.description_kz')
+                ->addSelect('helps.image')
+                ->addSelect('helps.image_en')
+                ->addSelect('helps.image_kz')
+                ->addSelect('help_categories.name as category_name')
+                ->addSelect('help_categories.name_kz as category_name_kz')
+                ->addSelect('help_categories.name_en as category_name_en')
                 ->orWhere('helps.is_published = false and helps.deleted_at IS NULL')
                 ->orWhere('helps.is_published = true and helps.deleted_at IS NULL');
         } else {
             $query = $query
+                ->addSelect('helps.title' . $locale . ' as title')
+                ->addSelect('helps.description' . $locale . ' as description')
+                ->addSelect('helps.image' . $locale . ' as image')
+                ->addSelect('help_categories.name' . $locale . ' as category_name')
                 ->andWhere('helps.is_published = true and helps.deleted_at IS NULL');
         }
 
