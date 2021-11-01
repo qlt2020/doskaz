@@ -46,7 +46,9 @@
                             }
                         }
                     },
-                    {key: 'image', type: ImageUpload, required: true, label: 'Главное изображение'},
+                    {key: 'image', type: ImageUpload, required: true, label: 'Изображение на русском'},
+                    {key: 'image_kz', type: ImageUpload, required: true, label: 'Изображение на казахском'},
+                    {key: 'image_en', type: ImageUpload, required: true, label: 'Изображение на английском'},
                     {key: 'meta', type: MetaData, label: 'Мета-данные'},
                 ]
             }

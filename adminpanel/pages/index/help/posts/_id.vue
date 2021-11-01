@@ -3,6 +3,7 @@
         title="Редактирование записи помощи"
         api-path="/api/help"
         :fields="fields"
+        edit-base-path="/help/posts"
     />
 </template>
 
@@ -30,7 +31,7 @@
                     {key: 'description_kz', label: 'Описание на казахском', type: TinyMCE},
                     {key: 'description_en', label: 'Описание на английском', type: TinyMCE},
                     {
-                        key: 'categoryId', label: 'Категория', type: Selection, required: true, options: {
+                        key: 'category', label: 'Категория', type: Selection, required: true, options: {
                             async asyncOptions() {
                                 const {data: {items}} = await self.$axios.get('/api/help-category', {
                                     params: {limit: 999}
@@ -39,7 +40,9 @@
                             }
                         }
                     },
-                    {key: 'image', type: ImageUpload, required: true, label: 'Главное изображение'}
+                    {key: 'image', type: ImageUpload, required: true, label: 'Изображение на русском'},
+                    {key: 'image_kz', type: ImageUpload, required: true, label: 'Изображение на казахском'},
+                    {key: 'image_en', type: ImageUpload, required: true, label: 'Изображение на английском'}
                 ]
             }
         }
