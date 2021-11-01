@@ -52,8 +52,8 @@ final class PostsFinder
     {
         $image = $this->connection->convertToPHPValue($data['image'], Image::class);
         $ogImage = $this->connection->convertToPHPValue($data['meta_og_image'], Image::class);
-        $image_kz = $this->connection->convertToPHPValue($data['image_kz'], Image::class);
-        $image_en = $this->connection->convertToPHPValue($data['image_en'], Image::class);
+        $image_kz = isset($data['image_kz']) && $data['image_kz'] != null ? $this->connection->convertToPHPValue($data['image_kz'], Image::class) : false;
+        $image_en = isset($data['image_en']) && $data['image_en'] != null ? $this->connection->convertToPHPValue($data['image_en'], Image::class) : false;
 
         $annotation = strip_tags($data['annotation'] ?? '');
 
