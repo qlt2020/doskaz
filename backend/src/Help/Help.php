@@ -85,13 +85,13 @@ class Help
 
     /**
      * @var string
-     * @ORM\Column(type="text", length=255, nullable=false)
+     * @ORM\Column(type="text", length=255, nullable=true)
      */
     private $image_kz;
 
     /**
      * @var string
-     * @ORM\Column(type="text", length=255, nullable=false)
+     * @ORM\Column(type="text", length=255, nullable=true)
      */
     private $image_en;
 

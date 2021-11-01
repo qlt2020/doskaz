@@ -22,8 +22,8 @@ final class Version20211101084902 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
-        $this->addSql('ALTER TABLE helps ADD image_kz TEXT NOT NULL');
-        $this->addSql('ALTER TABLE helps ADD image_en TEXT NOT NULL');
+        $this->addSql('ALTER TABLE helps ADD image_kz TEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE helps ADD image_en TEXT DEFAULT NULL');
         
     }
 
