@@ -20,8 +20,6 @@ class HelpRepository
 
     public function index(Request $request, array $roles = null)
     {
-        $locale = $request->getLocale();
-        $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->query(null, $request, $roles);
         $items = $query->execute()->fetchAll();
 
@@ -48,6 +46,8 @@ class HelpRepository
         $object->setDescriptionEn($data->description_en);
         $object->setCategory($this->entityManager, $data->category);
         $object->setImage($data->image);
+        $object->setImageKz($data->image_kz);
+        $object->setImageEn($data->image_en);
         $object->setCreatedAt();
         $object->setUpdatedAt();
 
@@ -73,7 +73,8 @@ class HelpRepository
         $object->setDescriptionEn($data->description_en);
         $object->setCategory($this->entityManager, $data->category);
         $object->setImage($data->image);
-
+        $object->setImageKz($data->image_kz);
+        $object->setImageEn($data->image_en);
         $object->setUpdatedAt();
 
         return $this->transaction($object, 'Successfully updated');
@@ -136,7 +137,7 @@ class HelpRepository
             ->select('helps.id as id')
             ->addSelect('helps.title' . $locale . ' as title')
             ->addSelect('helps.description' . $locale . ' as description')
-            ->addSelect('helps.image as image')
+            ->addSelect('helps.image' . $locale . ' as image')
             ->addSelect('help_categories.id as category_id')
             ->addSelect('help_categories.name' . $locale . ' as category_name')
             ->from('helps', 'helps')
