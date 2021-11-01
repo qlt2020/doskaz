@@ -138,7 +138,7 @@ export default {
           position: relative;
           width: 100%;
           border-radius: 10px 10px 0px 0px;
-          height: 400px;
+          object-fit: contain;
         }
       }
       .item-content {
