@@ -52,8 +52,8 @@ final class PostsFinder
     {
         $image = $this->connection->convertToPHPValue($data['image'], Image::class);
         $ogImage = $this->connection->convertToPHPValue($data['meta_og_image'], Image::class);
-        $image_kz = isset($data['image_kz']) && $data['image_kz'] != null ? $this->connection->convertToPHPValue($data['image_kz'], Image::class) : false;
-        $image_en = isset($data['image_en']) && $data['image_en'] != null ? $this->connection->convertToPHPValue($data['image_en'], Image::class) : false;
+        // $image_kz = isset($data['image_kz']) && $data['image_kz'] != null ? $this->connection->convertToPHPValue($data['image_kz'], Image::class) : false;
+        // $image_en = isset($data['image_en']) && $data['image_en'] != null ? $this->connection->convertToPHPValue($data['image_en'], Image::class) : false;
 
         $annotation = strip_tags($data['annotation'] ?? '');
 
@@ -69,10 +69,10 @@ final class PostsFinder
             'publishedAt' => $this->connection->convertToPHPValue($data['published_at'], 'datetimetz_immutable'),
             'image' => $image ? $image->resize(710) : null,
             'previewImage' => $image ? $image->resize(260) : null,
-            'image_kz' => $image_kz ? $image_kz->resize(710) : null,
-            'previewImageKz' => $image_kz ? $image_kz->resize(260) : null,
-            'image_en' => $image_en ? $image_en->resize(710) : null,
-            'previewImageEn' => $image_en ? $image_en->resize(260) : null,
+            // 'image_kz' => $image_kz ? $image_kz->resize(710) : null,
+            // 'previewImageKz' => $image_kz ? $image_kz->resize(260) : null,
+            // 'image_en' => $image_en ? $image_en->resize(710) : null,
+            // 'previewImageEn' => $image_en ? $image_en->resize(260) : null,
             'meta' => [
                 'title' => $data['meta_title'] ?: $data['title'],
                 'description' => $data['meta_description'] ?: $annotation,
