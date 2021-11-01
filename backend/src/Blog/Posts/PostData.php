@@ -95,4 +95,16 @@ final class PostData implements DataObject
      * @Assert\NotBlank()
      */
     public $image;
+
+    /**
+     * @var Image|null
+     * @Assert\NotBlank()
+     */
+    public $image_kz;
+
+    /**
+     * @var Image|null
+     * @Assert\NotBlank()
+     */
+    public $image_en;
 }

@@ -63,6 +63,18 @@ class HelpData implements DataObject
     public $image;
 
     /**
+     * @var Image|null
+     * @Assert\NotBlank()
+     */
+    public $image_kz;
+
+    /**
+     * @var Image|null
+     * @Assert\NotBlank()
+     */
+    public $image_en;
+
+    /**
      * @Assert\NotBlank
      */
     public $category;

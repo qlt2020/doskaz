@@ -90,6 +90,8 @@ class PostsAdminController extends AbstractController
             ->addSelect('content_en')
             ->addSelect('category_id')
             ->addSelect('image')
+            ->addSelect('image_kz')
+            ->addSelect('image_en')
             ->addSelect('meta_title')
             ->addSelect('meta_description')
             ->addSelect('meta_keywords')
@@ -124,6 +126,8 @@ class PostsAdminController extends AbstractController
         $postData->content_en = $data['content_en'];
         $postData->categoryId = $data['category_id'];
         $postData->image = $this->connection->convertToPHPValue($data['image'], Image::class);
+        $postData->image_kz = $this->connection->convertToPHPValue($data['image_kz'], Image::class);
+        $postData->image_en = $this->connection->convertToPHPValue($data['image_en'], Image::class);
 
         $meta = new MetaData();
         $meta->title = $data['meta_title'];
@@ -183,6 +187,8 @@ class PostsAdminController extends AbstractController
                 ->addSelect('blog_posts.content_en')
                 ->addSelect('blog_posts.category_id')
                 ->addSelect('blog_posts.image')
+                ->addSelect('blog_posts.image_en')
+                ->addSelect('blog_posts.image_kz')
                 ->addSelect('blog_posts.meta_title')
                 ->addSelect('blog_posts.meta_description')
                 ->addSelect('blog_posts.meta_keywords')
