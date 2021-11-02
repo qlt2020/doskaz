@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations\Get;
 use OpenApi\Annotations\Post;
+use OpenApi\Annotations\Put;
 use OpenApi\Annotations\Delete;
 use OpenApi\Annotations\Response;
 use OpenApi\Annotations\Parameter;
+use OpenApi\Annotations\Schema;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
@@ -121,7 +123,7 @@ class HelpAdminController extends AbstractController
 
     /**
      * @Route(path="publish/{id}", methods={"GET"}, requirements={"id"="\d+"})
-     * @GET(
+     * @Get(
      *     path="/api/admin/help/publish/{id}",
      *     tags={"Помощь"},
      *     summary="Публикация/не публикация Помощи",

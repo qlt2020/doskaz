@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations\Get;
 use OpenApi\Annotations\Response;
 use OpenApi\Annotations\Parameter;
+use OpenApi\Annotations\Schema;
 
 /**
  * @Route(path="/api/help")
