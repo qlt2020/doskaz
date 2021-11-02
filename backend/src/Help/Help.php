@@ -79,12 +79,21 @@ class Help
 
     /**
      * @var string
-     * @Assert\NotBlank
-     * @Assert\Type("string")
-     * @Assert\Length(min=3, max=255)
      * @ORM\Column(type="text", length=255, nullable=false)
      */
     private $image;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text", length=255, nullable=true)
+     */
+    private $image_kz;
+
+    /**
+     * @var string
+     * @ORM\Column(type="text", length=255, nullable=true)
+     */
+    private $image_en;
 
     /**
      * @ORM\Column(type="datetimetz_immutable")
@@ -131,6 +140,8 @@ class Help
             'description_kz' => $this->description_kz,
             'description_en' => $this->description_en,
             'image' => $this->image,
+            'image_kz' => $this->image_kz,
+            'image_en' => $this->image_en,
             'category' => $this->category,
             'is_published' => $this->isPublished
         ];
@@ -139,6 +150,16 @@ class Help
     public function getImage()
     {
         return $this->image;
+    }
+
+    public function getImageKz()
+    {
+        return $this->image_kz;
+    }
+
+    public function getImageEn()
+    {
+        return $this->image_en;
     }
 
     public function getTitle()
@@ -228,6 +249,16 @@ class Help
 
     public function setImage(?Image $image){
             $this->image = $image->image;
+    }
+
+    public function setImageKz(?Image $image)
+    {
+        $this->image_kz = $image->image;
+    }
+
+    public function setImageEn(?Image $image)
+    {
+        $this->image_en = $image->image;
     }
 
 }

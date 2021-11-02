@@ -115,6 +115,18 @@ class Post
      */
     private $image;
 
+    /**
+     * @var Image
+     * @ORM\Column(type=Image::class, nullable=true, options={"jsonb" = true})
+     */
+    private $image_kz;
+
+    /**
+     * @var Image
+     * @ORM\Column(type=Image::class, nullable=true, options={"jsonb" = true})
+     */
+    private $image_en;
+
     public function __construct(PostData $postData, ?Image $image, Meta $meta, Slug $slug)
     {
         $this->title = $postData->title;
@@ -124,6 +136,8 @@ class Post
         $this->publishedAt = $postData->publishedAt;
         $this->isPublished = $postData->isPublished;
         $this->image = $image;
+        $this->image_kz = $postData->image_kz;
+        $this->image_en = $postData->image_en;
         $this->meta = $meta;
         $this->slug = $slug;
         $this->annotation = $postData->annotation;
@@ -155,6 +169,8 @@ class Post
         $this->publishedAt = $postData->publishedAt;
         $this->isPublished = $postData->isPublished;
         $this->image = $image;
+        $this->image_kz = $postData->image_kz;
+        $this->image_en = $postData->image_en;
         $this->meta = $meta;
         $this->slug = $slug;
         $this->annotation = $postData->annotation;

@@ -20,8 +20,6 @@ class HelpRepository
 
     public function index(Request $request, array $roles = null)
     {
-        $locale = $request->getLocale();
-        $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->query(null, $request, $roles);
         $items = $query->execute()->fetchAll();
 
@@ -48,6 +46,8 @@ class HelpRepository
         $object->setDescriptionEn($data->description_en);
         $object->setCategory($this->entityManager, $data->category);
         $object->setImage($data->image);
+        $object->setImageKz($data->image_kz);
+        $object->setImageEn($data->image_en);
         $object->setCreatedAt();
         $object->setUpdatedAt();
 
@@ -73,7 +73,8 @@ class HelpRepository
         $object->setDescriptionEn($data->description_en);
         $object->setCategory($this->entityManager, $data->category);
         $object->setImage($data->image);
-
+        $object->setImageKz($data->image_kz);
+        $object->setImageEn($data->image_en);
         $object->setUpdatedAt();
 
         return $this->transaction($object, 'Successfully updated');
@@ -134,21 +135,33 @@ class HelpRepository
         $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->connection->createQueryBuilder()
             ->select('helps.id as id')
-            ->addSelect('helps.title' . $locale . ' as title')
-            ->addSelect('helps.description' . $locale . ' as description')
-            ->addSelect('helps.image as image')
-            ->addSelect('help_categories.id as category_id')
-            ->addSelect('help_categories.name' . $locale . ' as category_name')
+            ->addSelect('help_categories.id as category')
             ->from('helps', 'helps')
             ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
             ->where('helps.deleted_at IS NULL');
 
         if ($roles != null && in_array('ROLE_ADMIN', $roles)) {
             $query = $query
+                ->addSelect('helps.title')
+                ->addSelect('helps.title_en')
+                ->addSelect('helps.title_kz')
+                ->addSelect('helps.description')
+                ->addSelect('helps.description_en')
+                ->addSelect('helps.description_kz')
+                ->addSelect('helps.image')
+                ->addSelect('helps.image_en')
+                ->addSelect('helps.image_kz')
+                ->addSelect('help_categories.name as category_name')
+                ->addSelect('help_categories.name_kz as category_name_kz')
+                ->addSelect('help_categories.name_en as category_name_en')
                 ->orWhere('helps.is_published = false and helps.deleted_at IS NULL')
                 ->orWhere('helps.is_published = true and helps.deleted_at IS NULL');
         } else {
             $query = $query
+                ->addSelect('helps.title' . $locale . ' as title')
+                ->addSelect('helps.description' . $locale . ' as description')
+                ->addSelect('helps.image' . $locale . ' as image')
+                ->addSelect('help_categories.name' . $locale . ' as category_name')
                 ->andWhere('helps.is_published = true and helps.deleted_at IS NULL');
         }
 

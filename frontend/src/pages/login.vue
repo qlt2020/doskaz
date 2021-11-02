@@ -10,6 +10,7 @@ import LoginForm from "~/components/LoginForm";
 export default {
   layout: "main",
   components: { LoginForm },
+  middleware: ["profile"],
   head() {
     return {
       title: this.$t("login.pageTitle")

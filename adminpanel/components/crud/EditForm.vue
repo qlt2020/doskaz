@@ -52,7 +52,7 @@
                         await this.$router.push(`${this.editBasePath}/${this.item.id}`)
                     }
                 } catch (e) {
-
+                    console.log(e);
                 }
             }
         }
