@@ -10,5 +10,8 @@ services:
     App\Help\HelpController:
         tags: [ 'controller.service_arguments' ]
 
+    App\Help\HelpAdminController:
+        tags: [ 'controller.service_arguments' ]
+
     App\Help\HelpCategory\HelpCategoryController:
         tags: [ 'controller.service_arguments' ]

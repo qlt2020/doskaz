@@ -18,16 +18,33 @@ class HelpRepository
         $this->connection = $connection;
     }
 
-    public function index(Request $request, array $roles = null)
+    public function index(Request $request)
     {
-        $query = $this->query(null, $request, $roles);
+        $query = $this->query(null, $request);
         $items = $query->execute()->fetchAll();
 
         return new JsonResponse(['items' => $items], 200);
     }
 
-    public function show($id, Request $request, array $roles = null){
-        $item = $this->query($id, $request, $roles)->execute()->fetchAll();
+    public function indexAdmin()
+    {
+        $query = $this->queryAdmin(null);
+        $items = $query->execute()->fetchAll();
+
+        return new JsonResponse(['items' => $items], 200);
+    }
+
+    public function show($id, Request $request){
+        $item = $this->query($id, $request)->execute()->fetchAll();
+        if (count($item) == 0) {
+            return new JsonResponse('Not found', 404);
+        }
+        return new JsonResponse($item[0], 200);
+    }
+
+    public function showAdmin($id)
+    {
+        $item = $this->queryAdmin($id)->execute()->fetchAll();
         if (count($item) == 0) {
             return new JsonResponse('Not found', 404);
         }
@@ -130,44 +147,55 @@ class HelpRepository
         }
     }
 
-    private function query(?int $id, Request $request, array $roles = null){
+    private function query(?int $id, Request $request){
         $locale = $request->getLocale();
         $locale = $locale === 'ru' ? '' : '_' . $locale;
         $query = $this->connection->createQueryBuilder()
             ->select('helps.id as id')
+            ->addSelect('helps.title' . $locale . ' as title')
+            ->addSelect('helps.description' . $locale . ' as description')
+            ->addSelect('helps.image' . $locale . ' as image')
+            ->addSelect('help_categories.name' . $locale . ' as category_name')
+            ->addSelect('help_categories.id as category')
+            ->from('helps', 'helps')
+            ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
+            ->where('helps.deleted_at IS NULL')
+            ->andWhere('helps.is_published = true');
+
+        if (isset($id)) {
+            $query = $query
+                ->andWhere( 'helps.id = :id')
+                ->setParameter('id', $id);
+        }
+
+        return $query;
+    }
+
+    private function queryAdmin(?int $id)
+    {
+        $query = $this->connection->createQueryBuilder()
+            ->select('helps.id')
+            ->addSelect('helps.title')
+            ->addSelect('helps.title_en')
+            ->addSelect('helps.title_kz')
+            ->addSelect('helps.description')
+            ->addSelect('helps.description_en')
+            ->addSelect('helps.description_kz')
+            ->addSelect('helps.image')
+            ->addSelect('helps.image_en')
+            ->addSelect('helps.image_kz')
+            ->addSelect('helps.is_published')
+            ->addSelect('help_categories.name as category_name')
+            ->addSelect('help_categories.name_kz as category_name_kz')
+            ->addSelect('help_categories.name_en as category_name_en')
             ->addSelect('help_categories.id as category')
             ->from('helps', 'helps')
             ->join('helps', 'help_categories', 'help_categories', 'helps.category_id = help_categories.id')
             ->where('helps.deleted_at IS NULL');
 
-        if ($roles != null && in_array('ROLE_ADMIN', $roles)) {
-            $query = $query
-                ->addSelect('helps.title')
-                ->addSelect('helps.title_en')
-                ->addSelect('helps.title_kz')
-                ->addSelect('helps.description')
-                ->addSelect('helps.description_en')
-                ->addSelect('helps.description_kz')
-                ->addSelect('helps.image')
-                ->addSelect('helps.image_en')
-                ->addSelect('helps.image_kz')
-                ->addSelect('help_categories.name as category_name')
-                ->addSelect('help_categories.name_kz as category_name_kz')
-                ->addSelect('help_categories.name_en as category_name_en')
-                ->orWhere('helps.is_published = false and helps.deleted_at IS NULL')
-                ->orWhere('helps.is_published = true and helps.deleted_at IS NULL');
-        } else {
-            $query = $query
-                ->addSelect('helps.title' . $locale . ' as title')
-                ->addSelect('helps.description' . $locale . ' as description')
-                ->addSelect('helps.image' . $locale . ' as image')
-                ->addSelect('help_categories.name' . $locale . ' as category_name')
-                ->andWhere('helps.is_published = true and helps.deleted_at IS NULL');
-        }
-
         if (isset($id)) {
             $query = $query
-                ->andWhere( 'helps.id = :id')
+                ->andWhere('helps.id = :id')
                 ->setParameter('id', $id);
         }
 
