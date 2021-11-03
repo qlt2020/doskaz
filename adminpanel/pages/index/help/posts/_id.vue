@@ -1,7 +1,7 @@
 <template>
     <crud-edit
         title="Редактирование записи помощи"
-        api-path="/api/help"
+        api-path="/api/admin/help"
         :fields="fields"
         edit-base-path="/help/posts"
     />
