@@ -1,7 +1,7 @@
 <template>
     <crud-list
         title="Записи помощи"
-        api-path="/api/help"
+        api-path="/api/admin/help"
         :table-fields="fields"
     />
 </template>
