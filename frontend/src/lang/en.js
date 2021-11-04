@@ -443,7 +443,7 @@ export default {
     },
   },
   mainMenu: {
-    help: "Inaccessible",
+    help: "Help",
     about: "About map",
     blog: "Multimedia library",
     contacts: "Contacts",
