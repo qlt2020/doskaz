@@ -621,7 +621,7 @@ final class ObjectsApiController extends AbstractController
             $requestLang = $request->query->get('lang');
         }
         $locale = '';
-        if ($requestLang !== 'ru'){
+        if ($requestLang != 'ru'){
             $locale = $requestLang;
         }
 
