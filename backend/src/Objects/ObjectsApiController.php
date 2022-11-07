@@ -616,7 +616,7 @@ final class ObjectsApiController extends AbstractController
     public function pdf(Request $request, MapObject $mapObject, Client $client)
     {
         $acceptLanguages = ['ru','en','kz'];
-        $requestLang = $request->lang;
+        $requestLang = $request->get('lang');
         if(!isset($requestLang) || trim($requestLang) === '' || !in_array($requestLang, $acceptLanguages)){
             $requestLang = 'ru';
         }
