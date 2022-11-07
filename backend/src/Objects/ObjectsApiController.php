@@ -621,12 +621,12 @@ final class ObjectsApiController extends AbstractController
             $requestLang = $request->query->get('lang');
         }
         $locale = '';
-        if ($requestLang != 'ru'){
-            $locale = $requestLang;
+        if ($requestLang !== 'ru'){
+            $locale = '/'.$requestLang;
         }
 
 //        $request = new URLRequest($this->params->get('app.frontend_url').'/'.$request->getLocale(). '/objects/pdf?id=' . $mapObject->id());
-        $request = new URLRequest($this->params->get('app.frontend_url').'/'.$locale. '/objects/pdf?id=' . $mapObject->id());
+        $request = new URLRequest($this->params->get('app.frontend_url').$locale. '/objects/pdf?id=' . $mapObject->id());
 
         $request->setMargins([0, 0, 0, 0]);
         $request->setPaperSize(URLRequest::A4);
