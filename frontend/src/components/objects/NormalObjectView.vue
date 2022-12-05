@@ -322,7 +322,7 @@
             <div class="more-detail__top">
               {{ $t("objects.detailedInfo") }}
               <a
-                :href="`/api/objects/${$route.params.id}/pdf`"
+                :href="`/api/objects/${$route.params.id}/pdf?lang=${$i18n.locale}`"
                 target="_blank"
                 class="more-detail__download"
                 download
