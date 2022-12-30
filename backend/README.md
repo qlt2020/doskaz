@@ -1,3 +1,32 @@
+## Minimum requirements
+- Postgresql 12 with postgis extension
+- gotenberg docker container on localhost:3000
+
+## Pdf import
+- Install docker ci on the server;
+- Deploy a project gotenberg in accordance with documentation https://gotenberg.dev/docs/6.x/install;
+- Update host configuration in TheCodingMachine\Gotenberg\Client located at src/Infrastructure/services.yaml.
+
+## Database migration
+#### Before launching make sure that:
+- you have manually deleted PRIMARY KEY in the tables called levels and profile_completion_tasks;
+- you have set value of the object_id column to NULL in the already existing rows of the complaints table.
+
+## Commands
+- The php bin/console app:blogs:truncate command clears (Truncate) tables that are connected to the Blog module:
+ - blog_comments;
+ - blog_posts;
+ - blog_categories Upon successful completion, it prints a success message to the terminal. In case of an error, it will display a message in the terminal stating that an error has occurred and will rollback all changes in the database.
+
+### php bin/console app:objects:update-object-category
+The command replaces old icons to the new ones
+
+### php bin/console app:create-help-blog-category
+The command creates new category called “Help” in the Media library
+- The php bin/console app:objects:update-object-category command replaces old icons to the new ones
+
+
+
 ## Минимальные требования
 - Postgresql 12 with postgis extension
 - gotenberg docker container on ```localhost:3000```
