@@ -1,4 +1,4 @@
-""" Hello, this is product documentation. 
+###Hello, this is product documentation. 
 Below are links for detailed study:
 - [Technology stack](https://github.com/qlt2020/doskaz/blob/main/Technology%20Stack.pdf)
 - [Architectural diagrams](https://github.com/qlt2020/doskaz/blob/main/Architectural%20diagrams.pdf)
